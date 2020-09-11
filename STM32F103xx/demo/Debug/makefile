@@ -38,20 +38,19 @@ default.size.stdout \
 OBJDUMP_LIST += \
 demo.list \
 
+OBJCOPY_HEX += \
+demo.hex \
+
 OBJCOPY_BIN += \
 demo.bin \
 
 
 # All Target
-all:
-	+@make --no-print-directory main-build && make --no-print-directory post-build
-
-# Main-build Target
-main-build: demo.elf secondary-outputs
+all: demo.elf secondary-outputs
 
 # Tool invocations
-demo.elf: $(OBJS) $(USER_OBJS) D:\Program\ Files\STM32CubeIDE_1.4.0\workspace_1.4.0\demo\STM32F103C8TX_FLASH.ld
-	arm-none-eabi-gcc -o "demo.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m3 -T"D:\Program Files\STM32CubeIDE_1.4.0\workspace_1.4.0\demo\STM32F103C8TX_FLASH.ld" --specs=nosys.specs -Wl,-Map="demo.map" -Wl,--gc-sections -static --specs=nano.specs -mfloat-abi=soft -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+demo.elf: $(OBJS) $(USER_OBJS) D:\Program\ Files\STM32CubeIDE_1.4.0\workspace_1.4.0\STM32CubeIDE_Project\STM32F103xx\demo\STM32F103C8TX_FLASH.ld
+	arm-none-eabi-gcc -o "demo.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m3 -T"D:\Program Files\STM32CubeIDE_1.4.0\workspace_1.4.0\STM32CubeIDE_Project\STM32F103xx\demo\STM32F103C8TX_FLASH.ld" --specs=nosys.specs -Wl,-Map="demo.map" -Wl,--gc-sections -static --specs=nano.specs -mfloat-abi=soft -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
 	@echo 'Finished building target: $@'
 	@echo ' '
 
@@ -65,6 +64,11 @@ demo.list: $(EXECUTABLES)
 	@echo 'Finished building: $@'
 	@echo ' '
 
+demo.hex: $(EXECUTABLES)
+	arm-none-eabi-objcopy  -O ihex $(EXECUTABLES) "demo.hex"
+	@echo 'Finished building: $@'
+	@echo ' '
+
 demo.bin: $(EXECUTABLES)
 	arm-none-eabi-objcopy  -O binary $(EXECUTABLES) "demo.bin"
 	@echo 'Finished building: $@'
@@ -75,13 +79,9 @@ clean:
 	-$(RM) *
 	-@echo ' '
 
-post-build:
-	arm-none-eabi-objcopy "demo.elf" -O ihex "demo.hex"
-	-@echo ' '
-
-secondary-outputs: $(SIZE_OUTPUT) $(OBJDUMP_LIST) $(OBJCOPY_BIN)
+secondary-outputs: $(SIZE_OUTPUT) $(OBJDUMP_LIST) $(OBJCOPY_HEX) $(OBJCOPY_BIN)
 
 .PHONY: all clean dependents
-.SECONDARY: post-build
+.SECONDARY:
 
 -include ../makefile.targets

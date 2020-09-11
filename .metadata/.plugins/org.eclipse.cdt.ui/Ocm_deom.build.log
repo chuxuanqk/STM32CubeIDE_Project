@@ -1,0 +1,10 @@
+18:22:40 **** Build of configuration Debug for project Ocm_deom ****
+make all 
+arm-none-eabi-size   Ocm_deom.elf 
+   text	   data	    bss	    dec	    hex	filename
+   4356	   1104	    328	   5788	   169c	Ocm_deom.elf
+Finished building: default.size.stdout
+ 
+
+18:22:40 Build Finished. 0 errors, 0 warnings. (took 534ms)
+

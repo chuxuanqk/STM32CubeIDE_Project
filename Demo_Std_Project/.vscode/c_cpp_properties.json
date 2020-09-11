@@ -1,0 +1,26 @@
+{
+    "configurations": [
+        {
+            "name": "Win32",
+            "includePath": [
+                "${workspaceFolder}/Ocm_demo/Driver/inc",
+                "${workspaceFolder}/Ocm_demo/Libraries/CMSIS/Include",
+                "${workspaceFolder}/Ocm_demo/Libraries/STM32F10x_StdPeriph_Driver/inc",
+                "${workspaceFolder}/Ocm_demo/src",
+                "${workspaceFolder}/Ocm_demo/Libraries/CMSIS/Device/ST/STM32F10x/Include"
+            ],
+            "defines": [
+                "_DEBUG",
+                "UNICODE",
+                "_UNICODE",
+                "USE_HAL_DRIVER",
+                "STM32F10X_MD"
+            ],
+            "compilerPath": "D:\\Program Files\\MinGW\\bin\\gcc.exe",
+            "cStandard": "c11",
+            "cppStandard": "gnu++14",
+            "intelliSenseMode": "clang-x86"
+        }
+    ],
+    "version": 4
+}
