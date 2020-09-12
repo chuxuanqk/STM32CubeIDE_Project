@@ -35,6 +35,7 @@ __lock___atexit_recursive_mutex
 __lock___arc4random_mutex
                     0x1               d:/program files/stm32cubeide_1.4.0/stm32cubeide/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.7-2018-q2-update.win32_1.4.0.202007081208/tools/bin/../lib/gcc/arm-none-eabi/7.3.1/../../../../arm-none-eabi/lib/thumb/v7-m\libc.a(lib_a-lock.o)
 errno               0x4               d:/program files/stm32cubeide_1.4.0/stm32cubeide/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.7-2018-q2-update.win32_1.4.0.202007081208/tools/bin/../lib/gcc/arm-none-eabi/7.3.1/../../../../arm-none-eabi/lib/thumb/v7-m\libnosys.a(errno.o)
+FLASH_BUF           0x400             Driver/src/flash.o
 __lock___env_recursive_mutex
                     0x1               d:/program files/stm32cubeide_1.4.0/stm32cubeide/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.7-2018-q2-update.win32_1.4.0.202007081208/tools/bin/../lib/gcc/arm-none-eabi/7.3.1/../../../../arm-none-eabi/lib/thumb/v7-m\libc.a(lib_a-lock.o)
 __lock___sinit_recursive_mutex
@@ -103,6 +104,100 @@ Discarded input sections
  .text          0x0000000000000000        0x0 Driver/src/board.o
  .data          0x0000000000000000        0x0 Driver/src/board.o
  .bss           0x0000000000000000        0x0 Driver/src/board.o
+ .group         0x0000000000000000        0xc Driver/src/flash.o
+ .group         0x0000000000000000        0xc Driver/src/flash.o
+ .group         0x0000000000000000        0xc Driver/src/flash.o
+ .group         0x0000000000000000        0xc Driver/src/flash.o
+ .group         0x0000000000000000        0xc Driver/src/flash.o
+ .group         0x0000000000000000        0xc Driver/src/flash.o
+ .group         0x0000000000000000        0xc Driver/src/flash.o
+ .group         0x0000000000000000        0xc Driver/src/flash.o
+ .group         0x0000000000000000        0xc Driver/src/flash.o
+ .group         0x0000000000000000        0xc Driver/src/flash.o
+ .group         0x0000000000000000        0xc Driver/src/flash.o
+ .group         0x0000000000000000        0xc Driver/src/flash.o
+ .group         0x0000000000000000        0xc Driver/src/flash.o
+ .group         0x0000000000000000        0xc Driver/src/flash.o
+ .group         0x0000000000000000        0xc Driver/src/flash.o
+ .group         0x0000000000000000        0xc Driver/src/flash.o
+ .group         0x0000000000000000        0xc Driver/src/flash.o
+ .group         0x0000000000000000        0xc Driver/src/flash.o
+ .group         0x0000000000000000        0xc Driver/src/flash.o
+ .group         0x0000000000000000        0xc Driver/src/flash.o
+ .group         0x0000000000000000        0xc Driver/src/flash.o
+ .group         0x0000000000000000        0xc Driver/src/flash.o
+ .group         0x0000000000000000        0xc Driver/src/flash.o
+ .group         0x0000000000000000        0xc Driver/src/flash.o
+ .group         0x0000000000000000        0xc Driver/src/flash.o
+ .group         0x0000000000000000        0xc Driver/src/flash.o
+ .group         0x0000000000000000        0xc Driver/src/flash.o
+ .group         0x0000000000000000        0xc Driver/src/flash.o
+ .group         0x0000000000000000        0xc Driver/src/flash.o
+ .group         0x0000000000000000        0xc Driver/src/flash.o
+ .group         0x0000000000000000        0xc Driver/src/flash.o
+ .group         0x0000000000000000        0xc Driver/src/flash.o
+ .group         0x0000000000000000        0xc Driver/src/flash.o
+ .group         0x0000000000000000        0xc Driver/src/flash.o
+ .group         0x0000000000000000        0xc Driver/src/flash.o
+ .group         0x0000000000000000        0xc Driver/src/flash.o
+ .text          0x0000000000000000        0x0 Driver/src/flash.o
+ .data          0x0000000000000000        0x0 Driver/src/flash.o
+ .bss           0x0000000000000000        0x0 Driver/src/flash.o
+ .text.__Flash_Write_NoCheck
+                0x0000000000000000       0x42 Driver/src/flash.o
+ .text.FLASH_Read
+                0x0000000000000000       0x42 Driver/src/flash.o
+ .text.Flash_Write
+                0x0000000000000000      0x154 Driver/src/flash.o
+ .debug_info    0x0000000000000000      0x20e Driver/src/flash.o
+ .debug_abbrev  0x0000000000000000      0x108 Driver/src/flash.o
+ .debug_aranges
+                0x0000000000000000       0x30 Driver/src/flash.o
+ .debug_ranges  0x0000000000000000       0x20 Driver/src/flash.o
+ .debug_macro   0x0000000000000000      0x1a7 Driver/src/flash.o
+ .debug_macro   0x0000000000000000      0xa54 Driver/src/flash.o
+ .debug_macro   0x0000000000000000       0x5d Driver/src/flash.o
+ .debug_macro   0x0000000000000000       0x34 Driver/src/flash.o
+ .debug_macro   0x0000000000000000       0x22 Driver/src/flash.o
+ .debug_macro   0x0000000000000000       0x8e Driver/src/flash.o
+ .debug_macro   0x0000000000000000       0x51 Driver/src/flash.o
+ .debug_macro   0x0000000000000000       0xef Driver/src/flash.o
+ .debug_macro   0x0000000000000000       0x6a Driver/src/flash.o
+ .debug_macro   0x0000000000000000      0x1df Driver/src/flash.o
+ .debug_macro   0x0000000000000000       0x18 Driver/src/flash.o
+ .debug_macro   0x0000000000000000      0x663 Driver/src/flash.o
+ .debug_macro   0x0000000000000000     0x7eb3 Driver/src/flash.o
+ .debug_macro   0x0000000000000000      0x2e4 Driver/src/flash.o
+ .debug_macro   0x0000000000000000      0x14a Driver/src/flash.o
+ .debug_macro   0x0000000000000000      0x3cf Driver/src/flash.o
+ .debug_macro   0x0000000000000000       0xc8 Driver/src/flash.o
+ .debug_macro   0x0000000000000000      0x17b Driver/src/flash.o
+ .debug_macro   0x0000000000000000       0xac Driver/src/flash.o
+ .debug_macro   0x0000000000000000      0x3b0 Driver/src/flash.o
+ .debug_macro   0x0000000000000000       0x9d Driver/src/flash.o
+ .debug_macro   0x0000000000000000      0x2d5 Driver/src/flash.o
+ .debug_macro   0x0000000000000000      0x279 Driver/src/flash.o
+ .debug_macro   0x0000000000000000      0x2ad Driver/src/flash.o
+ .debug_macro   0x0000000000000000      0x2b4 Driver/src/flash.o
+ .debug_macro   0x0000000000000000       0x64 Driver/src/flash.o
+ .debug_macro   0x0000000000000000       0x82 Driver/src/flash.o
+ .debug_macro   0x0000000000000000      0x3e2 Driver/src/flash.o
+ .debug_macro   0x0000000000000000       0x58 Driver/src/flash.o
+ .debug_macro   0x0000000000000000      0x344 Driver/src/flash.o
+ .debug_macro   0x0000000000000000      0x2c4 Driver/src/flash.o
+ .debug_macro   0x0000000000000000      0x711 Driver/src/flash.o
+ .debug_macro   0x0000000000000000      0x229 Driver/src/flash.o
+ .debug_macro   0x0000000000000000       0x34 Driver/src/flash.o
+ .debug_macro   0x0000000000000000       0x8c Driver/src/flash.o
+ .debug_macro   0x0000000000000000       0x35 Driver/src/flash.o
+ .debug_macro   0x0000000000000000       0x16 Driver/src/flash.o
+ .debug_line    0x0000000000000000      0x764 Driver/src/flash.o
+ .debug_str     0x0000000000000000    0x4d898 Driver/src/flash.o
+ .comment       0x0000000000000000       0x7c Driver/src/flash.o
+ .debug_frame   0x0000000000000000       0x80 Driver/src/flash.o
+ .ARM.attributes
+                0x0000000000000000       0x33 Driver/src/flash.o
+ COMMON         0x0000000000000000      0x400 Driver/src/flash.o
  .group         0x0000000000000000        0xc Libraries/STM32F10x_StdPeriph_Driver/src/misc.o
  .group         0x0000000000000000        0xc Libraries/STM32F10x_StdPeriph_Driver/src/misc.o
  .group         0x0000000000000000        0xc Libraries/STM32F10x_StdPeriph_Driver/src/misc.o
@@ -3325,6 +3420,7 @@ LOAD d:/program files/stm32cubeide_1.4.0/stm32cubeide/plugins/com.st.stm32cube.i
 LOAD d:/program files/stm32cubeide_1.4.0/stm32cubeide/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.7-2018-q2-update.win32_1.4.0.202007081208/tools/bin/../lib/gcc/arm-none-eabi/7.3.1/thumb/v7-m/crtbegin.o
 LOAD d:/program files/stm32cubeide_1.4.0/stm32cubeide/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.7-2018-q2-update.win32_1.4.0.202007081208/tools/bin/../lib/gcc/arm-none-eabi/7.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/crt0.o
 LOAD Driver/src/board.o
+LOAD Driver/src/flash.o
 LOAD Libraries/STM32F10x_StdPeriph_Driver/src/misc.o
 LOAD Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_adc.o
 LOAD Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_bkp.o
@@ -3388,12 +3484,12 @@ LOAD d:/program files/stm32cubeide_1.4.0/stm32cubeide/plugins/com.st.stm32cube.i
                 0x000000000800014c       0x54 Driver/src/board.o
  .text.SysTick_Config
                 0x00000000080001a0       0x44 Driver/src/board.o
- .text.Write_Config_To_Flash
-                0x00000000080001e4       0x9c Driver/src/board.o
-                0x00000000080001e4                Write_Config_To_Flash
  .text.Config_Data_ReInit
-                0x0000000008000280       0x38 Driver/src/board.o
-                0x0000000008000280                Config_Data_ReInit
+                0x00000000080001e4       0x38 Driver/src/board.o
+                0x00000000080001e4                Config_Data_ReInit
+ .text.Write_Config_To_Flash
+                0x000000000800021c       0x9c Driver/src/board.o
+                0x000000000800021c                Write_Config_To_Flash
  .text.Read_Config_Form_Flash
                 0x00000000080002b8       0x78 Driver/src/board.o
                 0x00000000080002b8                Read_Config_Form_Flash
@@ -3867,35 +3963,35 @@ OUTPUT(Ocm_deom.elf elf32-littlearm)
  .debug_macro   0x000000000000da81      0x198 src/stm32f1xx_it.o
  .debug_macro   0x000000000000dc19      0x19b src/system_stm32f10x.o
 
-.debug_line     0x0000000000000000     0x3f93
- .debug_line    0x0000000000000000      0x80b Driver/src/board.o
- .debug_line    0x000000000000080b      0x6d1 Libraries/STM32F10x_StdPeriph_Driver/src/misc.o
- .debug_line    0x0000000000000edc      0x94d Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_flash.o
- .debug_line    0x0000000000001829      0x94e Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_rcc.o
- .debug_line    0x0000000000002177      0x920 Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_usart.o
- .debug_line    0x0000000000002a97      0x6a1 src/main.o
- .debug_line    0x0000000000003138       0x7c src/startup_stm32f10x_md.o
- .debug_line    0x00000000000031b4      0x6f3 src/stm32f1xx_it.o
- .debug_line    0x00000000000038a7      0x6ec src/system_stm32f10x.o
+.debug_line     0x0000000000000000     0x3fba
+ .debug_line    0x0000000000000000      0x832 Driver/src/board.o
+ .debug_line    0x0000000000000832      0x6d1 Libraries/STM32F10x_StdPeriph_Driver/src/misc.o
+ .debug_line    0x0000000000000f03      0x94d Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_flash.o
+ .debug_line    0x0000000000001850      0x94e Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_rcc.o
+ .debug_line    0x000000000000219e      0x920 Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_usart.o
+ .debug_line    0x0000000000002abe      0x6a1 src/main.o
+ .debug_line    0x000000000000315f       0x7c src/startup_stm32f10x_md.o
+ .debug_line    0x00000000000031db      0x6f3 src/stm32f1xx_it.o
+ .debug_line    0x00000000000038ce      0x6ec src/system_stm32f10x.o
 
-.debug_str      0x0000000000000000    0x4fcf1
- .debug_str     0x0000000000000000    0x4dc63 Driver/src/board.o
-                                      0x4ddfc (size before relaxing)
- .debug_str     0x000000000004dc63      0x16e Libraries/STM32F10x_StdPeriph_Driver/src/misc.o
+.debug_str      0x0000000000000000    0x4fd18
+ .debug_str     0x0000000000000000    0x4dc8a Driver/src/board.o
+                                      0x4de23 (size before relaxing)
+ .debug_str     0x000000000004dc8a      0x16e Libraries/STM32F10x_StdPeriph_Driver/src/misc.o
                                       0x4d9e9 (size before relaxing)
- .debug_str     0x000000000004ddd1      0x775 Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_flash.o
+ .debug_str     0x000000000004ddf8      0x775 Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_flash.o
                                       0x4df6e (size before relaxing)
- .debug_str     0x000000000004e546      0xb59 Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_rcc.o
+ .debug_str     0x000000000004e56d      0xb59 Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_rcc.o
                                       0x4e341 (size before relaxing)
- .debug_str     0x000000000004f09f      0x818 Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_usart.o
+ .debug_str     0x000000000004f0c6      0x818 Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_usart.o
                                       0x4e06b (size before relaxing)
- .debug_str     0x000000000004f8b7      0x2d0 src/main.o
+ .debug_str     0x000000000004f8de      0x2d0 src/main.o
                                       0x4db6e (size before relaxing)
- .debug_str     0x000000000004fb87       0x2c src/startup_stm32f10x_md.o
+ .debug_str     0x000000000004fbae       0x2c src/startup_stm32f10x_md.o
                                          0x61 (size before relaxing)
- .debug_str     0x000000000004fbb3       0xb8 src/stm32f1xx_it.o
+ .debug_str     0x000000000004fbda       0xb8 src/stm32f1xx_it.o
                                       0x4d7f2 (size before relaxing)
- .debug_str     0x000000000004fc6b       0x86 src/system_stm32f10x.o
+ .debug_str     0x000000000004fc92       0x86 src/system_stm32f10x.o
                                       0x4d8eb (size before relaxing)
 
 .comment        0x0000000000000000       0x7b

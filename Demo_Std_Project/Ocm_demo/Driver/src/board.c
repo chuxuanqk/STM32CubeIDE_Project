@@ -14,26 +14,6 @@
 union STM32_ID_12Byte STM32_ID;
 Config_Data_Str Config_Data;
 
-void Write_Config_To_Flash(Config_Data_Str *config)
-{
-    u16 i;
-    u8 *data_ptr = (u8 *)config;
-    u32 flash_addr = CONFIG_DATA_FLASH_ADDR;
-    FLASH_Unlock();                                                                            /* 每次擦除Flash中数据时得先解锁 */
-    FLASH_ClearFlag(FLASH_FLAG_BSY | FLASH_FLAG_EOP | FLASH_FLAG_PGERR | FLASH_FLAG_WRPRTERR); //清除标记
-    for (i = 0; i < (sizeof(Config_Data_Str) / FLASH_Page_SIZE + 1); i++)
-        while (FLASH_COMPLETE != FLASH_ErasePage(CONFIG_DATA_FLASH_ADDR + i * FLASH_Page_SIZE))
-            ;
-
-    for (i = 0; i < sizeof(Config_Data_Str); i++)
-    {
-        while (FLASH_COMPLETE != FLASH_ProgramHalfWord(flash_addr, (data_ptr[i] + data_ptr[i + 1] * 256)))
-            ;
-        i++;
-        flash_addr += 2;
-    }
-}
-
 void Config_Data_ReInit(Config_Data_Str *config)
 {
     u16 i;
@@ -50,12 +30,36 @@ void Config_Data_ReInit(Config_Data_Str *config)
     // Dev_Config_Reinit((config->dev_con));
 };
 
+void Write_Config_To_Flash(Config_Data_Str *config)
+{
+    u16 i;
+    u8 *data_ptr = (u8 *)config;
+    u32 flash_addr = CONFIG_DATA_FLASH_ADDR;
+    FLASH_Unlock();                                                                            /* 每次擦除Flash中数据时得先解锁 */
+    FLASH_ClearFlag(FLASH_FLAG_BSY | FLASH_FLAG_EOP | FLASH_FLAG_PGERR | FLASH_FLAG_WRPRTERR); //清除标记
+
+    // 页擦除
+    for (i = 0; i < (sizeof(Config_Data_Str) / FLASH_Page_SIZE + 1); i++)
+        while (FLASH_COMPLETE != FLASH_ErasePage(CONFIG_DATA_FLASH_ADDR + i * FLASH_Page_SIZE))
+            ;
+
+    for (i = 0; i < sizeof(Config_Data_Str); i++)
+    {
+        while (FLASH_COMPLETE != FLASH_ProgramHalfWord(flash_addr, (data_ptr[i] + data_ptr[i + 1] * 256)))
+            ;
+        i++;
+        flash_addr += 2;
+    }
+}
+
 void Read_Config_Form_Flash(Config_Data_Str *config)
 {
     u16 i;
     u8 *data_ptr = (u8 *)config;
     u16 tmp_read;
     u32 flash_addr = CONFIG_DATA_FLASH_ADDR;
+
+    // 读取指定地址的数据
     for (i = 0; i < sizeof(Config_Data_Str); i++)
     {
         tmp_read = *(vu16 *)(flash_addr);
@@ -66,6 +70,7 @@ void Read_Config_Form_Flash(Config_Data_Str *config)
 
         flash_addr += 2;
     }
+
     //判断是否为第一次启动
     if (config->save_data_flag != 1)
     {

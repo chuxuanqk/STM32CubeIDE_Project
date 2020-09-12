@@ -31,15 +31,15 @@ Idx Name          Size      VMA       LMA       File off  Algn
                   CONTENTS, READONLY, DEBUGGING
  13 .debug_macro  0000ddb4  00000000  00000000  00024988  2**0
                   CONTENTS, READONLY, DEBUGGING
- 14 .debug_line   00003f93  00000000  00000000  0003273c  2**0
+ 14 .debug_line   00003fba  00000000  00000000  0003273c  2**0
                   CONTENTS, READONLY, DEBUGGING
- 15 .debug_str    0004fcf1  00000000  00000000  000366cf  2**0
+ 15 .debug_str    0004fd18  00000000  00000000  000366f6  2**0
                   CONTENTS, READONLY, DEBUGGING
- 16 .comment      0000007b  00000000  00000000  000863c0  2**0
+ 16 .comment      0000007b  00000000  00000000  0008640e  2**0
                   CONTENTS, READONLY
- 17 .debug_frame  00001354  00000000  00000000  0008643c  2**2
+ 17 .debug_frame  00001354  00000000  00000000  0008648c  2**2
                   CONTENTS, READONLY, DEBUGGING
- 18 .stabstr      0000003f  00000000  00000000  00087790  2**0
+ 18 .stabstr      0000003f  00000000  00000000  000877e0  2**0
                   CONTENTS, READONLY, DEBUGGING
 
 Disassembly of section .text:
@@ -170,151 +170,153 @@ static __INLINE uint32_t SysTick_Config(uint32_t ticks)
  80001de:	bd80      	pop	{r7, pc}
  80001e0:	e000e010 	.word	0xe000e010
 
-080001e4 <Write_Config_To_Flash>:
+080001e4 <Config_Data_ReInit>:
 
 union STM32_ID_12Byte STM32_ID;
 Config_Data_Str Config_Data;
 
-void Write_Config_To_Flash(Config_Data_Str *config)
+void Config_Data_ReInit(Config_Data_Str *config)
 {
- 80001e4:	b580      	push	{r7, lr}
- 80001e6:	b086      	sub	sp, #24
+ 80001e4:	b480      	push	{r7}
+ 80001e6:	b085      	sub	sp, #20
  80001e8:	af00      	add	r7, sp, #0
  80001ea:	6078      	str	r0, [r7, #4]
     u16 i;
-    u8 *data_ptr = (u8 *)config;
- 80001ec:	687b      	ldr	r3, [r7, #4]
- 80001ee:	60fb      	str	r3, [r7, #12]
-    u32 flash_addr = CONFIG_DATA_FLASH_ADDR;
- 80001f0:	4b22      	ldr	r3, [pc, #136]	; (800027c <Write_Config_To_Flash+0x98>)
- 80001f2:	613b      	str	r3, [r7, #16]
-    FLASH_Unlock();                                                                            /* 每次擦除Flash中数据时得先解锁 */
- 80001f4:	f000 fa10 	bl	8000618 <FLASH_Unlock>
-    FLASH_ClearFlag(FLASH_FLAG_BSY | FLASH_FLAG_EOP | FLASH_FLAG_PGERR | FLASH_FLAG_WRPRTERR); //清除标记
- 80001f8:	2035      	movs	r0, #53	; 0x35
- 80001fa:	f000 fa7f 	bl	80006fc <FLASH_ClearFlag>
-    for (i = 0; i < (sizeof(Config_Data_Str) / FLASH_Page_SIZE + 1); i++)
- 80001fe:	2300      	movs	r3, #0
- 8000200:	82fb      	strh	r3, [r7, #22]
- 8000202:	e00e      	b.n	8000222 <Write_Config_To_Flash+0x3e>
-        while (FLASH_COMPLETE != FLASH_ErasePage(CONFIG_DATA_FLASH_ADDR + i * FLASH_Page_SIZE))
- 8000204:	bf00      	nop
- 8000206:	8afb      	ldrh	r3, [r7, #22]
- 8000208:	f503 3300 	add.w	r3, r3, #131072	; 0x20000
- 800020c:	333f      	adds	r3, #63	; 0x3f
- 800020e:	029b      	lsls	r3, r3, #10
- 8000210:	4618      	mov	r0, r3
- 8000212:	f000 fa13 	bl	800063c <FLASH_ErasePage>
- 8000216:	4603      	mov	r3, r0
- 8000218:	2b04      	cmp	r3, #4
- 800021a:	d1f4      	bne.n	8000206 <Write_Config_To_Flash+0x22>
-    for (i = 0; i < (sizeof(Config_Data_Str) / FLASH_Page_SIZE + 1); i++)
- 800021c:	8afb      	ldrh	r3, [r7, #22]
- 800021e:	3301      	adds	r3, #1
- 8000220:	82fb      	strh	r3, [r7, #22]
- 8000222:	8afb      	ldrh	r3, [r7, #22]
- 8000224:	2b00      	cmp	r3, #0
- 8000226:	d0ed      	beq.n	8000204 <Write_Config_To_Flash+0x20>
-            ;
-
-    for (i = 0; i < sizeof(Config_Data_Str); i++)
- 8000228:	2300      	movs	r3, #0
- 800022a:	82fb      	strh	r3, [r7, #22]
- 800022c:	e01f      	b.n	800026e <Write_Config_To_Flash+0x8a>
-    {
-        while (FLASH_COMPLETE != FLASH_ProgramHalfWord(flash_addr, (data_ptr[i] + data_ptr[i + 1] * 256)))
- 800022e:	bf00      	nop
- 8000230:	8afb      	ldrh	r3, [r7, #22]
- 8000232:	68fa      	ldr	r2, [r7, #12]
- 8000234:	4413      	add	r3, r2
- 8000236:	781b      	ldrb	r3, [r3, #0]
- 8000238:	b29a      	uxth	r2, r3
- 800023a:	8afb      	ldrh	r3, [r7, #22]
- 800023c:	3301      	adds	r3, #1
- 800023e:	68f9      	ldr	r1, [r7, #12]
- 8000240:	440b      	add	r3, r1
- 8000242:	781b      	ldrb	r3, [r3, #0]
- 8000244:	b29b      	uxth	r3, r3
- 8000246:	021b      	lsls	r3, r3, #8
- 8000248:	b29b      	uxth	r3, r3
- 800024a:	4413      	add	r3, r2
- 800024c:	b29b      	uxth	r3, r3
- 800024e:	4619      	mov	r1, r3
- 8000250:	6938      	ldr	r0, [r7, #16]
- 8000252:	f000 fa25 	bl	80006a0 <FLASH_ProgramHalfWord>
- 8000256:	4603      	mov	r3, r0
- 8000258:	2b04      	cmp	r3, #4
- 800025a:	d1e9      	bne.n	8000230 <Write_Config_To_Flash+0x4c>
-            ;
-        i++;
- 800025c:	8afb      	ldrh	r3, [r7, #22]
- 800025e:	3301      	adds	r3, #1
- 8000260:	82fb      	strh	r3, [r7, #22]
-        flash_addr += 2;
- 8000262:	693b      	ldr	r3, [r7, #16]
- 8000264:	3302      	adds	r3, #2
- 8000266:	613b      	str	r3, [r7, #16]
-    for (i = 0; i < sizeof(Config_Data_Str); i++)
- 8000268:	8afb      	ldrh	r3, [r7, #22]
- 800026a:	3301      	adds	r3, #1
- 800026c:	82fb      	strh	r3, [r7, #22]
- 800026e:	8afb      	ldrh	r3, [r7, #22]
- 8000270:	2b15      	cmp	r3, #21
- 8000272:	d9dc      	bls.n	800022e <Write_Config_To_Flash+0x4a>
-    }
-}
- 8000274:	bf00      	nop
- 8000276:	3718      	adds	r7, #24
- 8000278:	46bd      	mov	sp, r7
- 800027a:	bd80      	pop	{r7, pc}
- 800027c:	0800fc00 	.word	0x0800fc00
-
-08000280 <Config_Data_ReInit>:
-
-void Config_Data_ReInit(Config_Data_Str *config)
-{
- 8000280:	b480      	push	{r7}
- 8000282:	b085      	sub	sp, #20
- 8000284:	af00      	add	r7, sp, #0
- 8000286:	6078      	str	r0, [r7, #4]
-    u16 i;
     u8 *temp_ptr = (u8 *)config;
- 8000288:	687b      	ldr	r3, [r7, #4]
- 800028a:	60bb      	str	r3, [r7, #8]
+ 80001ec:	687b      	ldr	r3, [r7, #4]
+ 80001ee:	60bb      	str	r3, [r7, #8]
     //清零所有参数
     for (i = 0; i < sizeof(Config_Data_Str); i++)
- 800028c:	2300      	movs	r3, #0
- 800028e:	81fb      	strh	r3, [r7, #14]
- 8000290:	e007      	b.n	80002a2 <Config_Data_ReInit+0x22>
+ 80001f0:	2300      	movs	r3, #0
+ 80001f2:	81fb      	strh	r3, [r7, #14]
+ 80001f4:	e007      	b.n	8000206 <Config_Data_ReInit+0x22>
     {
         temp_ptr[i] = 0;
- 8000292:	89fb      	ldrh	r3, [r7, #14]
- 8000294:	68ba      	ldr	r2, [r7, #8]
- 8000296:	4413      	add	r3, r2
- 8000298:	2200      	movs	r2, #0
- 800029a:	701a      	strb	r2, [r3, #0]
+ 80001f6:	89fb      	ldrh	r3, [r7, #14]
+ 80001f8:	68ba      	ldr	r2, [r7, #8]
+ 80001fa:	4413      	add	r3, r2
+ 80001fc:	2200      	movs	r2, #0
+ 80001fe:	701a      	strb	r2, [r3, #0]
     for (i = 0; i < sizeof(Config_Data_Str); i++)
- 800029c:	89fb      	ldrh	r3, [r7, #14]
- 800029e:	3301      	adds	r3, #1
- 80002a0:	81fb      	strh	r3, [r7, #14]
- 80002a2:	89fb      	ldrh	r3, [r7, #14]
- 80002a4:	2b15      	cmp	r3, #21
- 80002a6:	d9f4      	bls.n	8000292 <Config_Data_ReInit+0x12>
+ 8000200:	89fb      	ldrh	r3, [r7, #14]
+ 8000202:	3301      	adds	r3, #1
+ 8000204:	81fb      	strh	r3, [r7, #14]
+ 8000206:	89fb      	ldrh	r3, [r7, #14]
+ 8000208:	2b15      	cmp	r3, #21
+ 800020a:	d9f4      	bls.n	80001f6 <Config_Data_ReInit+0x12>
     }
     //设置默认值
     config->save_data_flag = 1;
- 80002a8:	687b      	ldr	r3, [r7, #4]
- 80002aa:	2201      	movs	r2, #1
- 80002ac:	751a      	strb	r2, [r3, #20]
+ 800020c:	687b      	ldr	r3, [r7, #4]
+ 800020e:	2201      	movs	r2, #1
+ 8000210:	751a      	strb	r2, [r3, #20]
 
     // Dev_Config_Reinit(&(config->dev_con));
     // Dev_Config_Reinit((config->dev_con));
 };
- 80002ae:	bf00      	nop
- 80002b0:	3714      	adds	r7, #20
- 80002b2:	46bd      	mov	sp, r7
- 80002b4:	bc80      	pop	{r7}
- 80002b6:	4770      	bx	lr
+ 8000212:	bf00      	nop
+ 8000214:	3714      	adds	r7, #20
+ 8000216:	46bd      	mov	sp, r7
+ 8000218:	bc80      	pop	{r7}
+ 800021a:	4770      	bx	lr
+
+0800021c <Write_Config_To_Flash>:
+
+void Write_Config_To_Flash(Config_Data_Str *config)
+{
+ 800021c:	b580      	push	{r7, lr}
+ 800021e:	b086      	sub	sp, #24
+ 8000220:	af00      	add	r7, sp, #0
+ 8000222:	6078      	str	r0, [r7, #4]
+    u16 i;
+    u8 *data_ptr = (u8 *)config;
+ 8000224:	687b      	ldr	r3, [r7, #4]
+ 8000226:	60fb      	str	r3, [r7, #12]
+    u32 flash_addr = CONFIG_DATA_FLASH_ADDR;
+ 8000228:	4b22      	ldr	r3, [pc, #136]	; (80002b4 <Write_Config_To_Flash+0x98>)
+ 800022a:	613b      	str	r3, [r7, #16]
+    FLASH_Unlock();                                                                            /* 每次擦除Flash中数据时得先解锁 */
+ 800022c:	f000 f9f4 	bl	8000618 <FLASH_Unlock>
+    FLASH_ClearFlag(FLASH_FLAG_BSY | FLASH_FLAG_EOP | FLASH_FLAG_PGERR | FLASH_FLAG_WRPRTERR); //清除标记
+ 8000230:	2035      	movs	r0, #53	; 0x35
+ 8000232:	f000 fa63 	bl	80006fc <FLASH_ClearFlag>
+
+    // 页擦除
+    for (i = 0; i < (sizeof(Config_Data_Str) / FLASH_Page_SIZE + 1); i++)
+ 8000236:	2300      	movs	r3, #0
+ 8000238:	82fb      	strh	r3, [r7, #22]
+ 800023a:	e00e      	b.n	800025a <Write_Config_To_Flash+0x3e>
+        while (FLASH_COMPLETE != FLASH_ErasePage(CONFIG_DATA_FLASH_ADDR + i * FLASH_Page_SIZE))
+ 800023c:	bf00      	nop
+ 800023e:	8afb      	ldrh	r3, [r7, #22]
+ 8000240:	f503 3300 	add.w	r3, r3, #131072	; 0x20000
+ 8000244:	333f      	adds	r3, #63	; 0x3f
+ 8000246:	029b      	lsls	r3, r3, #10
+ 8000248:	4618      	mov	r0, r3
+ 800024a:	f000 f9f7 	bl	800063c <FLASH_ErasePage>
+ 800024e:	4603      	mov	r3, r0
+ 8000250:	2b04      	cmp	r3, #4
+ 8000252:	d1f4      	bne.n	800023e <Write_Config_To_Flash+0x22>
+    for (i = 0; i < (sizeof(Config_Data_Str) / FLASH_Page_SIZE + 1); i++)
+ 8000254:	8afb      	ldrh	r3, [r7, #22]
+ 8000256:	3301      	adds	r3, #1
+ 8000258:	82fb      	strh	r3, [r7, #22]
+ 800025a:	8afb      	ldrh	r3, [r7, #22]
+ 800025c:	2b00      	cmp	r3, #0
+ 800025e:	d0ed      	beq.n	800023c <Write_Config_To_Flash+0x20>
+            ;
+
+    for (i = 0; i < sizeof(Config_Data_Str); i++)
+ 8000260:	2300      	movs	r3, #0
+ 8000262:	82fb      	strh	r3, [r7, #22]
+ 8000264:	e01f      	b.n	80002a6 <Write_Config_To_Flash+0x8a>
+    {
+        while (FLASH_COMPLETE != FLASH_ProgramHalfWord(flash_addr, (data_ptr[i] + data_ptr[i + 1] * 256)))
+ 8000266:	bf00      	nop
+ 8000268:	8afb      	ldrh	r3, [r7, #22]
+ 800026a:	68fa      	ldr	r2, [r7, #12]
+ 800026c:	4413      	add	r3, r2
+ 800026e:	781b      	ldrb	r3, [r3, #0]
+ 8000270:	b29a      	uxth	r2, r3
+ 8000272:	8afb      	ldrh	r3, [r7, #22]
+ 8000274:	3301      	adds	r3, #1
+ 8000276:	68f9      	ldr	r1, [r7, #12]
+ 8000278:	440b      	add	r3, r1
+ 800027a:	781b      	ldrb	r3, [r3, #0]
+ 800027c:	b29b      	uxth	r3, r3
+ 800027e:	021b      	lsls	r3, r3, #8
+ 8000280:	b29b      	uxth	r3, r3
+ 8000282:	4413      	add	r3, r2
+ 8000284:	b29b      	uxth	r3, r3
+ 8000286:	4619      	mov	r1, r3
+ 8000288:	6938      	ldr	r0, [r7, #16]
+ 800028a:	f000 fa09 	bl	80006a0 <FLASH_ProgramHalfWord>
+ 800028e:	4603      	mov	r3, r0
+ 8000290:	2b04      	cmp	r3, #4
+ 8000292:	d1e9      	bne.n	8000268 <Write_Config_To_Flash+0x4c>
+            ;
+        i++;
+ 8000294:	8afb      	ldrh	r3, [r7, #22]
+ 8000296:	3301      	adds	r3, #1
+ 8000298:	82fb      	strh	r3, [r7, #22]
+        flash_addr += 2;
+ 800029a:	693b      	ldr	r3, [r7, #16]
+ 800029c:	3302      	adds	r3, #2
+ 800029e:	613b      	str	r3, [r7, #16]
+    for (i = 0; i < sizeof(Config_Data_Str); i++)
+ 80002a0:	8afb      	ldrh	r3, [r7, #22]
+ 80002a2:	3301      	adds	r3, #1
+ 80002a4:	82fb      	strh	r3, [r7, #22]
+ 80002a6:	8afb      	ldrh	r3, [r7, #22]
+ 80002a8:	2b15      	cmp	r3, #21
+ 80002aa:	d9dc      	bls.n	8000266 <Write_Config_To_Flash+0x4a>
+    }
+}
+ 80002ac:	bf00      	nop
+ 80002ae:	3718      	adds	r7, #24
+ 80002b0:	46bd      	mov	sp, r7
+ 80002b2:	bd80      	pop	{r7, pc}
+ 80002b4:	0800fc00 	.word	0x0800fc00
 
 080002b8 <Read_Config_Form_Flash>:
 
@@ -332,6 +334,8 @@ void Read_Config_Form_Flash(Config_Data_Str *config)
     u32 flash_addr = CONFIG_DATA_FLASH_ADDR;
  80002c4:	4b19      	ldr	r3, [pc, #100]	; (800032c <Read_Config_Form_Flash+0x74>)
  80002c6:	613b      	str	r3, [r7, #16]
+
+    // 读取指定地址的数据
     for (i = 0; i < sizeof(Config_Data_Str); i++)
  80002c8:	2300      	movs	r3, #0
  80002ca:	82fb      	strh	r3, [r7, #22]
@@ -378,6 +382,7 @@ void Read_Config_Form_Flash(Config_Data_Str *config)
  800030a:	2b15      	cmp	r3, #21
  800030c:	d9df      	bls.n	80002ce <Read_Config_Form_Flash+0x16>
     }
+
     //判断是否为第一次启动
     if (config->save_data_flag != 1)
  800030e:	687b      	ldr	r3, [r7, #4]
@@ -387,10 +392,10 @@ void Read_Config_Form_Flash(Config_Data_Str *config)
     {
         Config_Data_ReInit(config);    //重置所有参数
  8000316:	6878      	ldr	r0, [r7, #4]
- 8000318:	f7ff ffb2 	bl	8000280 <Config_Data_ReInit>
+ 8000318:	f7ff ff64 	bl	80001e4 <Config_Data_ReInit>
         Write_Config_To_Flash(config); //回写参数到flash
  800031c:	6878      	ldr	r0, [r7, #4]
- 800031e:	f7ff ff61 	bl	80001e4 <Write_Config_To_Flash>
+ 800031e:	f7ff ff7d 	bl	800021c <Write_Config_To_Flash>
     }
 }
  8000322:	bf00      	nop

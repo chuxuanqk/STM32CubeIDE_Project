@@ -806,3 +806,7 @@
 2020-09-11 18:22:38,675 [INFO] RetryExec:113 - Retrying request to {s}->https://download.eclipse.org:443
 2020-09-11 18:22:59,644 [INFO] RetryExec:97 - I/O exception (java.net.SocketException) caught when processing request to {}->http://download.eclipse.org:80: Socket operation on nonsocket: configureBlocking
 2020-09-11 18:22:59,645 [INFO] RetryExec:113 - Retrying request to {}->http://download.eclipse.org:80
+2020-09-12 15:08:13,025 [INFO] Activator:178 - 
+
+
+2020-09-12 15:08:13,031 [INFO] Activator:179 - !SESSION log4j initialized
