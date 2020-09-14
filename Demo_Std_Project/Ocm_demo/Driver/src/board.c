@@ -113,7 +113,7 @@ void RCC_Configuration(void)
     }
 }
 
-void NVIC_Configuration(void)
+static void NVIC_Configuration(void)
 {
     NVIC_InitTypeDef NVIC_InitStructure;
 #ifdef VETB_TAB_RAM
@@ -123,70 +123,6 @@ void NVIC_Configuration(void)
 #endif
     /* Configure one bit for preemption priority */
     NVIC_PriorityGroupConfig(NVIC_PriorityGroup_0);
-
-    /* Enable the USART1 Interrupt */
-    NVIC_InitStructure.NVIC_IRQChannel = USART1_IRQn;         //通道设置为串口1中断（故后面应选择在“void USART1_IRQHandler(void)”开中断）
-    NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 0; //中断占先等级0
-    NVIC_InitStructure.NVIC_IRQChannelSubPriority = 1;        //中断响应优先级0
-    NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;           //打开中断
-    NVIC_Init(&NVIC_InitStructure);
-
-    //DMA发送中断设置
-    NVIC_InitStructure.NVIC_IRQChannel = DMA1_Channel4_IRQn;
-    NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 0;
-    NVIC_InitStructure.NVIC_IRQChannelSubPriority = 2;
-    NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
-    NVIC_Init(&NVIC_InitStructure);
-
-    /* Enable CAN1 RX0 interrupt IRQ channel */
-    NVIC_InitStructure.NVIC_IRQChannel = USB_LP_CAN1_RX0_IRQn;
-    NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 0;
-    NVIC_InitStructure.NVIC_IRQChannelSubPriority = 3;
-    NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
-    NVIC_Init(&NVIC_InitStructure);
-
-    /* Enable CAN1 TX0 interrupt IRQ channel */
-    /*
-  NVIC_InitStructure.NVIC_IRQChannel = USB_HP_CAN1_TX_IRQn;
-  NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 1;
-  NVIC_InitStructure.NVIC_IRQChannelSubPriority = 1;
-  NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
-  NVIC_Init(&NVIC_InitStructure);
-	*/
-
-    /* Enable the USART2 Interrupt */
-    NVIC_InitStructure.NVIC_IRQChannel = USART2_IRQn;         //通道设置为串口1中断（故后面应选择在“void USART1_IRQHandler(void)”开中断）
-    NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 0; //中断占先等级0
-    NVIC_InitStructure.NVIC_IRQChannelSubPriority = 4;        //中断响应优先级0
-    NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;           //打开中断
-    NVIC_Init(&NVIC_InitStructure);
-
-    //DMA发送中断设置
-    NVIC_InitStructure.NVIC_IRQChannel = DMA1_Channel7_IRQn;
-    NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 0;
-    NVIC_InitStructure.NVIC_IRQChannelSubPriority = 5;
-    NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
-    NVIC_Init(&NVIC_InitStructure);
-
-    /* Enable the USART3 Interrupt */
-    NVIC_InitStructure.NVIC_IRQChannel = USART3_IRQn;         //通道设置为串口1中断（故后面应选择在“void USART1_IRQHandler(void)”开中断）
-    NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 0; //中断占先等级0
-    NVIC_InitStructure.NVIC_IRQChannelSubPriority = 6;        //中断响应优先级0
-    NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;           //打开中断
-    NVIC_Init(&NVIC_InitStructure);
-
-    //DMA发送中断设置
-    NVIC_InitStructure.NVIC_IRQChannel = DMA1_Channel2_IRQn;
-    NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 0;
-    NVIC_InitStructure.NVIC_IRQChannelSubPriority = 7;
-    NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
-    NVIC_Init(&NVIC_InitStructure);
-
-    //窗口看门狗中断
-    //    NVIC_InitStructure.NVIC_IRQChannel = WWDG_IRQn;
-    //    NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 0;
-    //    NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;
-    //    NVIC_Init(&NVIC_InitStructure);
 }
 
 void hw_board_init(void)

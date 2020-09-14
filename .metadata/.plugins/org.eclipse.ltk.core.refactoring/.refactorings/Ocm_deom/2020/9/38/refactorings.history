@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Move &apos;uart.c&apos; to &apos;src&apos;" description="Move &apos;uart.c&apos; to &apos;src&apos;" destination="Driver/src" element1="Driver/inc/uart.c" flags="7" id="org.eclipse.ltk.core.refactoring.move.resources" resources="1" stamp="1600048731257" updateReferences="true"/>
+</session>

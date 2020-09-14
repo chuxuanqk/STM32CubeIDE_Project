@@ -8,21 +8,30 @@
 		<item key="DIALOG_FONT_NAME" value="1|Microsoft YaHei UI|9.0|0|WINDOWS|1|-12|0|0|0|400|0|0|0|1|0|0|0|0|Microsoft YaHei UI"/>
 	</section>
 	<section name="org.eclipse.ui.texteditor.FindReplaceDialog">
-		<item key="selection" value="FLASH"/>
+		<item key="selection" value="uart-&gt;uart_device-&gt;uartx"/>
 		<item key="wrap" value="true"/>
 		<item key="casesensitive" value="false"/>
 		<item key="wholeword" value="false"/>
 		<item key="incremental" value="false"/>
 		<item key="isRegEx" value="false"/>
 		<list key="findhistory">
+			<item value="uart-&gt;uart_device-&gt;uartx"/>
+			<item value="uart-&gt;uart_device"/>
+			<item value="uart1"/>
+			<item value="PARITY_NONE"/>
+			<item value="ocm_ubase_t"/>
 			<item value="FLASH"/>
 		</list>
 		<list key="replacehistory">
+			<item value="uart"/>
+			<item value="uart-&gt;uart_device-&gt;uartx"/>
+			<item value="uint32_t"/>
+			<item value=""/>
 		</list>
 	</section>
 	<section name="org.eclipse.ui.texteditor.FindReplaceDialog_dialogBounds">
-		<item key="DIALOG_X_ORIGIN" value="1230"/>
-		<item key="DIALOG_Y_ORIGIN" value="211"/>
+		<item key="DIALOG_X_ORIGIN" value="1521"/>
+		<item key="DIALOG_Y_ORIGIN" value="97"/>
 		<item key="DIALOG_WIDTH" value="300"/>
 		<item key="DIALOG_HEIGHT" value="322"/>
 		<item key="DIALOG_FONT_NAME" value="1|Microsoft YaHei UI|9.0|0|WINDOWS|1|-12|0|0|0|400|0|0|0|1|0|0|0|0|Microsoft YaHei UI"/>

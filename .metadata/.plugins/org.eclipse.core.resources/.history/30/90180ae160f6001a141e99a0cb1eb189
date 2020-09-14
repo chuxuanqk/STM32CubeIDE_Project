@@ -1,0 +1,16 @@
+/*
+ * config.h
+ *
+ *  Created on: 2020年9月14日
+ *      Author: Administrator
+ */
+
+#ifndef CONFIG_H_
+#define CONFIG_H_
+
+#define USING_UART1
+#define USING_UART2
+
+
+
+#endif /* CONFIG_H_ */

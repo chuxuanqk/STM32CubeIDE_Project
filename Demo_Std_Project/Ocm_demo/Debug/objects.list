@@ -1,5 +1,6 @@
 "Driver/src/board.o"
 "Driver/src/flash.o"
+"Driver/src/uart.o"
 "Libraries/STM32F10x_StdPeriph_Driver/src/misc.o"
 "Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_adc.o"
 "Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_bkp.o"

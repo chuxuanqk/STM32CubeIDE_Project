@@ -31,6 +31,7 @@ SOFTWARE.
 #include <stddef.h>
 #include "stm32f10x.h"
 #include "board.h"
+#include "uart.h"
 
 
 
@@ -43,36 +44,8 @@ SOFTWARE.
 */
 int main(void)
 {
-
-  /**
-  *  IMPORTANT NOTE!
-  *  The symbol VECT_TAB_SRAM needs to be defined when building the project
-  *  if code has been located to RAM and interrupts are used. 
-  *  Otherwise the interrupt table located in flash will be used.
-  *  See also the <system_*.c> file and how the SystemInit() function updates 
-  *  SCB->VTOR register.  
-  *  E.g.  SCB->VTOR = 0x20000000;  
-  */
-
-  /* USARTx configured as follow:
-        - BaudRate = 115200 baud
-        - Word Length = 8 Bits
-        - One Stop Bit
-        - No parity
-        - Hardware flow control disabled (RTS and CTS signals)
-        - Receive and transmit enabled
-  */
   hw_board_init();
-
-  USART_InitTypeDef USART_InitStructure;
-  USART_InitStructure.USART_BaudRate = 9600;
-  USART_InitStructure.USART_WordLength = USART_WordLength_8b;
-  USART_InitStructure.USART_StopBits = USART_StopBits_1;
-  USART_InitStructure.USART_Parity = USART_Parity_No;
-  USART_InitStructure.USART_HardwareFlowControl = USART_HardwareFlowControl_None;
-  USART_InitStructure.USART_Mode = USART_Mode_Rx | USART_Mode_Tx;
-
-  USART_Init(USART1, &USART_InitStructure);
+  hw_uart_init();
 
   /* TODO - Add your application code here */
 

@@ -1,23 +1,10 @@
-15:20:02 **** Incremental Build of configuration Debug for project Ocm_deom ****
+18:26:47 **** Incremental Build of configuration Debug for project Ocm_deom ****
 make all 
-arm-none-eabi-gcc "../Driver/src/flash.c" -mcpu=cortex-m3 -std=gnu11 -g3 -DSTM32F10X_MD -DUSE_STDPERIPH_DRIVER -c -I../src -I../Libraries/STM32F10x_StdPeriph_Driver/inc -I../Libraries/CMSIS/Device/ST/STM32F10x/Include -I../Libraries/CMSIS/Include -I"D:/Program Files/STM32CubeIDE_1.4.0/workspace_1.4.0/STM32CubeIDE_Project/Demo_Std_Project/Ocm_demo/Driver/inc" -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -MMD -MP -MF"Driver/src/flash.d" -MT"Driver/src/flash.o"  -mfloat-abi=soft -mthumb -o "Driver/src/flash.o"
-arm-none-eabi-gcc -o "Ocm_deom.elf" @"objects.list"   -mcpu=cortex-m3 -T"../stm32_flash.ld" --specs=nosys.specs -Wl,-Map="Ocm_deom.map" -Wl,--gc-sections -static  -mfloat-abi=soft -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
-Finished building target: Ocm_deom.elf
- 
-arm-none-eabi-objdump -h -S  Ocm_deom.elf  > "Ocm_deom.list"
-Finished building: Ocm_deom.list
- 
-arm-none-eabi-objcopy  -O ihex  Ocm_deom.elf  "Ocm_deom.hex"
-Finished building: Ocm_deom.hex
- 
-arm-none-eabi-objcopy  -O binary  Ocm_deom.elf  "Ocm_deom.bin"
-Finished building: Ocm_deom.bin
- 
 arm-none-eabi-size   Ocm_deom.elf 
    text	   data	    bss	    dec	    hex	filename
-   4356	   1104	    328	   5788	   169c	Ocm_deom.elf
+   6876	   1608	    328	   8812	   226c	Ocm_deom.elf
 Finished building: default.size.stdout
  
 
-15:20:04 Build Finished. 0 errors, 0 warnings. (took 1s.747ms)
+18:26:47 Build Finished. 0 errors, 0 warnings. (took 515ms)
 

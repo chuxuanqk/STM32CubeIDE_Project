@@ -9,3 +9,8 @@
 
 //全部设备通道总数
 #define MODULE_ALL_NUM 5
+
+#define USING_UART1
+//#define USING_UART2
+#define USING_UART3
+#define USE_USART_DMA_TX
