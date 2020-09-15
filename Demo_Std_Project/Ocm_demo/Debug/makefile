@@ -11,6 +11,7 @@ RM := rm -rf
 -include src/subdir.mk
 -include Libraries/STM32F10x_StdPeriph_Driver/src/subdir.mk
 -include Driver/src/subdir.mk
+-include Application/subdir.mk
 -include subdir.mk
 -include objects.mk
 

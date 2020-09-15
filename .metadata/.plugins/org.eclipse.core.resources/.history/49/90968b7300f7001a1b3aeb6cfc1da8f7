@@ -1,0 +1,16 @@
+/*
+ * test.c
+ *
+ *  Created on: 2020年9月14日
+ *      Author: Administrator
+ */
+
+#include "uart.h"
+
+void uart_test(void)
+{
+    if(uart_getflag(USART1, UART_FLAG_DMA_TC) != false)
+    {
+	uart_write(USART1, pbuf, size)
+    }
+}

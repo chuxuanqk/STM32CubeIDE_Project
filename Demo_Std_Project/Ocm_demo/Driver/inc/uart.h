@@ -100,11 +100,18 @@ struct uart_device{
       uint32_t tx_gl_flag;
       /* dma irq channel */
       uint8_t tx_irq_ch;
+      /* dma tx complete IT */
+      uint32_t tx_tc_IT;
   }dma_tx;
 
 #endif
+};
 
-
+enum UART_FLAG{
+  UART_FLAG_DEFAULT,
+  UART_FLAG_DMA_TC,
+  UART_FLAG_DMA_RC,
+  UART_FLAG_RC,
 };
 
 struct uart_data{
@@ -118,9 +125,19 @@ struct uart_data{
 };
 
 void hw_uart_init(void);
+bool uart_getflag(USART_TypeDef* uartx, enum UART_FLAG uflag);
+bool uart_clearflag(USART_TypeDef* uartx, enum UART_FLAG uflag);
 int16_t uart_getc(USART_TypeDef* uartx);
 int16_t uart_read(USART_TypeDef* uartx, uint8_t *pbuf, uint8_t size);
 int16_t uart_write(USART_TypeDef* uartx, uint8_t *pbuf, uint8_t size);
 void uart_stream_configuration(const struct uart_data* pstream);
+
+void USART1_IRQHandler(void);
+void USART2_IRQHandler(void);
+void USART3_IRQHandler(void);
+
+void DMA1_Channel4_IRQHandler(void);
+void DMA1_Channel7_IRQHandler(void);
+void DMA1_Channel2_IRQHandler(void);
 
 #endif /* DRIVER_INC_UART_H_ */

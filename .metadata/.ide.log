@@ -814,3 +814,17 @@
 
 
 2020-09-14 09:58:02,724 [INFO] Activator:179 - !SESSION log4j initialized
+2020-09-15 09:37:58,408 [INFO] Activator:178 - 
+
+
+2020-09-15 09:37:58,408 [INFO] Activator:179 - !SESSION log4j initialized
+2020-09-15 09:38:07,591 [INFO] RetryExec:97 - I/O exception (org.apache.http.NoHttpResponseException) caught when processing request to {s}->https://download.eclipse.org:443: The target server failed to respond
+2020-09-15 09:38:07,607 [INFO] RetryExec:113 - Retrying request to {s}->https://download.eclipse.org:443
+2020-09-15 10:47:48,564 [ERROR] LogOutputStream:74 - [STDERR_REDIRECT] ???? 15, 2020 10:47:48 ???? java.util.prefs.WindowsPreferences WindowsRegOpenKey1
+2020-09-15 10:47:48,580 [ERROR] LogOutputStream:74 - [STDERR_REDIRECT] ????: Trying to recreate Windows registry node Software\Classes\eclipse+mpc at root 0x80000001.
+2020-09-15 10:47:48,580 [ERROR] LogOutputStream:74 - [STDERR_REDIRECT] 
+2020-09-15 11:36:02,555 [ERROR] LogOutputStream:74 - [STDERR_REDIRECT] 
+2020-09-15 11:36:11,642 [INFO] Activator:178 - 
+
+
+2020-09-15 11:36:11,644 [INFO] Activator:179 - !SESSION log4j initialized

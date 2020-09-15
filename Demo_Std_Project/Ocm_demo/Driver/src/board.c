@@ -115,7 +115,6 @@ void RCC_Configuration(void)
 
 static void NVIC_Configuration(void)
 {
-    NVIC_InitTypeDef NVIC_InitStructure;
 #ifdef VETB_TAB_RAM
     NVYC_SetVectorTable(NVIC_VectTab_RAM, 0x0);
 #else

@@ -1,0 +1,17 @@
+/*
+ * gpio.c
+ *
+ *  Created on: 2020年9月15日
+ *      Author: Administrator
+ */
+
+
+static void RCC_Configuration(void)
+{
+
+}
+
+void hw_gpio_init(void)
+{
+
+}

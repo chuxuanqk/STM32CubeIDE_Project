@@ -1,0 +1,18 @@
+/*
+ * gpio.h
+ *
+ *  Created on: 2020年9月15日
+ *      Author: Administrator
+ */
+
+#ifndef DRIVER_INC_GPIO_H_
+#define DRIVER_INC_GPIO_H_
+
+
+#include "stm32f10x.h"
+
+#
+
+void hw_gpio_init(void);
+
+#endif /* DRIVER_INC_GPIO_H_ */

@@ -1,0 +1,19 @@
+/*
+ * gpio.c
+ *
+ *  Created on: 2020年9月15日
+ *      Author: Administrator
+ */
+
+#include "gpio.h"
+
+
+static void RCC_Configuration(void)
+{
+  RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOA,)
+}
+
+void hw_gpio_init(void)
+{
+
+}
