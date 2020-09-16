@@ -33,6 +33,8 @@ SOFTWARE.
 #include "board.h"
 #include "uart.h"
 #include "gpio.h"
+#include "uart_485.h"
+#include "string.h"
 #include "test.h"
 
 
@@ -52,17 +54,28 @@ int main(void)
   hw_board_init();
   hw_uart_init();
   hw_gpio_init();
+  hw_uart_485_init();
 
   /* TODO - Add your application code here */
-
+  uart_Setread_Size(USART1, 2);
+  uart_Setread_Size(USART3, 4);
   /* Infinite loop */
   while (1)
   {
       if(uart_getflag(USART1, UART_FLAG_RC))
       {
-	  size = uart_read(USART1, buf_rc, 1);
-	  uart_write(USART1, buf_rc, 1);
+	  size = uart_read(USART1, buf_rc, 2);
+	  uart_485_write(USART3, buf_rc, size);
+	  memset(buf_rc, 0, sizeof(buf_rc));
 	  uart_clearflag(USART1, UART_FLAG_RC);
+      }
+
+      if(uart_getflag(USART3, UART_FLAG_RC))
+      {
+	  size = uart_485_read(USART3, buf_rc, 4);
+	  uart_write(USART1, buf_rc, 4);
+	  memset(buf_rc, 0, sizeof(buf_rc));
+	  uart_clearflag(USART3, UART_FLAG_RC);
       }
   }
 }

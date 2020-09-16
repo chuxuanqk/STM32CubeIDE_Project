@@ -86,6 +86,8 @@ static void UART_Configuration(struct uart_device *uart, struct uart_configure *
   USART_ClockInitStructure.USART_LastBit = USART_LastBit_Disable; //在SCLK引脚上输出最后发送的那个数据字的脉冲不从SCLK输出
   USART_ClockInit(uart->uartx, &USART_ClockInitStructure);
 
+  USART_DeInit(uart->uartx);
+
   USART_InitStructure.USART_BaudRate = cfg->baud_rate;
   if (cfg->data_bits == DATA_BITS_8)
   {
@@ -125,9 +127,10 @@ static void UART_Configuration(struct uart_device *uart, struct uart_configure *
   USART_InitStructure.USART_Mode = USART_Mode_Rx | USART_Mode_Tx;
   USART_Init(uart->uartx, &USART_InitStructure);
 
-  USART_ITConfig(uart->uartx, USART_IT_RXNE, ENABLE); //接收中断使能
   //串口采用DMA发送
   USART_DMACmd(uart->uartx, USART_DMAReq_Tx, ENABLE);
+  USART_ITConfig(uart->uartx, USART_IT_RXNE, ENABLE); 		// 接收中断使能
+  USART_ClearITPendingBit(uart->uartx, USART_IT_RXNE);		// 清除接收完成中断
   /* Enable USART */
   USART_Cmd(uart->uartx, ENABLE);
 }
@@ -206,9 +209,9 @@ static void UART_DMA_Tx_Config(struct uart_data *pdata)
   DMA_InitStructure.DMA_M2M = DMA_M2M_Disable;
 
   DMA_Init(uart->dma_tx.tx_ch, &DMA_InitStructure);
-  DMA_ITConfig(uart->dma_tx.tx_ch, DMA_IT_TC, ENABLE);
   // 清除DMA标志
-  DMA_ClearFlag(uart->dma_tx.tx_gl_flag);
+//  DMA_ClearFlag(uart->dma_tx.tx_gl_flag);
+  DMA_ITConfig(uart->dma_tx.tx_ch, DMA_IT_TC, ENABLE);	// dma传输中断
   DMA_Cmd(uart->dma_tx.tx_ch, DISABLE);
 }
 #endif
@@ -276,38 +279,41 @@ static void uart_isr(struct uart_data *puart)
   USART_TypeDef *uart = puart->uart_device->uartx;
   if (USART_GetITStatus(uart, USART_IT_RXNE) != RESET)
   {
-    /* 奇偶校验错误检测，无校验错误 */
-    if (USART_GetFlagStatus(uart, USART_FLAG_PE) == RESET)
-    {
       puart->stream_rx[puart->rx_index] = (uint8_t)USART_ReceiveData(uart);
-      puart->rx_index = (++puart->rx_index) % UART_DMA_RB_BUFSZ;
+      ++puart->rx_index;
+      puart->rx_index = puart->rx_index % UART_DMA_RB_BUFSZ;
       if (puart->rx_index == puart->recv_len)
       {
+//	NET_LED_TRIGGLE;
         puart->rx_flag = true;
       }
-    }
     /* clear interrupt */
     USART_ClearITPendingBit(uart, USART_IT_RXNE);
   }
 
 #ifdef USE_USART_DMA_RX
   /* 检测到总线空闲，USART_CR1的IDLEIE为1 */
-  if (USART_GetFlagStatus(uart, USART_IT_IDLE) != RESET)
+  if (USART_GetITStatus(uart, USART_IT_IDLE) != RESET)
   {
   }
 #endif
 
   /* 一帧数据发送完成后，并且TXE=1时即数据已经被转移到移位寄存器中， USART_CR1中的TCIE为1产生中断*/
-  if (USART_GetFlagStatus(uart, USART_IT_TC) != RESET)
+  if (USART_GetITStatus(uart, USART_IT_TC) != RESET)
   {
     /* clear interrupt */
+      uart_tc_isr_hook();
+      USART_ClearITPendingBit(uart, USART_IT_TC);
+      USART_ITConfig(uart, USART_IT_TC, DISABLE);
+  }
 
-    USART_ITConfig(uart, USART_IT_TC, DISABLE);
-    USART_ClearITPendingBit(uart, USART_IT_TC);
+  if(USART_GetITStatus(uart, USART_IT_TXE) != RESET)
+  {
+
   }
 
   /* 检测到过载错误，当RXNE仍是1时，当前被接收在移位寄存器中的数据，需要传送至RDR寄存器是，硬件将该位 置位 */
-  if (USART_GetFlagStatus(uart, USART_FLAG_ORE) == SET)
+  if (USART_GetITStatus(uart, USART_FLAG_ORE) == SET)
   {
     USART_ReceiveData(uart);
   }
@@ -317,10 +323,19 @@ static void dma_isr(struct uart_data *puart)
 {
   struct uart_dma_tx *dma_tx = &puart->uart_device->dma_tx;
 
-  NET_LED_TRIGGLE;
-  puart->tx_flag = false;	// 使能再次发送
-  DMA_Cmd(dma_tx->tx_ch, DISABLE);
-  DMA_ClearFlag(dma_tx->tx_gl_flag);
+  if(DMA_GetITStatus(dma_tx->tx_tc_IT) != RESET){
+    if(puart->uart_device->uartx == USART3)
+    {
+	USART_ClearITPendingBit(puart->uart_device->uartx, USART_IT_TC);
+	USART_ITConfig(puart->uart_device->uartx, USART_IT_TC, ENABLE);		// 传输中断使能
+    }
+
+    NET_LED_TRIGGLE;
+    uart_dmaisr_hook();
+    puart->tx_flag = false;	// 使能再次发送
+    DMA_Cmd(dma_tx->tx_ch, DISABLE);
+    DMA_ClearFlag(dma_tx->tx_gl_flag);
+  }
 }
 
 #ifdef USING_UART1
@@ -532,15 +547,15 @@ int16_t uart_read(USART_TypeDef *uartx, uint8_t *pbuf, uint8_t size)
   if (pstream->recv_len != size)
     pstream->recv_len = size;
 
-  if ((pstream->recv_len <= pstream->rx_index) && (pstream->rx_flag == true))
+  if (pstream->rx_flag == true)
   {
-    for (i = 0; i < pstream->rx_index; i++)
+    for (i = 0; i < size; i++)
       pbuf[i] = pstream->stream_rx[i];
 
-    ret = i;
+    ret = size;
     pstream->rx_flag = false;
     pstream->rx_index = 0;
-    memset(pstream->stream_rx, 0, pstream->rx_index);
+    memset(pstream->stream_rx, 0, sizeof(pstream->stream_rx));	// refflush
   }
 
   return ret;
@@ -567,7 +582,7 @@ int16_t uart_write(USART_TypeDef *uartx, uint8_t *pbuf, uint8_t size)
 
   if (pstream->tx_flag != true)
   {
-//      pstream->tx_flag = true;	// 设置发送标志
+      pstream->tx_flag = true;	// 设置发送标志
       ret = size;
 
       for(i=0; i<size; i++)
@@ -583,6 +598,28 @@ int16_t uart_write(USART_TypeDef *uartx, uint8_t *pbuf, uint8_t size)
   }
 
   return ret;
+}
+
+
+int16_t uart_Setread_Size(USART_TypeDef* uartx, uint8_t size)
+{
+  struct uart_data *pstream;
+#ifdef USING_UART1
+  if (USART1 == uartx)
+    pstream = &duart1;
+#endif
+#ifdef USING_UART2
+  else if (USART2 == uartx)
+    pstream = &duart2;
+#endif
+#ifdef USING_UART3
+  else if (USART3 == uartx)
+    pstream = &duart3;
+#endif
+
+  pstream->recv_len = size;
+
+  return pstream->recv_len;
 }
 
 void hw_uart_init(void)

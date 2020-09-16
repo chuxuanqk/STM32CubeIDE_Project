@@ -130,7 +130,10 @@ bool uart_clearflag(USART_TypeDef* uartx, enum UART_FLAG uflag);
 int16_t uart_getc(USART_TypeDef* uartx);
 int16_t uart_read(USART_TypeDef* uartx, uint8_t *pbuf, uint8_t size);
 int16_t uart_write(USART_TypeDef* uartx, uint8_t *pbuf, uint8_t size);
-void uart_stream_configuration(const struct uart_data* pstream);
+//void uart_stream_configuration(struct uart_data* pstream);
+int16_t uart_Setread_Size(USART_TypeDef* uartx, uint8_t size);
+void __attribute__((weak)) uart_dmaisr_hook(void);
+void __attribute__((weak)) uart_tc_isr_hook(void);
 
 void USART1_IRQHandler(void);
 void USART2_IRQHandler(void);
