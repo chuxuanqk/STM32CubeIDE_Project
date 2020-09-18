@@ -49,6 +49,7 @@ __lock___dd_hash_mutex
                     0x1               d:/program files/stm32cubeide_1.4.0/stm32cubeide/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.7-2018-q2-update.win32_1.4.0.202007081208/tools/bin/../lib/gcc/arm-none-eabi/7.3.1/../../../../arm-none-eabi/lib/thumb/v7-m\libc.a(lib_a-lock.o)
 __lock___tz_mutex   0x1               d:/program files/stm32cubeide_1.4.0/stm32cubeide/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.7-2018-q2-update.win32_1.4.0.202007081208/tools/bin/../lib/gcc/arm-none-eabi/7.3.1/../../../../arm-none-eabi/lib/thumb/v7-m\libc.a(lib_a-lock.o)
 Config_Data         0x16              Driver/src/board.o
+can_receive         0x70              Driver/src/can.o
 __lock___sfp_recursive_mutex
                     0x1               d:/program files/stm32cubeide_1.4.0/stm32cubeide/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.7-2018-q2-update.win32_1.4.0.202007081208/tools/bin/../lib/gcc/arm-none-eabi/7.3.1/../../../../arm-none-eabi/lib/thumb/v7-m\libc.a(lib_a-lock.o)
 
@@ -81,9 +82,41 @@ Discarded input sections
  .debug_frame   0x0000000000000000       0x34 Application/test.o
  .ARM.attributes
                 0x0000000000000000       0x33 Application/test.o
+ .text          0x0000000000000000        0x0 Driver/src/BL0940.o
+ .data          0x0000000000000000        0x0 Driver/src/BL0940.o
+ .bss           0x0000000000000000        0x0 Driver/src/BL0940.o
+ .text.Read_BL0940_Reg
+                0x0000000000000000       0xec Driver/src/BL0940.o
+ .text.Write_BL0940_Reg
+                0x0000000000000000       0x20 Driver/src/BL0940.o
+ .debug_info    0x0000000000000000       0x48 Driver/src/BL0940.o
+ .debug_abbrev  0x0000000000000000       0x40 Driver/src/BL0940.o
+ .debug_aranges
+                0x0000000000000000       0x28 Driver/src/BL0940.o
+ .debug_ranges  0x0000000000000000       0x18 Driver/src/BL0940.o
+ .debug_line    0x0000000000000000       0x82 Driver/src/BL0940.o
+ .debug_str     0x0000000000000000      0x158 Driver/src/BL0940.o
+ .comment       0x0000000000000000       0x7c Driver/src/BL0940.o
+ .debug_frame   0x0000000000000000       0x5c Driver/src/BL0940.o
+ .ARM.attributes
+                0x0000000000000000       0x33 Driver/src/BL0940.o
  .text          0x0000000000000000        0x0 Driver/src/board.o
  .data          0x0000000000000000        0x0 Driver/src/board.o
  .bss           0x0000000000000000        0x0 Driver/src/board.o
+ .text          0x0000000000000000        0x0 Driver/src/can.o
+ .data          0x0000000000000000        0x0 Driver/src/can.o
+ .bss           0x0000000000000000        0x0 Driver/src/can.o
+ .text.RCC_Configuration
+                0x0000000000000000       0x1a Driver/src/can.o
+ .text.NVIC_Configuration
+                0x0000000000000000       0x26 Driver/src/can.o
+ .text.GPIO_Configuration
+                0x0000000000000000       0x40 Driver/src/can.o
+ .text.CAN_Configuration
+                0x0000000000000000       0x90 Driver/src/can.o
+ .text.hw_can_init
+                0x0000000000000000       0x18 Driver/src/can.o
+ COMMON         0x0000000000000000       0x70 Driver/src/can.o
  .text          0x0000000000000000        0x0 Driver/src/flash.o
  .data          0x0000000000000000        0x0 Driver/src/flash.o
  .bss           0x0000000000000000        0x0 Driver/src/flash.o
@@ -116,6 +149,10 @@ Discarded input sections
  .text          0x0000000000000000        0x0 Driver/src/uart_485.o
  .data          0x0000000000000000        0x0 Driver/src/uart_485.o
  .bss           0x0000000000000000        0x0 Driver/src/uart_485.o
+ .text.uart_485_read
+                0x0000000000000000       0x26 Driver/src/uart_485.o
+ .text.uart_485_write
+                0x0000000000000000       0x34 Driver/src/uart_485.o
  .text          0x0000000000000000        0x0 Libraries/STM32F10x_StdPeriph_Driver/src/misc.o
  .data          0x0000000000000000        0x0 Libraries/STM32F10x_StdPeriph_Driver/src/misc.o
  .bss           0x0000000000000000        0x0 Libraries/STM32F10x_StdPeriph_Driver/src/misc.o
@@ -267,8 +304,6 @@ Discarded input sections
                 0x0000000000000000       0xd4 Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_can.o
  .text.CAN_CancelTransmit
                 0x0000000000000000       0x50 Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_can.o
- .text.CAN_Receive
-                0x0000000000000000      0x17a Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_can.o
  .text.CAN_FIFORelease
                 0x0000000000000000       0x36 Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_can.o
  .text.CAN_MessagePending
@@ -293,21 +328,8 @@ Discarded input sections
                 0x0000000000000000       0x70 Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_can.o
  .text.CAN_GetITStatus
                 0x0000000000000000      0x194 Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_can.o
- .text.CAN_ClearITPendingBit
-                0x0000000000000000       0xdc Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_can.o
  .text.CheckITStatus
                 0x0000000000000000       0x2e Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_can.o
- .debug_info    0x0000000000000000      0x1e6 Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_can.o
- .debug_abbrev  0x0000000000000000       0x80 Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_can.o
- .debug_aranges
-                0x0000000000000000       0xe0 Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_can.o
- .debug_ranges  0x0000000000000000       0xd0 Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_can.o
- .debug_line    0x0000000000000000      0x3e4 Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_can.o
- .debug_str     0x0000000000000000      0x300 Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_can.o
- .comment       0x0000000000000000       0x7c Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_can.o
- .debug_frame   0x0000000000000000      0x3f4 Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_can.o
- .ARM.attributes
-                0x0000000000000000       0x33 Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_can.o
  .text          0x0000000000000000        0x0 Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_cec.o
  .data          0x0000000000000000        0x0 Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_cec.o
  .bss           0x0000000000000000        0x0 Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_cec.o
@@ -1360,7 +1382,9 @@ LOAD d:/program files/stm32cubeide_1.4.0/stm32cubeide/plugins/com.st.stm32cube.i
 LOAD d:/program files/stm32cubeide_1.4.0/stm32cubeide/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.7-2018-q2-update.win32_1.4.0.202007081208/tools/bin/../lib/gcc/arm-none-eabi/7.3.1/thumb/v7-m/crtbegin.o
 LOAD d:/program files/stm32cubeide_1.4.0/stm32cubeide/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.7-2018-q2-update.win32_1.4.0.202007081208/tools/bin/../lib/gcc/arm-none-eabi/7.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/crt0.o
 LOAD Application/test.o
+LOAD Driver/src/BL0940.o
 LOAD Driver/src/board.o
+LOAD Driver/src/can.o
 LOAD Driver/src/flash.o
 LOAD Driver/src/gpio.o
 LOAD Driver/src/uart.o
@@ -1419,7 +1443,7 @@ LOAD d:/program files/stm32cubeide_1.4.0/stm32cubeide/plugins/com.st.stm32cube.i
                 0x0000000008000000                g_pfnVectors
                 0x000000000800010c                . = ALIGN (0x4)
 
-.text           0x000000000800010c     0x2250
+.text           0x000000000800010c     0x2434
                 0x000000000800010c                . = ALIGN (0x4)
  *(.text)
  .text          0x000000000800010c       0x40 d:/program files/stm32cubeide_1.4.0/stm32cubeide/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.7-2018-q2-update.win32_1.4.0.202007081208/tools/bin/../lib/gcc/arm-none-eabi/7.3.1/thumb/v7-m/crtbegin.o
@@ -1448,391 +1472,399 @@ LOAD d:/program files/stm32cubeide_1.4.0/stm32cubeide/plugins/com.st.stm32cube.i
  .text.hw_board_init
                 0x00000000080003ec       0x30 Driver/src/board.o
                 0x00000000080003ec                hw_board_init
+ .text.USB_HP_CAN1_TX_IRQHandler
+                0x000000000800041c        0xc Driver/src/can.o
+                0x000000000800041c                USB_HP_CAN1_TX_IRQHandler
+ .text.USB_LP_CAN1_RX0_IRQHandler
+                0x0000000008000428       0x2c Driver/src/can.o
+                0x0000000008000428                USB_LP_CAN1_RX0_IRQHandler
  .text.RCC_Configuration
-                0x000000000800041c       0x18 Driver/src/gpio.o
+                0x0000000008000454       0x18 Driver/src/gpio.o
  .text.GPIO_Configuration
-                0x0000000008000434       0x4c Driver/src/gpio.o
+                0x000000000800046c       0x4c Driver/src/gpio.o
  .text.hw_gpio_init
-                0x0000000008000480       0x10 Driver/src/gpio.o
-                0x0000000008000480                hw_gpio_init
+                0x00000000080004b8       0x10 Driver/src/gpio.o
+                0x00000000080004b8                hw_gpio_init
  .text.RCC_Configuration
-                0x0000000008000490       0x3e Driver/src/uart.o
- *fill*         0x00000000080004ce        0x2 
- .text.GPIO_Configuration
-                0x00000000080004d0       0x90 Driver/src/uart.o
- .text.UART_Configuration
-                0x0000000008000560      0x138 Driver/src/uart.o
- .text.UART_DMA_Tx_Config
-                0x0000000008000698       0x86 Driver/src/uart.o
+                0x00000000080004c8       0x3e Driver/src/uart.o
  .text.NVIC_Configuration
-                0x000000000800071e       0x9e Driver/src/uart.o
- .text.uart_isr
-                0x00000000080007bc       0xd0 Driver/src/uart.o
- .text.dma_isr  0x000000000800088c       0x9c Driver/src/uart.o
- .text.USART1_IRQHandler
-                0x0000000008000928       0x14 Driver/src/uart.o
-                0x0000000008000928                USART1_IRQHandler
- .text.DMA1_Channel4_IRQHandler
-                0x000000000800093c       0x14 Driver/src/uart.o
-                0x000000000800093c                DMA1_Channel4_IRQHandler
- .text.USART3_IRQHandler
-                0x0000000008000950       0x14 Driver/src/uart.o
-                0x0000000008000950                USART3_IRQHandler
- .text.DMA1_Channel2_IRQHandler
-                0x0000000008000964       0x14 Driver/src/uart.o
-                0x0000000008000964                DMA1_Channel2_IRQHandler
- .text.uart_getflag
-                0x0000000008000978       0x78 Driver/src/uart.o
-                0x0000000008000978                uart_getflag
- .text.uart_clearflag
-                0x00000000080009f0       0x5c Driver/src/uart.o
-                0x00000000080009f0                uart_clearflag
- .text.uart_read
-                0x0000000008000a4c       0xb0 Driver/src/uart.o
-                0x0000000008000a4c                uart_read
- .text.uart_write
-                0x0000000008000afc       0xb0 Driver/src/uart.o
-                0x0000000008000afc                uart_write
- .text.uart_Setread_Size
-                0x0000000008000bac       0x4c Driver/src/uart.o
-                0x0000000008000bac                uart_Setread_Size
- .text.hw_uart_init
-                0x0000000008000bf8       0x68 Driver/src/uart.o
-                0x0000000008000bf8                hw_uart_init
- .text.RCC_Configuration
-                0x0000000008000c60       0x10 Driver/src/uart_485.o
+                0x0000000008000506       0x9e Driver/src/uart.o
  .text.GPIO_Configuration
-                0x0000000008000c70       0x34 Driver/src/uart_485.o
+                0x00000000080005a4       0x90 Driver/src/uart.o
+ .text.UART_Configuration
+                0x0000000008000634      0x138 Driver/src/uart.o
+ .text.UART_DMA_Tx_Config
+                0x000000000800076c       0x86 Driver/src/uart.o
+ *fill*         0x00000000080007f2        0x2 
+ .text.uart_isr
+                0x00000000080007f4       0xd0 Driver/src/uart.o
+ .text.dma_isr  0x00000000080008c4       0x9c Driver/src/uart.o
+ .text.USART1_IRQHandler
+                0x0000000008000960       0x14 Driver/src/uart.o
+                0x0000000008000960                USART1_IRQHandler
+ .text.DMA1_Channel4_IRQHandler
+                0x0000000008000974       0x14 Driver/src/uart.o
+                0x0000000008000974                DMA1_Channel4_IRQHandler
+ .text.USART3_IRQHandler
+                0x0000000008000988       0x14 Driver/src/uart.o
+                0x0000000008000988                USART3_IRQHandler
+ .text.DMA1_Channel2_IRQHandler
+                0x000000000800099c       0x14 Driver/src/uart.o
+                0x000000000800099c                DMA1_Channel2_IRQHandler
+ .text.__get_duartx
+                0x00000000080009b0       0x40 Driver/src/uart.o
+                0x00000000080009b0                __get_duartx
+ .text.uart_getflag
+                0x00000000080009f0       0x52 Driver/src/uart.o
+                0x00000000080009f0                uart_getflag
+ .text.uart_clearflag
+                0x0000000008000a42       0x36 Driver/src/uart.o
+                0x0000000008000a42                uart_clearflag
+ .text.uart_read
+                0x0000000008000a78       0x8e Driver/src/uart.o
+                0x0000000008000a78                uart_read
+ .text.uart_write
+                0x0000000008000b06       0x8c Driver/src/uart.o
+                0x0000000008000b06                uart_write
+ *fill*         0x0000000008000b92        0x2 
+ .text.uart_Setread_Size
+                0x0000000008000b94       0x4c Driver/src/uart.o
+                0x0000000008000b94                uart_Setread_Size
+ .text.hw_uart_init
+                0x0000000008000be0       0x68 Driver/src/uart.o
+                0x0000000008000be0                hw_uart_init
+ .text.RCC_Configuration
+                0x0000000008000c48       0x10 Driver/src/uart_485.o
+ .text.GPIO_Configuration
+                0x0000000008000c58       0x34 Driver/src/uart_485.o
  .text.uart_tc_isr_hook
-                0x0000000008000ca4       0x18 Driver/src/uart_485.o
-                0x0000000008000ca4                uart_tc_isr_hook
- .text.uart_485_read
-                0x0000000008000cbc       0x26 Driver/src/uart_485.o
-                0x0000000008000cbc                uart_485_read
- *fill*         0x0000000008000ce2        0x2 
- .text.uart_485_write
-                0x0000000008000ce4       0x34 Driver/src/uart_485.o
-                0x0000000008000ce4                uart_485_write
+                0x0000000008000c8c       0x18 Driver/src/uart_485.o
+                0x0000000008000c8c                uart_tc_isr_hook
  .text.hw_uart_485_init
-                0x0000000008000d18       0x10 Driver/src/uart_485.o
-                0x0000000008000d18                hw_uart_485_init
+                0x0000000008000ca4       0x10 Driver/src/uart_485.o
+                0x0000000008000ca4                hw_uart_485_init
  .text.NVIC_PriorityGroupConfig
-                0x0000000008000d28       0x24 Libraries/STM32F10x_StdPeriph_Driver/src/misc.o
-                0x0000000008000d28                NVIC_PriorityGroupConfig
+                0x0000000008000cb4       0x24 Libraries/STM32F10x_StdPeriph_Driver/src/misc.o
+                0x0000000008000cb4                NVIC_PriorityGroupConfig
  .text.NVIC_Init
-                0x0000000008000d4c       0xc4 Libraries/STM32F10x_StdPeriph_Driver/src/misc.o
-                0x0000000008000d4c                NVIC_Init
+                0x0000000008000cd8       0xc4 Libraries/STM32F10x_StdPeriph_Driver/src/misc.o
+                0x0000000008000cd8                NVIC_Init
  .text.NVIC_SetVectorTable
-                0x0000000008000e10       0x2c Libraries/STM32F10x_StdPeriph_Driver/src/misc.o
-                0x0000000008000e10                NVIC_SetVectorTable
+                0x0000000008000d9c       0x2c Libraries/STM32F10x_StdPeriph_Driver/src/misc.o
+                0x0000000008000d9c                NVIC_SetVectorTable
  .text.SysTick_CLKSourceConfig
-                0x0000000008000e3c       0x38 Libraries/STM32F10x_StdPeriph_Driver/src/misc.o
-                0x0000000008000e3c                SysTick_CLKSourceConfig
+                0x0000000008000dc8       0x38 Libraries/STM32F10x_StdPeriph_Driver/src/misc.o
+                0x0000000008000dc8                SysTick_CLKSourceConfig
+ .text.CAN_Receive
+                0x0000000008000e00      0x17a Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_can.o
+                0x0000000008000e00                CAN_Receive
+ *fill*         0x0000000008000f7a        0x2 
+ .text.CAN_ClearITPendingBit
+                0x0000000008000f7c       0xdc Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_can.o
+                0x0000000008000f7c                CAN_ClearITPendingBit
  .text.DMA_DeInit
-                0x0000000008000e74      0x178 Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_dma.o
-                0x0000000008000e74                DMA_DeInit
+                0x0000000008001058      0x178 Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_dma.o
+                0x0000000008001058                DMA_DeInit
  .text.DMA_Init
-                0x0000000008000fec       0x7c Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_dma.o
-                0x0000000008000fec                DMA_Init
- .text.DMA_Cmd  0x0000000008001068       0x38 Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_dma.o
-                0x0000000008001068                DMA_Cmd
+                0x00000000080011d0       0x7c Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_dma.o
+                0x00000000080011d0                DMA_Init
+ .text.DMA_Cmd  0x000000000800124c       0x38 Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_dma.o
+                0x000000000800124c                DMA_Cmd
  .text.DMA_ITConfig
-                0x00000000080010a0       0x3a Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_dma.o
-                0x00000000080010a0                DMA_ITConfig
+                0x0000000008001284       0x3a Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_dma.o
+                0x0000000008001284                DMA_ITConfig
  .text.DMA_SetCurrDataCounter
-                0x00000000080010da       0x1c Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_dma.o
-                0x00000000080010da                DMA_SetCurrDataCounter
- *fill*         0x00000000080010f6        0x2 
+                0x00000000080012be       0x1c Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_dma.o
+                0x00000000080012be                DMA_SetCurrDataCounter
+ *fill*         0x00000000080012da        0x2 
  .text.DMA_ClearFlag
-                0x00000000080010f8       0x34 Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_dma.o
-                0x00000000080010f8                DMA_ClearFlag
+                0x00000000080012dc       0x34 Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_dma.o
+                0x00000000080012dc                DMA_ClearFlag
  .text.DMA_GetITStatus
-                0x000000000800112c       0x50 Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_dma.o
-                0x000000000800112c                DMA_GetITStatus
+                0x0000000008001310       0x50 Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_dma.o
+                0x0000000008001310                DMA_GetITStatus
  .text.FLASH_Unlock
-                0x000000000800117c       0x24 Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_flash.o
-                0x000000000800117c                FLASH_Unlock
+                0x0000000008001360       0x24 Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_flash.o
+                0x0000000008001360                FLASH_Unlock
  .text.FLASH_ErasePage
-                0x00000000080011a0       0x64 Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_flash.o
-                0x00000000080011a0                FLASH_ErasePage
+                0x0000000008001384       0x64 Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_flash.o
+                0x0000000008001384                FLASH_ErasePage
  .text.FLASH_ProgramHalfWord
-                0x0000000008001204       0x5c Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_flash.o
-                0x0000000008001204                FLASH_ProgramHalfWord
+                0x00000000080013e8       0x5c Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_flash.o
+                0x00000000080013e8                FLASH_ProgramHalfWord
  .text.FLASH_ClearFlag
-                0x0000000008001260       0x1c Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_flash.o
-                0x0000000008001260                FLASH_ClearFlag
+                0x0000000008001444       0x1c Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_flash.o
+                0x0000000008001444                FLASH_ClearFlag
  .text.FLASH_GetBank1Status
-                0x000000000800127c       0x54 Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_flash.o
-                0x000000000800127c                FLASH_GetBank1Status
+                0x0000000008001460       0x54 Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_flash.o
+                0x0000000008001460                FLASH_GetBank1Status
  .text.FLASH_WaitForLastOperation
-                0x00000000080012d0       0x44 Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_flash.o
-                0x00000000080012d0                FLASH_WaitForLastOperation
+                0x00000000080014b4       0x44 Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_flash.o
+                0x00000000080014b4                FLASH_WaitForLastOperation
  .text.GPIO_Init
-                0x0000000008001314      0x178 Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_gpio.o
-                0x0000000008001314                GPIO_Init
+                0x00000000080014f8      0x178 Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_gpio.o
+                0x00000000080014f8                GPIO_Init
  .text.GPIO_ReadOutputDataBit
-                0x000000000800148c       0x32 Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_gpio.o
-                0x000000000800148c                GPIO_ReadOutputDataBit
+                0x0000000008001670       0x32 Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_gpio.o
+                0x0000000008001670                GPIO_ReadOutputDataBit
  .text.GPIO_SetBits
-                0x00000000080014be       0x1c Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_gpio.o
-                0x00000000080014be                GPIO_SetBits
+                0x00000000080016a2       0x1c Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_gpio.o
+                0x00000000080016a2                GPIO_SetBits
  .text.GPIO_ResetBits
-                0x00000000080014da       0x1c Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_gpio.o
-                0x00000000080014da                GPIO_ResetBits
+                0x00000000080016be       0x1c Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_gpio.o
+                0x00000000080016be                GPIO_ResetBits
  .text.GPIO_WriteBit
-                0x00000000080014f6       0x2e Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_gpio.o
-                0x00000000080014f6                GPIO_WriteBit
+                0x00000000080016da       0x2e Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_gpio.o
+                0x00000000080016da                GPIO_WriteBit
  .text.RCC_DeInit
-                0x0000000008001524       0x5c Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_rcc.o
-                0x0000000008001524                RCC_DeInit
+                0x0000000008001708       0x5c Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_rcc.o
+                0x0000000008001708                RCC_DeInit
  .text.RCC_HSEConfig
-                0x0000000008001580       0x5c Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_rcc.o
-                0x0000000008001580                RCC_HSEConfig
+                0x0000000008001764       0x5c Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_rcc.o
+                0x0000000008001764                RCC_HSEConfig
  .text.RCC_WaitForHSEStartUp
-                0x00000000080015dc       0x50 Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_rcc.o
-                0x00000000080015dc                RCC_WaitForHSEStartUp
+                0x00000000080017c0       0x50 Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_rcc.o
+                0x00000000080017c0                RCC_WaitForHSEStartUp
  .text.RCC_PLLConfig
-                0x000000000800162c       0x3c Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_rcc.o
-                0x000000000800162c                RCC_PLLConfig
+                0x0000000008001810       0x3c Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_rcc.o
+                0x0000000008001810                RCC_PLLConfig
  .text.RCC_PLLCmd
-                0x0000000008001668       0x20 Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_rcc.o
-                0x0000000008001668                RCC_PLLCmd
+                0x000000000800184c       0x20 Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_rcc.o
+                0x000000000800184c                RCC_PLLCmd
  .text.RCC_SYSCLKConfig
-                0x0000000008001688       0x38 Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_rcc.o
-                0x0000000008001688                RCC_SYSCLKConfig
+                0x000000000800186c       0x38 Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_rcc.o
+                0x000000000800186c                RCC_SYSCLKConfig
  .text.RCC_GetSYSCLKSource
-                0x00000000080016c0       0x1c Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_rcc.o
-                0x00000000080016c0                RCC_GetSYSCLKSource
+                0x00000000080018a4       0x1c Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_rcc.o
+                0x00000000080018a4                RCC_GetSYSCLKSource
  .text.RCC_HCLKConfig
-                0x00000000080016dc       0x38 Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_rcc.o
-                0x00000000080016dc                RCC_HCLKConfig
+                0x00000000080018c0       0x38 Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_rcc.o
+                0x00000000080018c0                RCC_HCLKConfig
  .text.RCC_PCLK1Config
-                0x0000000008001714       0x38 Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_rcc.o
-                0x0000000008001714                RCC_PCLK1Config
+                0x00000000080018f8       0x38 Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_rcc.o
+                0x00000000080018f8                RCC_PCLK1Config
  .text.RCC_PCLK2Config
-                0x000000000800174c       0x38 Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_rcc.o
-                0x000000000800174c                RCC_PCLK2Config
+                0x0000000008001930       0x38 Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_rcc.o
+                0x0000000008001930                RCC_PCLK2Config
  .text.RCC_GetClocksFreq
-                0x0000000008001784      0x160 Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_rcc.o
-                0x0000000008001784                RCC_GetClocksFreq
+                0x0000000008001968      0x160 Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_rcc.o
+                0x0000000008001968                RCC_GetClocksFreq
  .text.RCC_AHBPeriphClockCmd
-                0x00000000080018e4       0x3c Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_rcc.o
-                0x00000000080018e4                RCC_AHBPeriphClockCmd
+                0x0000000008001ac8       0x3c Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_rcc.o
+                0x0000000008001ac8                RCC_AHBPeriphClockCmd
  .text.RCC_APB2PeriphClockCmd
-                0x0000000008001920       0x3c Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_rcc.o
-                0x0000000008001920                RCC_APB2PeriphClockCmd
+                0x0000000008001b04       0x3c Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_rcc.o
+                0x0000000008001b04                RCC_APB2PeriphClockCmd
  .text.RCC_APB1PeriphClockCmd
-                0x000000000800195c       0x3c Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_rcc.o
-                0x000000000800195c                RCC_APB1PeriphClockCmd
+                0x0000000008001b40       0x3c Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_rcc.o
+                0x0000000008001b40                RCC_APB1PeriphClockCmd
  .text.RCC_APB2PeriphResetCmd
-                0x0000000008001998       0x3c Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_rcc.o
-                0x0000000008001998                RCC_APB2PeriphResetCmd
+                0x0000000008001b7c       0x3c Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_rcc.o
+                0x0000000008001b7c                RCC_APB2PeriphResetCmd
  .text.RCC_APB1PeriphResetCmd
-                0x00000000080019d4       0x3c Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_rcc.o
-                0x00000000080019d4                RCC_APB1PeriphResetCmd
+                0x0000000008001bb8       0x3c Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_rcc.o
+                0x0000000008001bb8                RCC_APB1PeriphResetCmd
  .text.RCC_GetFlagStatus
-                0x0000000008001a10       0x74 Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_rcc.o
-                0x0000000008001a10                RCC_GetFlagStatus
+                0x0000000008001bf4       0x74 Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_rcc.o
+                0x0000000008001bf4                RCC_GetFlagStatus
  .text.USART_DeInit
-                0x0000000008001a84       0xb8 Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_usart.o
-                0x0000000008001a84                USART_DeInit
+                0x0000000008001c68       0xb8 Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_usart.o
+                0x0000000008001c68                USART_DeInit
  .text.USART_Init
-                0x0000000008001b3c      0x174 Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_usart.o
-                0x0000000008001b3c                USART_Init
+                0x0000000008001d20      0x174 Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_usart.o
+                0x0000000008001d20                USART_Init
  .text.USART_ClockInit
-                0x0000000008001cb0       0x56 Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_usart.o
-                0x0000000008001cb0                USART_ClockInit
+                0x0000000008001e94       0x56 Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_usart.o
+                0x0000000008001e94                USART_ClockInit
  .text.USART_Cmd
-                0x0000000008001d06       0x3e Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_usart.o
-                0x0000000008001d06                USART_Cmd
+                0x0000000008001eea       0x3e Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_usart.o
+                0x0000000008001eea                USART_Cmd
  .text.USART_ITConfig
-                0x0000000008001d44       0x8e Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_usart.o
-                0x0000000008001d44                USART_ITConfig
+                0x0000000008001f28       0x8e Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_usart.o
+                0x0000000008001f28                USART_ITConfig
  .text.USART_DMACmd
-                0x0000000008001dd2       0x46 Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_usart.o
-                0x0000000008001dd2                USART_DMACmd
+                0x0000000008001fb6       0x46 Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_usart.o
+                0x0000000008001fb6                USART_DMACmd
  .text.USART_ReceiveData
-                0x0000000008001e18       0x1e Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_usart.o
-                0x0000000008001e18                USART_ReceiveData
+                0x0000000008001ffc       0x1e Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_usart.o
+                0x0000000008001ffc                USART_ReceiveData
  .text.USART_GetITStatus
-                0x0000000008001e36       0xb4 Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_usart.o
-                0x0000000008001e36                USART_GetITStatus
+                0x000000000800201a       0xb4 Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_usart.o
+                0x000000000800201a                USART_GetITStatus
  .text.USART_ClearITPendingBit
-                0x0000000008001eea       0x38 Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_usart.o
-                0x0000000008001eea                USART_ClearITPendingBit
- *fill*         0x0000000008001f22        0x2 
- .text.main     0x0000000008001f24       0xb4 src/main.o
-                0x0000000008001f24                main
+                0x00000000080020ce       0x38 Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_usart.o
+                0x00000000080020ce                USART_ClearITPendingBit
+ *fill*         0x0000000008002106        0x2 
+ .text.main     0x0000000008002108       0xb4 src/main.o
+                0x0000000008002108                main
  .text.Reset_Handler
-                0x0000000008001fd8       0x50 src/startup_stm32f10x_md.o
-                0x0000000008001fd8                Reset_Handler
+                0x00000000080021bc       0x50 src/startup_stm32f10x_md.o
+                0x00000000080021bc                Reset_Handler
  .text.Default_Handler
-                0x0000000008002028        0x2 src/startup_stm32f10x_md.o
-                0x0000000008002028                EXTI2_IRQHandler
-                0x0000000008002028                TIM1_CC_IRQHandler
-                0x0000000008002028                PVD_IRQHandler
-                0x0000000008002028                EXTI3_IRQHandler
-                0x0000000008002028                EXTI0_IRQHandler
-                0x0000000008002028                I2C2_EV_IRQHandler
-                0x0000000008002028                ADC1_2_IRQHandler
-                0x0000000008002028                SPI1_IRQHandler
-                0x0000000008002028                TAMPER_IRQHandler
-                0x0000000008002028                RTC_IRQHandler
-                0x0000000008002028                DMA1_Channel7_IRQHandler
-                0x0000000008002028                CAN1_RX1_IRQHandler
-                0x0000000008002028                TIM4_IRQHandler
-                0x0000000008002028                I2C1_EV_IRQHandler
-                0x0000000008002028                DMA1_Channel6_IRQHandler
-                0x0000000008002028                TIM3_IRQHandler
-                0x0000000008002028                RCC_IRQHandler
-                0x0000000008002028                TIM1_TRG_COM_IRQHandler
-                0x0000000008002028                DMA1_Channel1_IRQHandler
-                0x0000000008002028                Default_Handler
-                0x0000000008002028                EXTI15_10_IRQHandler
-                0x0000000008002028                EXTI9_5_IRQHandler
-                0x0000000008002028                SPI2_IRQHandler
-                0x0000000008002028                DMA1_Channel5_IRQHandler
-                0x0000000008002028                EXTI4_IRQHandler
-                0x0000000008002028                USB_LP_CAN1_RX0_IRQHandler
-                0x0000000008002028                USB_HP_CAN1_TX_IRQHandler
-                0x0000000008002028                DMA1_Channel3_IRQHandler
-                0x0000000008002028                TIM1_UP_IRQHandler
-                0x0000000008002028                WWDG_IRQHandler
-                0x0000000008002028                TIM2_IRQHandler
-                0x0000000008002028                TIM1_BRK_IRQHandler
-                0x0000000008002028                EXTI1_IRQHandler
-                0x0000000008002028                RTCAlarm_IRQHandler
-                0x0000000008002028                USART2_IRQHandler
-                0x0000000008002028                I2C2_ER_IRQHandler
-                0x0000000008002028                CAN1_SCE_IRQHandler
-                0x0000000008002028                FLASH_IRQHandler
-                0x0000000008002028                I2C1_ER_IRQHandler
-                0x0000000008002028                USBWakeUp_IRQHandler
+                0x000000000800220c        0x2 src/startup_stm32f10x_md.o
+                0x000000000800220c                EXTI2_IRQHandler
+                0x000000000800220c                TIM1_CC_IRQHandler
+                0x000000000800220c                PVD_IRQHandler
+                0x000000000800220c                EXTI3_IRQHandler
+                0x000000000800220c                EXTI0_IRQHandler
+                0x000000000800220c                I2C2_EV_IRQHandler
+                0x000000000800220c                ADC1_2_IRQHandler
+                0x000000000800220c                SPI1_IRQHandler
+                0x000000000800220c                TAMPER_IRQHandler
+                0x000000000800220c                RTC_IRQHandler
+                0x000000000800220c                DMA1_Channel7_IRQHandler
+                0x000000000800220c                CAN1_RX1_IRQHandler
+                0x000000000800220c                TIM4_IRQHandler
+                0x000000000800220c                I2C1_EV_IRQHandler
+                0x000000000800220c                DMA1_Channel6_IRQHandler
+                0x000000000800220c                TIM3_IRQHandler
+                0x000000000800220c                RCC_IRQHandler
+                0x000000000800220c                TIM1_TRG_COM_IRQHandler
+                0x000000000800220c                DMA1_Channel1_IRQHandler
+                0x000000000800220c                Default_Handler
+                0x000000000800220c                EXTI15_10_IRQHandler
+                0x000000000800220c                EXTI9_5_IRQHandler
+                0x000000000800220c                SPI2_IRQHandler
+                0x000000000800220c                DMA1_Channel5_IRQHandler
+                0x000000000800220c                EXTI4_IRQHandler
+                0x000000000800220c                DMA1_Channel3_IRQHandler
+                0x000000000800220c                TIM1_UP_IRQHandler
+                0x000000000800220c                WWDG_IRQHandler
+                0x000000000800220c                TIM2_IRQHandler
+                0x000000000800220c                TIM1_BRK_IRQHandler
+                0x000000000800220c                EXTI1_IRQHandler
+                0x000000000800220c                RTCAlarm_IRQHandler
+                0x000000000800220c                USART2_IRQHandler
+                0x000000000800220c                I2C2_ER_IRQHandler
+                0x000000000800220c                CAN1_SCE_IRQHandler
+                0x000000000800220c                FLASH_IRQHandler
+                0x000000000800220c                I2C1_ER_IRQHandler
+                0x000000000800220c                USBWakeUp_IRQHandler
  .text.NMI_Handler
-                0x000000000800202a        0xc src/stm32f1xx_it.o
-                0x000000000800202a                NMI_Handler
+                0x000000000800220e        0xc src/stm32f1xx_it.o
+                0x000000000800220e                NMI_Handler
  .text.HardFault_Handler
-                0x0000000008002036        0x6 src/stm32f1xx_it.o
-                0x0000000008002036                HardFault_Handler
+                0x000000000800221a        0x6 src/stm32f1xx_it.o
+                0x000000000800221a                HardFault_Handler
  .text.MemManage_Handler
-                0x000000000800203c        0x6 src/stm32f1xx_it.o
-                0x000000000800203c                MemManage_Handler
+                0x0000000008002220        0x6 src/stm32f1xx_it.o
+                0x0000000008002220                MemManage_Handler
  .text.BusFault_Handler
-                0x0000000008002042        0x6 src/stm32f1xx_it.o
-                0x0000000008002042                BusFault_Handler
+                0x0000000008002226        0x6 src/stm32f1xx_it.o
+                0x0000000008002226                BusFault_Handler
  .text.UsageFault_Handler
-                0x0000000008002048        0x6 src/stm32f1xx_it.o
-                0x0000000008002048                UsageFault_Handler
+                0x000000000800222c        0x6 src/stm32f1xx_it.o
+                0x000000000800222c                UsageFault_Handler
  .text.SVC_Handler
-                0x000000000800204e        0xc src/stm32f1xx_it.o
-                0x000000000800204e                SVC_Handler
+                0x0000000008002232        0xc src/stm32f1xx_it.o
+                0x0000000008002232                SVC_Handler
  .text.DebugMon_Handler
-                0x000000000800205a        0xc src/stm32f1xx_it.o
-                0x000000000800205a                DebugMon_Handler
+                0x000000000800223e        0xc src/stm32f1xx_it.o
+                0x000000000800223e                DebugMon_Handler
  .text.PendSV_Handler
-                0x0000000008002066        0xc src/stm32f1xx_it.o
-                0x0000000008002066                PendSV_Handler
+                0x000000000800224a        0xc src/stm32f1xx_it.o
+                0x000000000800224a                PendSV_Handler
  .text.SysTick_Handler
-                0x0000000008002072        0xc src/stm32f1xx_it.o
-                0x0000000008002072                SysTick_Handler
- *fill*         0x000000000800207e        0x2 
+                0x0000000008002256        0xc src/stm32f1xx_it.o
+                0x0000000008002256                SysTick_Handler
+ *fill*         0x0000000008002262        0x2 
  .text.SystemInit
-                0x0000000008002080       0x68 src/system_stm32f10x.o
-                0x0000000008002080                SystemInit
+                0x0000000008002264       0x68 src/system_stm32f10x.o
+                0x0000000008002264                SystemInit
  .text.SetSysClock
-                0x00000000080020e8        0xc src/system_stm32f10x.o
+                0x00000000080022cc        0xc src/system_stm32f10x.o
  .text.SetSysClockTo72
-                0x00000000080020f4      0x100 src/system_stm32f10x.o
+                0x00000000080022d8      0x100 src/system_stm32f10x.o
  .text.__libc_init_array
-                0x00000000080021f4       0x48 d:/program files/stm32cubeide_1.4.0/stm32cubeide/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.7-2018-q2-update.win32_1.4.0.202007081208/tools/bin/../lib/gcc/arm-none-eabi/7.3.1/../../../../arm-none-eabi/lib/thumb/v7-m\libc.a(lib_a-init.o)
-                0x00000000080021f4                __libc_init_array
- .text.memset   0x000000000800223c       0x10 d:/program files/stm32cubeide_1.4.0/stm32cubeide/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.7-2018-q2-update.win32_1.4.0.202007081208/tools/bin/../lib/gcc/arm-none-eabi/7.3.1/../../../../arm-none-eabi/lib/thumb/v7-m\libc.a(lib_a-memset.o)
-                0x000000000800223c                memset
+                0x00000000080023d8       0x48 d:/program files/stm32cubeide_1.4.0/stm32cubeide/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.7-2018-q2-update.win32_1.4.0.202007081208/tools/bin/../lib/gcc/arm-none-eabi/7.3.1/../../../../arm-none-eabi/lib/thumb/v7-m\libc.a(lib_a-init.o)
+                0x00000000080023d8                __libc_init_array
+ .text.memset   0x0000000008002420       0x10 d:/program files/stm32cubeide_1.4.0/stm32cubeide/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.7-2018-q2-update.win32_1.4.0.202007081208/tools/bin/../lib/gcc/arm-none-eabi/7.3.1/../../../../arm-none-eabi/lib/thumb/v7-m\libc.a(lib_a-memset.o)
+                0x0000000008002420                memset
  .text.startup.register_fini
-                0x000000000800224c       0x14 d:/program files/stm32cubeide_1.4.0/stm32cubeide/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.7-2018-q2-update.win32_1.4.0.202007081208/tools/bin/../lib/gcc/arm-none-eabi/7.3.1/../../../../arm-none-eabi/lib/thumb/v7-m\libc.a(lib_a-__call_atexit.o)
- .text.atexit   0x0000000008002260        0xc d:/program files/stm32cubeide_1.4.0/stm32cubeide/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.7-2018-q2-update.win32_1.4.0.202007081208/tools/bin/../lib/gcc/arm-none-eabi/7.3.1/../../../../arm-none-eabi/lib/thumb/v7-m\libc.a(lib_a-atexit.o)
-                0x0000000008002260                atexit
+                0x0000000008002430       0x14 d:/program files/stm32cubeide_1.4.0/stm32cubeide/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.7-2018-q2-update.win32_1.4.0.202007081208/tools/bin/../lib/gcc/arm-none-eabi/7.3.1/../../../../arm-none-eabi/lib/thumb/v7-m\libc.a(lib_a-__call_atexit.o)
+ .text.atexit   0x0000000008002444        0xc d:/program files/stm32cubeide_1.4.0/stm32cubeide/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.7-2018-q2-update.win32_1.4.0.202007081208/tools/bin/../lib/gcc/arm-none-eabi/7.3.1/../../../../arm-none-eabi/lib/thumb/v7-m\libc.a(lib_a-atexit.o)
+                0x0000000008002444                atexit
  .text.__libc_fini_array
-                0x000000000800226c       0x28 d:/program files/stm32cubeide_1.4.0/stm32cubeide/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.7-2018-q2-update.win32_1.4.0.202007081208/tools/bin/../lib/gcc/arm-none-eabi/7.3.1/../../../../arm-none-eabi/lib/thumb/v7-m\libc.a(lib_a-fini.o)
-                0x000000000800226c                __libc_fini_array
+                0x0000000008002450       0x28 d:/program files/stm32cubeide_1.4.0/stm32cubeide/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.7-2018-q2-update.win32_1.4.0.202007081208/tools/bin/../lib/gcc/arm-none-eabi/7.3.1/../../../../arm-none-eabi/lib/thumb/v7-m\libc.a(lib_a-fini.o)
+                0x0000000008002450                __libc_fini_array
  .text.__retarget_lock_acquire_recursive
-                0x0000000008002294        0x2 d:/program files/stm32cubeide_1.4.0/stm32cubeide/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.7-2018-q2-update.win32_1.4.0.202007081208/tools/bin/../lib/gcc/arm-none-eabi/7.3.1/../../../../arm-none-eabi/lib/thumb/v7-m\libc.a(lib_a-lock.o)
-                0x0000000008002294                __retarget_lock_acquire_recursive
+                0x0000000008002478        0x2 d:/program files/stm32cubeide_1.4.0/stm32cubeide/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.7-2018-q2-update.win32_1.4.0.202007081208/tools/bin/../lib/gcc/arm-none-eabi/7.3.1/../../../../arm-none-eabi/lib/thumb/v7-m\libc.a(lib_a-lock.o)
+                0x0000000008002478                __retarget_lock_acquire_recursive
  .text.__retarget_lock_release_recursive
-                0x0000000008002296        0x2 d:/program files/stm32cubeide_1.4.0/stm32cubeide/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.7-2018-q2-update.win32_1.4.0.202007081208/tools/bin/../lib/gcc/arm-none-eabi/7.3.1/../../../../arm-none-eabi/lib/thumb/v7-m\libc.a(lib_a-lock.o)
-                0x0000000008002296                __retarget_lock_release_recursive
+                0x000000000800247a        0x2 d:/program files/stm32cubeide_1.4.0/stm32cubeide/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.7-2018-q2-update.win32_1.4.0.202007081208/tools/bin/../lib/gcc/arm-none-eabi/7.3.1/../../../../arm-none-eabi/lib/thumb/v7-m\libc.a(lib_a-lock.o)
+                0x000000000800247a                __retarget_lock_release_recursive
  .text.__register_exitproc
-                0x0000000008002298       0xac d:/program files/stm32cubeide_1.4.0/stm32cubeide/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.7-2018-q2-update.win32_1.4.0.202007081208/tools/bin/../lib/gcc/arm-none-eabi/7.3.1/../../../../arm-none-eabi/lib/thumb/v7-m\libc.a(lib_a-__atexit.o)
-                0x0000000008002298                __register_exitproc
+                0x000000000800247c       0xac d:/program files/stm32cubeide_1.4.0/stm32cubeide/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.7-2018-q2-update.win32_1.4.0.202007081208/tools/bin/../lib/gcc/arm-none-eabi/7.3.1/../../../../arm-none-eabi/lib/thumb/v7-m\libc.a(lib_a-__atexit.o)
+                0x000000000800247c                __register_exitproc
  *(.glue_7)
- .glue_7        0x0000000008002344        0x0 linker stubs
+ .glue_7        0x0000000008002528        0x0 linker stubs
  *(.glue_7t)
- .glue_7t       0x0000000008002344        0x0 linker stubs
+ .glue_7t       0x0000000008002528        0x0 linker stubs
  *(.eh_frame)
- .eh_frame      0x0000000008002344        0x0 d:/program files/stm32cubeide_1.4.0/stm32cubeide/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.7-2018-q2-update.win32_1.4.0.202007081208/tools/bin/../lib/gcc/arm-none-eabi/7.3.1/thumb/v7-m/crtbegin.o
+ .eh_frame      0x0000000008002528        0x0 d:/program files/stm32cubeide_1.4.0/stm32cubeide/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.7-2018-q2-update.win32_1.4.0.202007081208/tools/bin/../lib/gcc/arm-none-eabi/7.3.1/thumb/v7-m/crtbegin.o
  *(.init)
- .init          0x0000000008002344        0x4 d:/program files/stm32cubeide_1.4.0/stm32cubeide/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.7-2018-q2-update.win32_1.4.0.202007081208/tools/bin/../lib/gcc/arm-none-eabi/7.3.1/thumb/v7-m/crti.o
-                0x0000000008002344                _init
- .init          0x0000000008002348        0x8 d:/program files/stm32cubeide_1.4.0/stm32cubeide/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.7-2018-q2-update.win32_1.4.0.202007081208/tools/bin/../lib/gcc/arm-none-eabi/7.3.1/thumb/v7-m/crtn.o
+ .init          0x0000000008002528        0x4 d:/program files/stm32cubeide_1.4.0/stm32cubeide/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.7-2018-q2-update.win32_1.4.0.202007081208/tools/bin/../lib/gcc/arm-none-eabi/7.3.1/thumb/v7-m/crti.o
+                0x0000000008002528                _init
+ .init          0x000000000800252c        0x8 d:/program files/stm32cubeide_1.4.0/stm32cubeide/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.7-2018-q2-update.win32_1.4.0.202007081208/tools/bin/../lib/gcc/arm-none-eabi/7.3.1/thumb/v7-m/crtn.o
  *(.fini)
- .fini          0x0000000008002350        0x4 d:/program files/stm32cubeide_1.4.0/stm32cubeide/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.7-2018-q2-update.win32_1.4.0.202007081208/tools/bin/../lib/gcc/arm-none-eabi/7.3.1/thumb/v7-m/crti.o
-                0x0000000008002350                _fini
- .fini          0x0000000008002354        0x8 d:/program files/stm32cubeide_1.4.0/stm32cubeide/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.7-2018-q2-update.win32_1.4.0.202007081208/tools/bin/../lib/gcc/arm-none-eabi/7.3.1/thumb/v7-m/crtn.o
-                0x000000000800235c                . = ALIGN (0x4)
-                0x000000000800235c                _etext = .
+ .fini          0x0000000008002534        0x4 d:/program files/stm32cubeide_1.4.0/stm32cubeide/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.7-2018-q2-update.win32_1.4.0.202007081208/tools/bin/../lib/gcc/arm-none-eabi/7.3.1/thumb/v7-m/crti.o
+                0x0000000008002534                _fini
+ .fini          0x0000000008002538        0x8 d:/program files/stm32cubeide_1.4.0/stm32cubeide/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.7-2018-q2-update.win32_1.4.0.202007081208/tools/bin/../lib/gcc/arm-none-eabi/7.3.1/thumb/v7-m/crtn.o
+                0x0000000008002540                . = ALIGN (0x4)
+                0x0000000008002540                _etext = .
 
-.vfp11_veneer   0x000000000800235c        0x0
- .vfp11_veneer  0x000000000800235c        0x0 linker stubs
+.vfp11_veneer   0x0000000008002540        0x0
+ .vfp11_veneer  0x0000000008002540        0x0 linker stubs
 
-.v4_bx          0x000000000800235c        0x0
- .v4_bx         0x000000000800235c        0x0 linker stubs
+.v4_bx          0x0000000008002540        0x0
+ .v4_bx         0x0000000008002540        0x0 linker stubs
 
-.iplt           0x000000000800235c        0x0
- .iplt          0x000000000800235c        0x0 d:/program files/stm32cubeide_1.4.0/stm32cubeide/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.7-2018-q2-update.win32_1.4.0.202007081208/tools/bin/../lib/gcc/arm-none-eabi/7.3.1/thumb/v7-m/crtbegin.o
+.iplt           0x0000000008002540        0x0
+ .iplt          0x0000000008002540        0x0 d:/program files/stm32cubeide_1.4.0/stm32cubeide/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.7-2018-q2-update.win32_1.4.0.202007081208/tools/bin/../lib/gcc/arm-none-eabi/7.3.1/thumb/v7-m/crtbegin.o
 
-.rodata         0x000000000800235c        0x4
-                0x000000000800235c                . = ALIGN (0x4)
+.rodata         0x0000000008002540        0x4
+                0x0000000008002540                . = ALIGN (0x4)
  *(.rodata)
  *(.rodata*)
  .rodata._global_impure_ptr
-                0x000000000800235c        0x4 d:/program files/stm32cubeide_1.4.0/stm32cubeide/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.7-2018-q2-update.win32_1.4.0.202007081208/tools/bin/../lib/gcc/arm-none-eabi/7.3.1/../../../../arm-none-eabi/lib/thumb/v7-m\libc.a(lib_a-impure.o)
-                0x000000000800235c                _global_impure_ptr
-                0x0000000008002360                . = ALIGN (0x4)
+                0x0000000008002540        0x4 d:/program files/stm32cubeide_1.4.0/stm32cubeide/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.7-2018-q2-update.win32_1.4.0.202007081208/tools/bin/../lib/gcc/arm-none-eabi/7.3.1/../../../../arm-none-eabi/lib/thumb/v7-m\libc.a(lib_a-impure.o)
+                0x0000000008002540                _global_impure_ptr
+                0x0000000008002544                . = ALIGN (0x4)
 
-.rel.dyn        0x0000000008002360        0x0
- .rel.iplt      0x0000000008002360        0x0 d:/program files/stm32cubeide_1.4.0/stm32cubeide/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.7-2018-q2-update.win32_1.4.0.202007081208/tools/bin/../lib/gcc/arm-none-eabi/7.3.1/thumb/v7-m/crtbegin.o
+.rel.dyn        0x0000000008002544        0x0
+ .rel.iplt      0x0000000008002544        0x0 d:/program files/stm32cubeide_1.4.0/stm32cubeide/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.7-2018-q2-update.win32_1.4.0.202007081208/tools/bin/../lib/gcc/arm-none-eabi/7.3.1/thumb/v7-m/crtbegin.o
 
 .ARM.extab
  *(.ARM.extab* .gnu.linkonce.armextab.*)
 
-.ARM            0x0000000008002360        0x0
-                0x0000000008002360                __exidx_start = .
+.ARM            0x0000000008002544        0x0
+                0x0000000008002544                __exidx_start = .
  *(.ARM.exidx*)
-                0x0000000008002360                __exidx_end = .
+                0x0000000008002544                __exidx_end = .
 
-.preinit_array  0x0000000008002360        0x0
-                0x0000000008002360                PROVIDE (__preinit_array_start = .)
+.preinit_array  0x0000000008002544        0x0
+                0x0000000008002544                PROVIDE (__preinit_array_start = .)
  *(.preinit_array*)
-                0x0000000008002360                PROVIDE (__preinit_array_end = .)
+                0x0000000008002544                PROVIDE (__preinit_array_end = .)
 
-.init_array     0x0000000008002360        0x8
-                0x0000000008002360                PROVIDE (__init_array_start = .)
+.init_array     0x0000000008002544        0x8
+                0x0000000008002544                PROVIDE (__init_array_start = .)
  *(SORT_BY_NAME(.init_array.*))
  .init_array.00000
-                0x0000000008002360        0x4 d:/program files/stm32cubeide_1.4.0/stm32cubeide/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.7-2018-q2-update.win32_1.4.0.202007081208/tools/bin/../lib/gcc/arm-none-eabi/7.3.1/../../../../arm-none-eabi/lib/thumb/v7-m\libc.a(lib_a-__call_atexit.o)
+                0x0000000008002544        0x4 d:/program files/stm32cubeide_1.4.0/stm32cubeide/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.7-2018-q2-update.win32_1.4.0.202007081208/tools/bin/../lib/gcc/arm-none-eabi/7.3.1/../../../../arm-none-eabi/lib/thumb/v7-m\libc.a(lib_a-__call_atexit.o)
  *(.init_array*)
- .init_array    0x0000000008002364        0x4 d:/program files/stm32cubeide_1.4.0/stm32cubeide/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.7-2018-q2-update.win32_1.4.0.202007081208/tools/bin/../lib/gcc/arm-none-eabi/7.3.1/thumb/v7-m/crtbegin.o
-                0x0000000008002368                PROVIDE (__init_array_end = .)
+ .init_array    0x0000000008002548        0x4 d:/program files/stm32cubeide_1.4.0/stm32cubeide/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.7-2018-q2-update.win32_1.4.0.202007081208/tools/bin/../lib/gcc/arm-none-eabi/7.3.1/thumb/v7-m/crtbegin.o
+                0x000000000800254c                PROVIDE (__init_array_end = .)
 
-.fini_array     0x0000000008002368        0x4
-                0x0000000008002368                PROVIDE (__fini_array_start = .)
+.fini_array     0x000000000800254c        0x4
+                0x000000000800254c                PROVIDE (__fini_array_start = .)
  *(SORT_BY_NAME(.fini_array.*))
  *(.fini_array*)
- .fini_array    0x0000000008002368        0x4 d:/program files/stm32cubeide_1.4.0/stm32cubeide/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.7-2018-q2-update.win32_1.4.0.202007081208/tools/bin/../lib/gcc/arm-none-eabi/7.3.1/thumb/v7-m/crtbegin.o
-                0x000000000800236c                PROVIDE (__fini_array_end = .)
-                0x000000000800236c                _sidata = LOADADDR (.data)
+ .fini_array    0x000000000800254c        0x4 d:/program files/stm32cubeide_1.4.0/stm32cubeide/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.7-2018-q2-update.win32_1.4.0.202007081208/tools/bin/../lib/gcc/arm-none-eabi/7.3.1/thumb/v7-m/crtbegin.o
+                0x0000000008002550                PROVIDE (__fini_array_end = .)
+                0x0000000008002550                _sidata = LOADADDR (.data)
 
-.data           0x0000000020000000      0x644 load address 0x000000000800236c
+.data           0x0000000020000000      0x644 load address 0x0000000008002550
                 0x0000000020000000                . = ALIGN (0x4)
                 0x0000000020000000                _sdata = .
  *(.data)
@@ -1862,11 +1894,11 @@ LOAD d:/program files/stm32cubeide_1.4.0/stm32cubeide/plugins/com.st.stm32cube.i
                 0x0000000020000644                . = ALIGN (0x4)
                 0x0000000020000644                _edata = .
 
-.igot.plt       0x0000000020000644        0x0 load address 0x00000000080029b0
+.igot.plt       0x0000000020000644        0x0 load address 0x0000000008002b94
  .igot.plt      0x0000000020000644        0x0 d:/program files/stm32cubeide_1.4.0/stm32cubeide/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.7-2018-q2-update.win32_1.4.0.202007081208/tools/bin/../lib/gcc/arm-none-eabi/7.3.1/thumb/v7-m/crtbegin.o
                 0x0000000020000644                . = ALIGN (0x4)
 
-.bss            0x0000000020000644       0x48 load address 0x00000000080029b0
+.bss            0x0000000020000644       0x48 load address 0x0000000008002b94
                 0x0000000020000644                _sbss = .
                 0x0000000020000644                __bss_start__ = _sbss
  *(.bss)
@@ -1892,7 +1924,7 @@ LOAD d:/program files/stm32cubeide_1.4.0/stm32cubeide/plugins/com.st.stm32cube.i
                 0x000000002000068c                __bss_end__ = _ebss
 
 ._user_heap_stack
-                0x000000002000068c      0x100 load address 0x00000000080029b0
+                0x000000002000068c      0x100 load address 0x0000000008002b94
                 0x000000002000068c                . = ALIGN (0x4)
                 [!provide]                        PROVIDE (end = .)
                 [!provide]                        PROVIDE (_end = .)
@@ -1922,181 +1954,203 @@ LOAD d:/program files/stm32cubeide_1.4.0/stm32cubeide/plugins/com.st.stm32cube.i
  .ARM.attributes
                 0x000000000000004a       0x33 Driver/src/board.o
  .ARM.attributes
-                0x000000000000007d       0x33 Driver/src/gpio.o
+                0x000000000000007d       0x33 Driver/src/can.o
  .ARM.attributes
-                0x00000000000000b0       0x33 Driver/src/uart.o
+                0x00000000000000b0       0x33 Driver/src/gpio.o
  .ARM.attributes
-                0x00000000000000e3       0x33 Driver/src/uart_485.o
+                0x00000000000000e3       0x33 Driver/src/uart.o
  .ARM.attributes
-                0x0000000000000116       0x33 Libraries/STM32F10x_StdPeriph_Driver/src/misc.o
+                0x0000000000000116       0x33 Driver/src/uart_485.o
  .ARM.attributes
-                0x0000000000000149       0x33 Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_dma.o
+                0x0000000000000149       0x33 Libraries/STM32F10x_StdPeriph_Driver/src/misc.o
  .ARM.attributes
-                0x000000000000017c       0x33 Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_flash.o
+                0x000000000000017c       0x33 Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_can.o
  .ARM.attributes
-                0x00000000000001af       0x33 Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_gpio.o
+                0x00000000000001af       0x33 Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_dma.o
  .ARM.attributes
-                0x00000000000001e2       0x33 Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_rcc.o
+                0x00000000000001e2       0x33 Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_flash.o
  .ARM.attributes
-                0x0000000000000215       0x33 Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_usart.o
+                0x0000000000000215       0x33 Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_gpio.o
  .ARM.attributes
-                0x0000000000000248       0x33 src/main.o
+                0x0000000000000248       0x33 Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_rcc.o
  .ARM.attributes
-                0x000000000000027b       0x21 src/startup_stm32f10x_md.o
+                0x000000000000027b       0x33 Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_usart.o
  .ARM.attributes
-                0x000000000000029c       0x33 src/stm32f1xx_it.o
+                0x00000000000002ae       0x33 src/main.o
  .ARM.attributes
-                0x00000000000002cf       0x33 src/system_stm32f10x.o
+                0x00000000000002e1       0x21 src/startup_stm32f10x_md.o
  .ARM.attributes
-                0x0000000000000302       0x2d d:/program files/stm32cubeide_1.4.0/stm32cubeide/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.7-2018-q2-update.win32_1.4.0.202007081208/tools/bin/../lib/gcc/arm-none-eabi/7.3.1/../../../../arm-none-eabi/lib/thumb/v7-m\libc.a(lib_a-impure.o)
+                0x0000000000000302       0x33 src/stm32f1xx_it.o
  .ARM.attributes
-                0x000000000000032f       0x2d d:/program files/stm32cubeide_1.4.0/stm32cubeide/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.7-2018-q2-update.win32_1.4.0.202007081208/tools/bin/../lib/gcc/arm-none-eabi/7.3.1/../../../../arm-none-eabi/lib/thumb/v7-m\libc.a(lib_a-init.o)
+                0x0000000000000335       0x33 src/system_stm32f10x.o
  .ARM.attributes
-                0x000000000000035c       0x2d d:/program files/stm32cubeide_1.4.0/stm32cubeide/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.7-2018-q2-update.win32_1.4.0.202007081208/tools/bin/../lib/gcc/arm-none-eabi/7.3.1/../../../../arm-none-eabi/lib/thumb/v7-m\libc.a(lib_a-memset.o)
+                0x0000000000000368       0x2d d:/program files/stm32cubeide_1.4.0/stm32cubeide/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.7-2018-q2-update.win32_1.4.0.202007081208/tools/bin/../lib/gcc/arm-none-eabi/7.3.1/../../../../arm-none-eabi/lib/thumb/v7-m\libc.a(lib_a-impure.o)
  .ARM.attributes
-                0x0000000000000389       0x2d d:/program files/stm32cubeide_1.4.0/stm32cubeide/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.7-2018-q2-update.win32_1.4.0.202007081208/tools/bin/../lib/gcc/arm-none-eabi/7.3.1/../../../../arm-none-eabi/lib/thumb/v7-m\libc.a(lib_a-__call_atexit.o)
+                0x0000000000000395       0x2d d:/program files/stm32cubeide_1.4.0/stm32cubeide/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.7-2018-q2-update.win32_1.4.0.202007081208/tools/bin/../lib/gcc/arm-none-eabi/7.3.1/../../../../arm-none-eabi/lib/thumb/v7-m\libc.a(lib_a-init.o)
  .ARM.attributes
-                0x00000000000003b6       0x2d d:/program files/stm32cubeide_1.4.0/stm32cubeide/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.7-2018-q2-update.win32_1.4.0.202007081208/tools/bin/../lib/gcc/arm-none-eabi/7.3.1/../../../../arm-none-eabi/lib/thumb/v7-m\libc.a(lib_a-atexit.o)
+                0x00000000000003c2       0x2d d:/program files/stm32cubeide_1.4.0/stm32cubeide/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.7-2018-q2-update.win32_1.4.0.202007081208/tools/bin/../lib/gcc/arm-none-eabi/7.3.1/../../../../arm-none-eabi/lib/thumb/v7-m\libc.a(lib_a-memset.o)
  .ARM.attributes
-                0x00000000000003e3       0x2d d:/program files/stm32cubeide_1.4.0/stm32cubeide/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.7-2018-q2-update.win32_1.4.0.202007081208/tools/bin/../lib/gcc/arm-none-eabi/7.3.1/../../../../arm-none-eabi/lib/thumb/v7-m\libc.a(lib_a-fini.o)
+                0x00000000000003ef       0x2d d:/program files/stm32cubeide_1.4.0/stm32cubeide/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.7-2018-q2-update.win32_1.4.0.202007081208/tools/bin/../lib/gcc/arm-none-eabi/7.3.1/../../../../arm-none-eabi/lib/thumb/v7-m\libc.a(lib_a-__call_atexit.o)
  .ARM.attributes
-                0x0000000000000410       0x2d d:/program files/stm32cubeide_1.4.0/stm32cubeide/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.7-2018-q2-update.win32_1.4.0.202007081208/tools/bin/../lib/gcc/arm-none-eabi/7.3.1/../../../../arm-none-eabi/lib/thumb/v7-m\libc.a(lib_a-lock.o)
+                0x000000000000041c       0x2d d:/program files/stm32cubeide_1.4.0/stm32cubeide/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.7-2018-q2-update.win32_1.4.0.202007081208/tools/bin/../lib/gcc/arm-none-eabi/7.3.1/../../../../arm-none-eabi/lib/thumb/v7-m\libc.a(lib_a-atexit.o)
  .ARM.attributes
-                0x000000000000043d       0x2d d:/program files/stm32cubeide_1.4.0/stm32cubeide/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.7-2018-q2-update.win32_1.4.0.202007081208/tools/bin/../lib/gcc/arm-none-eabi/7.3.1/../../../../arm-none-eabi/lib/thumb/v7-m\libc.a(lib_a-__atexit.o)
+                0x0000000000000449       0x2d d:/program files/stm32cubeide_1.4.0/stm32cubeide/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.7-2018-q2-update.win32_1.4.0.202007081208/tools/bin/../lib/gcc/arm-none-eabi/7.3.1/../../../../arm-none-eabi/lib/thumb/v7-m\libc.a(lib_a-fini.o)
  .ARM.attributes
-                0x000000000000046a       0x1d d:/program files/stm32cubeide_1.4.0/stm32cubeide/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.7-2018-q2-update.win32_1.4.0.202007081208/tools/bin/../lib/gcc/arm-none-eabi/7.3.1/thumb/v7-m/crtn.o
+                0x0000000000000476       0x2d d:/program files/stm32cubeide_1.4.0/stm32cubeide/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.7-2018-q2-update.win32_1.4.0.202007081208/tools/bin/../lib/gcc/arm-none-eabi/7.3.1/../../../../arm-none-eabi/lib/thumb/v7-m\libc.a(lib_a-lock.o)
+ .ARM.attributes
+                0x00000000000004a3       0x2d d:/program files/stm32cubeide_1.4.0/stm32cubeide/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.7-2018-q2-update.win32_1.4.0.202007081208/tools/bin/../lib/gcc/arm-none-eabi/7.3.1/../../../../arm-none-eabi/lib/thumb/v7-m\libc.a(lib_a-__atexit.o)
+ .ARM.attributes
+                0x00000000000004d0       0x1d d:/program files/stm32cubeide_1.4.0/stm32cubeide/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.7-2018-q2-update.win32_1.4.0.202007081208/tools/bin/../lib/gcc/arm-none-eabi/7.3.1/thumb/v7-m/crtn.o
 OUTPUT(Ocm_deom.elf elf32-littlearm)
 
-.debug_info     0x0000000000000000      0xe0c
+.debug_info     0x0000000000000000     0x10a1
  .debug_info    0x0000000000000000       0xc1 Driver/src/board.o
- .debug_info    0x00000000000000c1       0x59 Driver/src/gpio.o
- .debug_info    0x000000000000011a      0x165 Driver/src/uart.o
- .debug_info    0x000000000000027f       0x8c Driver/src/uart_485.o
- .debug_info    0x000000000000030b       0x7b Libraries/STM32F10x_StdPeriph_Driver/src/misc.o
- .debug_info    0x0000000000000386       0xea Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_dma.o
- .debug_info    0x0000000000000470      0x21d Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_flash.o
- .debug_info    0x000000000000068d      0x167 Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_gpio.o
- .debug_info    0x00000000000007f4      0x265 Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_rcc.o
- .debug_info    0x0000000000000a59      0x22e Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_usart.o
- .debug_info    0x0000000000000c87       0x37 src/main.o
- .debug_info    0x0000000000000cbe       0x22 src/startup_stm32f10x_md.o
- .debug_info    0x0000000000000ce0       0xbf src/stm32f1xx_it.o
- .debug_info    0x0000000000000d9f       0x6d src/system_stm32f10x.o
+ .debug_info    0x00000000000000c1       0x9d Driver/src/can.o
+ .debug_info    0x000000000000015e       0x59 Driver/src/gpio.o
+ .debug_info    0x00000000000001b7      0x177 Driver/src/uart.o
+ .debug_info    0x000000000000032e       0x8c Driver/src/uart_485.o
+ .debug_info    0x00000000000003ba       0x7b Libraries/STM32F10x_StdPeriph_Driver/src/misc.o
+ .debug_info    0x0000000000000435      0x1e6 Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_can.o
+ .debug_info    0x000000000000061b       0xea Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_dma.o
+ .debug_info    0x0000000000000705      0x21d Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_flash.o
+ .debug_info    0x0000000000000922      0x167 Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_gpio.o
+ .debug_info    0x0000000000000a89      0x265 Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_rcc.o
+ .debug_info    0x0000000000000cee      0x22e Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_usart.o
+ .debug_info    0x0000000000000f1c       0x37 src/main.o
+ .debug_info    0x0000000000000f53       0x22 src/startup_stm32f10x_md.o
+ .debug_info    0x0000000000000f75       0xbf src/stm32f1xx_it.o
+ .debug_info    0x0000000000001034       0x6d src/system_stm32f10x.o
 
-.debug_abbrev   0x0000000000000000      0x3da
+.debug_abbrev   0x0000000000000000      0x4ae
  .debug_abbrev  0x0000000000000000       0x7c Driver/src/board.o
- .debug_abbrev  0x000000000000007c       0x3e Driver/src/gpio.o
- .debug_abbrev  0x00000000000000ba       0x68 Driver/src/uart.o
- .debug_abbrev  0x0000000000000122       0x3e Driver/src/uart_485.o
- .debug_abbrev  0x0000000000000160       0x2a Libraries/STM32F10x_StdPeriph_Driver/src/misc.o
- .debug_abbrev  0x000000000000018a       0x40 Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_dma.o
- .debug_abbrev  0x00000000000001ca       0x56 Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_flash.o
- .debug_abbrev  0x0000000000000220       0x56 Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_gpio.o
- .debug_abbrev  0x0000000000000276       0x56 Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_rcc.o
- .debug_abbrev  0x00000000000002cc       0x40 Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_usart.o
- .debug_abbrev  0x000000000000030c       0x2a src/main.o
- .debug_abbrev  0x0000000000000336       0x12 src/startup_stm32f10x_md.o
- .debug_abbrev  0x0000000000000348       0x2a src/stm32f1xx_it.o
- .debug_abbrev  0x0000000000000372       0x68 src/system_stm32f10x.o
+ .debug_abbrev  0x000000000000007c       0x54 Driver/src/can.o
+ .debug_abbrev  0x00000000000000d0       0x3e Driver/src/gpio.o
+ .debug_abbrev  0x000000000000010e       0x68 Driver/src/uart.o
+ .debug_abbrev  0x0000000000000176       0x3e Driver/src/uart_485.o
+ .debug_abbrev  0x00000000000001b4       0x2a Libraries/STM32F10x_StdPeriph_Driver/src/misc.o
+ .debug_abbrev  0x00000000000001de       0x80 Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_can.o
+ .debug_abbrev  0x000000000000025e       0x40 Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_dma.o
+ .debug_abbrev  0x000000000000029e       0x56 Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_flash.o
+ .debug_abbrev  0x00000000000002f4       0x56 Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_gpio.o
+ .debug_abbrev  0x000000000000034a       0x56 Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_rcc.o
+ .debug_abbrev  0x00000000000003a0       0x40 Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_usart.o
+ .debug_abbrev  0x00000000000003e0       0x2a src/main.o
+ .debug_abbrev  0x000000000000040a       0x12 src/startup_stm32f10x_md.o
+ .debug_abbrev  0x000000000000041c       0x2a src/stm32f1xx_it.o
+ .debug_abbrev  0x0000000000000446       0x68 src/system_stm32f10x.o
 
-.debug_aranges  0x0000000000000000      0x6c8
+.debug_aranges  0x0000000000000000      0x800
  .debug_aranges
                 0x0000000000000000       0x60 Driver/src/board.o
  .debug_aranges
-                0x0000000000000060       0x30 Driver/src/gpio.o
+                0x0000000000000060       0x50 Driver/src/can.o
  .debug_aranges
-                0x0000000000000090       0xa8 Driver/src/uart.o
+                0x00000000000000b0       0x30 Driver/src/gpio.o
  .debug_aranges
-                0x0000000000000138       0x48 Driver/src/uart_485.o
+                0x00000000000000e0       0xb0 Driver/src/uart.o
  .debug_aranges
-                0x0000000000000180       0x40 Libraries/STM32F10x_StdPeriph_Driver/src/misc.o
+                0x0000000000000190       0x48 Driver/src/uart_485.o
  .debug_aranges
-                0x00000000000001c0       0x70 Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_dma.o
+                0x00000000000001d8       0x40 Libraries/STM32F10x_StdPeriph_Driver/src/misc.o
  .debug_aranges
-                0x0000000000000230       0xf8 Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_flash.o
+                0x0000000000000218       0xe0 Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_can.o
  .debug_aranges
-                0x0000000000000328       0xa8 Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_gpio.o
+                0x00000000000002f8       0x70 Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_dma.o
  .debug_aranges
-                0x00000000000003d0      0x118 Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_rcc.o
+                0x0000000000000368       0xf8 Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_flash.o
  .debug_aranges
-                0x00000000000004e8      0x100 Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_usart.o
+                0x0000000000000460       0xa8 Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_gpio.o
  .debug_aranges
-                0x00000000000005e8       0x20 src/main.o
+                0x0000000000000508      0x118 Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_rcc.o
  .debug_aranges
-                0x0000000000000608       0x28 src/startup_stm32f10x_md.o
+                0x0000000000000620      0x100 Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_usart.o
  .debug_aranges
-                0x0000000000000630       0x60 src/stm32f1xx_it.o
+                0x0000000000000720       0x20 src/main.o
  .debug_aranges
-                0x0000000000000690       0x38 src/system_stm32f10x.o
+                0x0000000000000740       0x28 src/startup_stm32f10x_md.o
+ .debug_aranges
+                0x0000000000000768       0x60 src/stm32f1xx_it.o
+ .debug_aranges
+                0x00000000000007c8       0x38 src/system_stm32f10x.o
 
-.debug_ranges   0x0000000000000000      0x5f0
+.debug_ranges   0x0000000000000000      0x708
  .debug_ranges  0x0000000000000000       0x50 Driver/src/board.o
- .debug_ranges  0x0000000000000050       0x20 Driver/src/gpio.o
- .debug_ranges  0x0000000000000070       0x98 Driver/src/uart.o
- .debug_ranges  0x0000000000000108       0x38 Driver/src/uart_485.o
- .debug_ranges  0x0000000000000140       0x30 Libraries/STM32F10x_StdPeriph_Driver/src/misc.o
- .debug_ranges  0x0000000000000170       0x60 Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_dma.o
- .debug_ranges  0x00000000000001d0       0xe8 Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_flash.o
- .debug_ranges  0x00000000000002b8       0x98 Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_gpio.o
- .debug_ranges  0x0000000000000350      0x108 Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_rcc.o
- .debug_ranges  0x0000000000000458       0xf0 Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_usart.o
- .debug_ranges  0x0000000000000548       0x10 src/main.o
- .debug_ranges  0x0000000000000558       0x20 src/startup_stm32f10x_md.o
- .debug_ranges  0x0000000000000578       0x50 src/stm32f1xx_it.o
- .debug_ranges  0x00000000000005c8       0x28 src/system_stm32f10x.o
+ .debug_ranges  0x0000000000000050       0x40 Driver/src/can.o
+ .debug_ranges  0x0000000000000090       0x20 Driver/src/gpio.o
+ .debug_ranges  0x00000000000000b0       0xa0 Driver/src/uart.o
+ .debug_ranges  0x0000000000000150       0x38 Driver/src/uart_485.o
+ .debug_ranges  0x0000000000000188       0x30 Libraries/STM32F10x_StdPeriph_Driver/src/misc.o
+ .debug_ranges  0x00000000000001b8       0xd0 Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_can.o
+ .debug_ranges  0x0000000000000288       0x60 Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_dma.o
+ .debug_ranges  0x00000000000002e8       0xe8 Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_flash.o
+ .debug_ranges  0x00000000000003d0       0x98 Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_gpio.o
+ .debug_ranges  0x0000000000000468      0x108 Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_rcc.o
+ .debug_ranges  0x0000000000000570       0xf0 Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_usart.o
+ .debug_ranges  0x0000000000000660       0x10 src/main.o
+ .debug_ranges  0x0000000000000670       0x20 src/startup_stm32f10x_md.o
+ .debug_ranges  0x0000000000000690       0x50 src/stm32f1xx_it.o
+ .debug_ranges  0x00000000000006e0       0x28 src/system_stm32f10x.o
 
-.debug_line     0x0000000000000000     0x15f6
+.debug_line     0x0000000000000000     0x1abc
  .debug_line    0x0000000000000000      0x1a6 Driver/src/board.o
- .debug_line    0x00000000000001a6       0x70 Driver/src/gpio.o
- .debug_line    0x0000000000000216      0x252 Driver/src/uart.o
- .debug_line    0x0000000000000468       0xa5 Driver/src/uart_485.o
- .debug_line    0x000000000000050d       0xc6 Libraries/STM32F10x_StdPeriph_Driver/src/misc.o
- .debug_line    0x00000000000005d3      0x1b0 Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_dma.o
- .debug_line    0x0000000000000783      0x342 Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_flash.o
- .debug_line    0x0000000000000ac5      0x247 Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_gpio.o
- .debug_line    0x0000000000000d0c      0x343 Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_rcc.o
- .debug_line    0x000000000000104f      0x315 Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_usart.o
- .debug_line    0x0000000000001364       0x51 src/main.o
- .debug_line    0x00000000000013b5       0x7c src/startup_stm32f10x_md.o
- .debug_line    0x0000000000001431       0xdd src/stm32f1xx_it.o
- .debug_line    0x000000000000150e       0xe8 src/system_stm32f10x.o
+ .debug_line    0x00000000000001a6       0xd8 Driver/src/can.o
+ .debug_line    0x000000000000027e       0x70 Driver/src/gpio.o
+ .debug_line    0x00000000000002ee      0x25c Driver/src/uart.o
+ .debug_line    0x000000000000054a       0xa5 Driver/src/uart_485.o
+ .debug_line    0x00000000000005ef       0xc6 Libraries/STM32F10x_StdPeriph_Driver/src/misc.o
+ .debug_line    0x00000000000006b5      0x3e4 Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_can.o
+ .debug_line    0x0000000000000a99      0x1b0 Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_dma.o
+ .debug_line    0x0000000000000c49      0x342 Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_flash.o
+ .debug_line    0x0000000000000f8b      0x247 Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_gpio.o
+ .debug_line    0x00000000000011d2      0x343 Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_rcc.o
+ .debug_line    0x0000000000001515      0x315 Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_usart.o
+ .debug_line    0x000000000000182a       0x51 src/main.o
+ .debug_line    0x000000000000187b       0x7c src/startup_stm32f10x_md.o
+ .debug_line    0x00000000000018f7       0xdd src/stm32f1xx_it.o
+ .debug_line    0x00000000000019d4       0xe8 src/system_stm32f10x.o
 
-.debug_str      0x0000000000000000      0xefe
+.debug_str      0x0000000000000000     0x1152
  .debug_str     0x0000000000000000      0x1d3 Driver/src/board.o
- .debug_str     0x00000000000001d3       0x35 Driver/src/gpio.o
+ .debug_str     0x00000000000001d3       0x7a Driver/src/can.o
+                                        0x1bf (size before relaxing)
+ .debug_str     0x000000000000024d       0x22 Driver/src/gpio.o
                                         0x167 (size before relaxing)
- .debug_str     0x0000000000000208       0xfc Driver/src/uart.o
-                                        0x254 (size before relaxing)
- .debug_str     0x0000000000000304       0x58 Driver/src/uart_485.o
+ .debug_str     0x000000000000026f      0x109 Driver/src/uart.o
+                                        0x261 (size before relaxing)
+ .debug_str     0x0000000000000378       0x58 Driver/src/uart_485.o
                                         0x19d (size before relaxing)
- .debug_str     0x000000000000035c       0x96 Libraries/STM32F10x_StdPeriph_Driver/src/misc.o
+ .debug_str     0x00000000000003d0       0x96 Libraries/STM32F10x_StdPeriph_Driver/src/misc.o
                                         0x1b6 (size before relaxing)
- .debug_str     0x00000000000003f2       0xe8 Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_dma.o
+ .debug_str     0x0000000000000466      0x1e0 Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_can.o
+                                        0x300 (size before relaxing)
+ .debug_str     0x0000000000000646       0xe8 Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_dma.o
                                         0x208 (size before relaxing)
- .debug_str     0x00000000000004da      0x2ae Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_flash.o
+ .debug_str     0x000000000000072e      0x2ae Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_flash.o
                                         0x3ce (size before relaxing)
- .debug_str     0x0000000000000788      0x180 Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_gpio.o
+ .debug_str     0x00000000000009dc      0x180 Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_gpio.o
                                         0x2a0 (size before relaxing)
- .debug_str     0x0000000000000908      0x26e Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_rcc.o
+ .debug_str     0x0000000000000b5c      0x26e Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_rcc.o
                                         0x38e (size before relaxing)
- .debug_str     0x0000000000000b76      0x24c Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_usart.o
+ .debug_str     0x0000000000000dca      0x24c Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_usart.o
                                         0x36c (size before relaxing)
- .debug_str     0x0000000000000dc2       0x13 src/main.o
+ .debug_str     0x0000000000001016       0x13 src/main.o
                                         0x133 (size before relaxing)
- .debug_str     0x0000000000000dd5       0x2c src/startup_stm32f10x_md.o
+ .debug_str     0x0000000000001029       0x2c src/startup_stm32f10x_md.o
                                          0x95 (size before relaxing)
- .debug_str     0x0000000000000e01       0xa6 src/stm32f1xx_it.o
+ .debug_str     0x0000000000001055       0xa6 src/stm32f1xx_it.o
                                         0x1c6 (size before relaxing)
- .debug_str     0x0000000000000ea7       0x57 src/system_stm32f10x.o
+ .debug_str     0x00000000000010fb       0x57 src/system_stm32f10x.o
                                         0x177 (size before relaxing)
 
 .comment        0x0000000000000000       0x7b
  .comment       0x0000000000000000       0x7b Driver/src/board.o
                                          0x7c (size before relaxing)
+ .comment       0x000000000000007b       0x7c Driver/src/can.o
  .comment       0x000000000000007b       0x7c Driver/src/gpio.o
  .comment       0x000000000000007b       0x7c Driver/src/uart.o
  .comment       0x000000000000007b       0x7c Driver/src/uart_485.o
  .comment       0x000000000000007b       0x7c Libraries/STM32F10x_StdPeriph_Driver/src/misc.o
+ .comment       0x000000000000007b       0x7c Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_can.o
  .comment       0x000000000000007b       0x7c Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_dma.o
  .comment       0x000000000000007b       0x7c Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_flash.o
  .comment       0x000000000000007b       0x7c Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_gpio.o
@@ -2106,27 +2160,29 @@ OUTPUT(Ocm_deom.elf elf32-littlearm)
  .comment       0x000000000000007b       0x7c src/stm32f1xx_it.o
  .comment       0x000000000000007b       0x7c src/system_stm32f10x.o
 
-.debug_frame    0x0000000000000000     0x1bc0
+.debug_frame    0x0000000000000000     0x20cc
  .debug_frame   0x0000000000000000      0x148 Driver/src/board.o
- .debug_frame   0x0000000000000148       0x6c Driver/src/gpio.o
- .debug_frame   0x00000000000001b4      0x280 Driver/src/uart.o
- .debug_frame   0x0000000000000434       0xd0 Driver/src/uart_485.o
- .debug_frame   0x0000000000000504       0xd8 Libraries/STM32F10x_StdPeriph_Driver/src/misc.o
- .debug_frame   0x00000000000005dc      0x1c8 Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_dma.o
- .debug_frame   0x00000000000007a4      0x410 Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_flash.o
- .debug_frame   0x0000000000000bb4      0x2d0 Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_gpio.o
- .debug_frame   0x0000000000000e84      0x4f4 Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_rcc.o
- .debug_frame   0x0000000000001378      0x490 Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_usart.o
- .debug_frame   0x0000000000001808       0x30 src/main.o
- .debug_frame   0x0000000000001838      0x110 src/stm32f1xx_it.o
- .debug_frame   0x0000000000001948       0x98 src/system_stm32f10x.o
- .debug_frame   0x00000000000019e0       0x2c d:/program files/stm32cubeide_1.4.0/stm32cubeide/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.7-2018-q2-update.win32_1.4.0.202007081208/tools/bin/../lib/gcc/arm-none-eabi/7.3.1/../../../../arm-none-eabi/lib/thumb/v7-m\libc.a(lib_a-init.o)
- .debug_frame   0x0000000000001a0c       0x20 d:/program files/stm32cubeide_1.4.0/stm32cubeide/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.7-2018-q2-update.win32_1.4.0.202007081208/tools/bin/../lib/gcc/arm-none-eabi/7.3.1/../../../../arm-none-eabi/lib/thumb/v7-m\libc.a(lib_a-memset.o)
- .debug_frame   0x0000000000001a2c       0x58 d:/program files/stm32cubeide_1.4.0/stm32cubeide/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.7-2018-q2-update.win32_1.4.0.202007081208/tools/bin/../lib/gcc/arm-none-eabi/7.3.1/../../../../arm-none-eabi/lib/thumb/v7-m\libc.a(lib_a-__call_atexit.o)
- .debug_frame   0x0000000000001a84       0x20 d:/program files/stm32cubeide_1.4.0/stm32cubeide/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.7-2018-q2-update.win32_1.4.0.202007081208/tools/bin/../lib/gcc/arm-none-eabi/7.3.1/../../../../arm-none-eabi/lib/thumb/v7-m\libc.a(lib_a-atexit.o)
- .debug_frame   0x0000000000001aa4       0x38 d:/program files/stm32cubeide_1.4.0/stm32cubeide/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.7-2018-q2-update.win32_1.4.0.202007081208/tools/bin/../lib/gcc/arm-none-eabi/7.3.1/../../../../arm-none-eabi/lib/thumb/v7-m\libc.a(lib_a-fini.o)
- .debug_frame   0x0000000000001adc       0xb0 d:/program files/stm32cubeide_1.4.0/stm32cubeide/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.7-2018-q2-update.win32_1.4.0.202007081208/tools/bin/../lib/gcc/arm-none-eabi/7.3.1/../../../../arm-none-eabi/lib/thumb/v7-m\libc.a(lib_a-lock.o)
- .debug_frame   0x0000000000001b8c       0x34 d:/program files/stm32cubeide_1.4.0/stm32cubeide/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.7-2018-q2-update.win32_1.4.0.202007081208/tools/bin/../lib/gcc/arm-none-eabi/7.3.1/../../../../arm-none-eabi/lib/thumb/v7-m\libc.a(lib_a-__atexit.o)
+ .debug_frame   0x0000000000000148       0xf8 Driver/src/can.o
+ .debug_frame   0x0000000000000240       0x6c Driver/src/gpio.o
+ .debug_frame   0x00000000000002ac      0x2a0 Driver/src/uart.o
+ .debug_frame   0x000000000000054c       0xd0 Driver/src/uart_485.o
+ .debug_frame   0x000000000000061c       0xd8 Libraries/STM32F10x_StdPeriph_Driver/src/misc.o
+ .debug_frame   0x00000000000006f4      0x3f4 Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_can.o
+ .debug_frame   0x0000000000000ae8      0x1c8 Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_dma.o
+ .debug_frame   0x0000000000000cb0      0x410 Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_flash.o
+ .debug_frame   0x00000000000010c0      0x2d0 Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_gpio.o
+ .debug_frame   0x0000000000001390      0x4f4 Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_rcc.o
+ .debug_frame   0x0000000000001884      0x490 Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_usart.o
+ .debug_frame   0x0000000000001d14       0x30 src/main.o
+ .debug_frame   0x0000000000001d44      0x110 src/stm32f1xx_it.o
+ .debug_frame   0x0000000000001e54       0x98 src/system_stm32f10x.o
+ .debug_frame   0x0000000000001eec       0x2c d:/program files/stm32cubeide_1.4.0/stm32cubeide/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.7-2018-q2-update.win32_1.4.0.202007081208/tools/bin/../lib/gcc/arm-none-eabi/7.3.1/../../../../arm-none-eabi/lib/thumb/v7-m\libc.a(lib_a-init.o)
+ .debug_frame   0x0000000000001f18       0x20 d:/program files/stm32cubeide_1.4.0/stm32cubeide/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.7-2018-q2-update.win32_1.4.0.202007081208/tools/bin/../lib/gcc/arm-none-eabi/7.3.1/../../../../arm-none-eabi/lib/thumb/v7-m\libc.a(lib_a-memset.o)
+ .debug_frame   0x0000000000001f38       0x58 d:/program files/stm32cubeide_1.4.0/stm32cubeide/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.7-2018-q2-update.win32_1.4.0.202007081208/tools/bin/../lib/gcc/arm-none-eabi/7.3.1/../../../../arm-none-eabi/lib/thumb/v7-m\libc.a(lib_a-__call_atexit.o)
+ .debug_frame   0x0000000000001f90       0x20 d:/program files/stm32cubeide_1.4.0/stm32cubeide/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.7-2018-q2-update.win32_1.4.0.202007081208/tools/bin/../lib/gcc/arm-none-eabi/7.3.1/../../../../arm-none-eabi/lib/thumb/v7-m\libc.a(lib_a-atexit.o)
+ .debug_frame   0x0000000000001fb0       0x38 d:/program files/stm32cubeide_1.4.0/stm32cubeide/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.7-2018-q2-update.win32_1.4.0.202007081208/tools/bin/../lib/gcc/arm-none-eabi/7.3.1/../../../../arm-none-eabi/lib/thumb/v7-m\libc.a(lib_a-fini.o)
+ .debug_frame   0x0000000000001fe8       0xb0 d:/program files/stm32cubeide_1.4.0/stm32cubeide/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.7-2018-q2-update.win32_1.4.0.202007081208/tools/bin/../lib/gcc/arm-none-eabi/7.3.1/../../../../arm-none-eabi/lib/thumb/v7-m\libc.a(lib_a-lock.o)
+ .debug_frame   0x0000000000002098       0x34 d:/program files/stm32cubeide_1.4.0/stm32cubeide/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.7-2018-q2-update.win32_1.4.0.202007081208/tools/bin/../lib/gcc/arm-none-eabi/7.3.1/../../../../arm-none-eabi/lib/thumb/v7-m\libc.a(lib_a-__atexit.o)
 
 .stabstr        0x0000000000000000       0x3f
  .stabstr       0x0000000000000000       0x3f d:/program files/stm32cubeide_1.4.0/stm32cubeide/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.7-2018-q2-update.win32_1.4.0.202007081208/tools/bin/../lib/gcc/arm-none-eabi/7.3.1/../../../../arm-none-eabi/lib/thumb/v7-m\libnosys.a(write.o)

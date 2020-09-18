@@ -1,5 +1,7 @@
 "Application/test.o"
+"Driver/src/BL0940.o"
 "Driver/src/board.o"
+"Driver/src/can.o"
 "Driver/src/flash.o"
 "Driver/src/gpio.o"
 "Driver/src/uart.o"

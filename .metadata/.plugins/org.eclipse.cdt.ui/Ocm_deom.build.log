@@ -1,6 +1,8 @@
-14:27:11 **** Incremental Build of configuration Debug for project Ocm_deom ****
+18:04:43 **** Incremental Build of configuration Debug for project Ocm_deom ****
 make all 
+arm-none-eabi-gcc "../Driver/src/BL0940.c" -mcpu=cortex-m3 -std=gnu11 -g1 -DSTM32F10X_MD -DUSE_STDPERIPH_DRIVER -c -I../src -I../Libraries/STM32F10x_StdPeriph_Driver/inc -I../Libraries/CMSIS/Device/ST/STM32F10x/Include -I../Libraries/CMSIS/Include -I"D:/Program Files/STM32CubeIDE_1.4.0/workspace_1.4.0/STM32CubeIDE_Project/Demo_Std_Project/Ocm_demo/Driver/inc" -I"D:/Program Files/STM32CubeIDE_1.4.0/workspace_1.4.0/STM32CubeIDE_Project/Demo_Std_Project/Ocm_demo/Application" -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -MMD -MP -MF"Driver/src/BL0940.d" -MT"Driver/src/BL0940.o"  -mfloat-abi=soft -mthumb -o "Driver/src/BL0940.o"
 arm-none-eabi-gcc "../Driver/src/uart.c" -mcpu=cortex-m3 -std=gnu11 -g1 -DSTM32F10X_MD -DUSE_STDPERIPH_DRIVER -c -I../src -I../Libraries/STM32F10x_StdPeriph_Driver/inc -I../Libraries/CMSIS/Device/ST/STM32F10x/Include -I../Libraries/CMSIS/Include -I"D:/Program Files/STM32CubeIDE_1.4.0/workspace_1.4.0/STM32CubeIDE_Project/Demo_Std_Project/Ocm_demo/Driver/inc" -I"D:/Program Files/STM32CubeIDE_1.4.0/workspace_1.4.0/STM32CubeIDE_Project/Demo_Std_Project/Ocm_demo/Application" -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -MMD -MP -MF"Driver/src/uart.d" -MT"Driver/src/uart.o"  -mfloat-abi=soft -mthumb -o "Driver/src/uart.o"
+arm-none-eabi-gcc "../Driver/src/uart_485.c" -mcpu=cortex-m3 -std=gnu11 -g1 -DSTM32F10X_MD -DUSE_STDPERIPH_DRIVER -c -I../src -I../Libraries/STM32F10x_StdPeriph_Driver/inc -I../Libraries/CMSIS/Device/ST/STM32F10x/Include -I../Libraries/CMSIS/Include -I"D:/Program Files/STM32CubeIDE_1.4.0/workspace_1.4.0/STM32CubeIDE_Project/Demo_Std_Project/Ocm_demo/Driver/inc" -I"D:/Program Files/STM32CubeIDE_1.4.0/workspace_1.4.0/STM32CubeIDE_Project/Demo_Std_Project/Ocm_demo/Application" -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -MMD -MP -MF"Driver/src/uart_485.d" -MT"Driver/src/uart_485.o"  -mfloat-abi=soft -mthumb -o "Driver/src/uart_485.o"
 arm-none-eabi-gcc -o "Ocm_deom.elf" @"objects.list"   -mcpu=cortex-m3 -T"../stm32_flash.ld" --specs=nosys.specs -Wl,-Map="Ocm_deom.map" -Wl,--gc-sections -static  -mfloat-abi=soft -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
 Finished building target: Ocm_deom.elf
  
@@ -15,9 +17,9 @@ Finished building: Ocm_deom.bin
  
 arm-none-eabi-size   Ocm_deom.elf 
    text	   data	    bss	    dec	    hex	filename
-   9056	   1616	    328	  11000	   2af8	Ocm_deom.elf
+   9540	   1616	    328	  11484	   2cdc	Ocm_deom.elf
 Finished building: default.size.stdout
  
 
-14:27:13 Build Finished. 0 errors, 0 warnings. (took 1s.453ms)
+18:04:45 Build Finished. 0 errors, 0 warnings. (took 1s.959ms)
 

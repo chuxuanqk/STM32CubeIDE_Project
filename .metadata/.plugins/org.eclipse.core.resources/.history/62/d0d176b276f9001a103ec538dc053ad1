@@ -1,0 +1,21 @@
+/*
+ * BL0940.h
+ *
+ *  Created on: 2020年9月18日
+ *      Author: Administrator
+ */
+
+#ifndef BL0940_H_
+#define BL0940_H_
+
+struct I_RMS{
+  uint8_t I_RMS_L;
+};
+
+struct BL0940_DataTypeDef{
+  struct I_RMS i_rms;
+};
+
+
+
+#endif /* BL0940_H_ */

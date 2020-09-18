@@ -1,0 +1,26 @@
+/*
+ * can.c
+ *
+ *  Created on: 2020年9月17日
+ *      Author: Administrator
+ */
+#include "can.h"
+
+
+static void RCC_Configuration(void)
+{
+  /* CAN Periph clock enable */
+  RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOA, ENABLE);
+  RCC_APB1PeriphClockCmd(RCC_APB1Periph_CAN1, ENABLE); //CAN1使能
+}
+
+static void GPIO_Configuration(void)
+{
+  GPIO_InitTypeDef GPIO_InitStructure;
+}
+
+
+static void CAN_Configuration()
+{
+
+}

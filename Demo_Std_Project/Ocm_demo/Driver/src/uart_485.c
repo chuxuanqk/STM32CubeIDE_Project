@@ -23,11 +23,6 @@ static void GPIO_Configuration(void)
   UART3_485_RECV();
 }
 
-//void uart_dmaisr_hook(void)
-//{
-//  UART3_485_RECV();
-//}
-
 void uart_tc_isr_hook(void)
 {
   UART3_485_RECV();
