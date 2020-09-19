@@ -263,6 +263,101 @@ static void UART_DMA_Tx_Config(struct uart_data *pdata)
 }
 #endif
 
+/**
+ * @description: 
+ * @param {type} 
+ * @return {type} 
+ */
+struct uart_data *__get_duartx(USART_TypeDef *uartx)
+{
+  struct uart_data *pstream;
+
+#ifdef USING_UART1
+  if (USART1 == uartx)
+    pstream = &duart1;
+#endif
+#ifdef USING_UART2
+  else if (USART2 == uartx)
+    pstream = &duart2;
+#endif
+#ifdef USING_UART3
+  else if (USART3 == uartx)
+    pstream = &duart3;
+#endif
+
+  return pstream;
+}
+
+/**
+ * @description: 内部函数，提供修改相关FLAG状态
+ * @param {type} 
+ * @return {type} 
+ */
+void __uart_setflag(USART_TypeDef *uartx, enum UART_FLAG uflag, bool status)
+{
+  struct uart_data *pstream = __get_duartx(uartx);
+
+  switch (uflag)
+  {
+  case UART_FLAG_DMA_TC:
+    pstream->tx_flag = status;
+    break;
+
+  case UART_FLAG_DMA_RC:
+    pstream->rx_flag = status;
+    break;
+
+  case UART_FLAG_TC:
+    pstream->tx_flag = status;
+    break;
+
+  case UART_FLAG_RC:
+    pstream->rx_flag = status;
+    break;
+
+  case UART_FLAG_IDLE:
+    break;
+
+  default:
+    break;
+  }
+}
+
+bool uart_getFlagStatus(USART_TypeDef *uartx, enum UART_FLAG uflag)
+{
+  bool ret = false;
+  struct uart_data *pstream = __get_duartx(uartx);
+
+  switch (uflag)
+  {
+  case UART_FLAG_DMA_TC:
+    ret = (pstream->tx_flag == false) ? true : false;
+    break;
+
+  case UART_FLAG_DMA_RC:
+    ret = (pstream->rx_flag == false) ? true : false;
+    break;
+
+  case UART_FLAG_TC:
+    ret = (pstream->tx_flag == false) ? true : false;
+    break;
+
+  case UART_FLAG_RC:
+    ret = (pstream->rx_flag == false) ? true : false;
+    break;
+
+  case UART_FLAG_IDLE:
+    if ((pstream->tx_flag == false) && (pstream->rx_flag == false))
+      ret = true;
+    break;
+
+  default:
+    break;
+  }
+
+  return ret;
+}
+
 int16_t uart_getc(USART_TypeDef *uartx)
 {
   int16_t ch = -1;
@@ -277,15 +372,17 @@ int16_t uart_getc(USART_TypeDef *uartx)
 static void uart_isr(struct uart_data *puart)
 {
   USART_TypeDef *uart = puart->uart_device->uartx;
+
   if (USART_GetITStatus(uart, USART_IT_RXNE) != RESET)
   {
-    puart->stream_rx[puart->rx_index] = (uint8_t)USART_ReceiveData(uart);
-    ++puart->rx_index;
-    puart->rx_index = puart->rx_index % UART_DMA_RB_BUFSZ;
-    if (puart->rx_index == puart->recv_len)
+    if (uart_getFlagStatus(uart, UART_FLAG_RC) == false)
     {
-      //	NET_LED_TRIGGLE;
-      puart->rx_flag = true;
+      puart->stream_rx[puart->rx_index] = (uint8_t)USART_ReceiveData(uart);
+      ++puart->rx_index;
+      puart->rx_index = puart->rx_index % UART_DMA_RB_BUFSZ;
+
+      if (puart->rx_index == puart->recv_len)
+        __uart_setflag(uart, UART_FLAG_RC, true);
     }
     /* clear interrupt */
     USART_ClearITPendingBit(uart, USART_IT_RXNE);
@@ -301,6 +398,13 @@ static void uart_isr(struct uart_data *puart)
   /* 一帧数据发送完成后，并且TXE=1时即数据已经被转移到移位寄存器中， USART_CR1中的TCIE为1产生中断*/
   if (USART_GetITStatus(uart, USART_IT_TC) != RESET)
   {
+    // 传输完成，将其UART_FLAG_xx_TC复位
+#ifdef USE_USART_DMA_TX
+    __uart_setflag(uart, UART_FLAG_DMA_TC, false);
+#elif
+    __uart_setflag(uart, UART_FLAG_TC, false);
+#endif
+
     /* clear interrupt */
     uart_tc_isr_hook();
     USART_ClearITPendingBit(uart, USART_IT_TC);
@@ -470,51 +574,18 @@ void DMA1_Channel2_IRQHandler(void)
 }
 #endif
 
-struct uart_data *__get_duartx(USART_TypeDef *uartx)
-{
-  struct uart_data *pstream;
-
-#ifdef USING_UART1
-  if (USART1 == uartx)
-    pstream = &duart1;
-#endif
-#ifdef USING_UART2
-  else if (USART2 == uartx)
-    pstream = &duart2;
-#endif
-#ifdef USING_UART3
-  else if (USART3 == uartx)
-    pstream = &duart3;
-#endif
-
-  return pstream;
-}
-
-bool uart_getflag(USART_TypeDef *uartx, enum UART_FLAG uflag)
-{
-  bool ret = false;
-  struct uart_data *pstream = __get_duartx(uartx);
-
-  if (uflag == UART_FLAG_DMA_TC)
-    ret = (pstream->tx_flag == false) ? true : false;
-
-  if (uflag == UART_FLAG_RC)
-    ret = (pstream->rx_flag == true) ? true : false;
-
-  return ret;
-}
-
-bool uart_clearflag(USART_TypeDef *uartx, enum UART_FLAG uflag)
+/**
+ * @description: 设置需要接收的字节长度，建议在使用uart_write给设备发送信息之前，设置设备返回的数据字节长度
+ * @param {type} 
+ * @return {type} 
+ */
+int16_t uart_SetRead_Size(USART_TypeDef *uartx, uint8_t size)
 {
   struct uart_data *pstream = __get_duartx(uartx);
 
-  if (uflag == UART_FLAG_DMA_TC)
-    pstream->tx_flag = false;
+  pstream->recv_len = size;
 
-  if (uflag == UART_FLAG_RC)
-    pstream->rx_flag = false;
-
-  return true;
+  return pstream->recv_len;
 }
 
 int16_t uart_read(USART_TypeDef *uartx, uint8_t *pbuf, uint8_t size)
@@ -529,14 +600,14 @@ int16_t uart_read(USART_TypeDef *uartx, uint8_t *pbuf, uint8_t size)
   if (pstream->recv_len != size)
     pstream->recv_len = size;
 
-  if (pstream->rx_flag == true)
+  if (uart_getFlagStatus(uartx, UART_FLAG_RC) == true)
   {
     for (i = 0; i < size; i++)
       pbuf[i] = pstream->stream_rx[i];
 
     ret = size;
-    pstream->rx_flag = false;
     pstream->rx_index = 0;
+    __uart_setflag(uartx, UART_FLAG_RC, false);
     memset(pstream->stream_rx, 0, sizeof(pstream->stream_rx)); // refflush
   }
 
@@ -549,45 +620,26 @@ int16_t uart_write(USART_TypeDef *uartx, uint8_t *pbuf, uint8_t size)
   uint8_t i = 0;
   struct uart_data *pstream = __get_duartx(uartx);
 
-  if (pstream->tx_flag != true)
+  if (uart_getFlagStatus(uartx, UART_FLAG_DMA_TC) == false)
   {
-    pstream->tx_flag = true; // 设置发送标志
     ret = size;
-
     for (i = 0; i < size; i++)
       pstream->stream_tx[i] = pbuf[i];
 
-    // 按字节发送
-    //    for (i = 0; i < size; i++)
-    //      USART_SendData(pstream->uart_device->uartx, pbuf[0]);
+#ifdef USE_USART_DMA_TX
+    __uart_setflag(uartx, UART_FLAG_DMA_TC, true);
     //DMA方式发送,设置数据长度
     DMA_SetCurrDataCounter(pstream->uart_device->dma_tx.tx_ch, size);
     //启动DMA发送
     DMA_Cmd(pstream->uart_device->dma_tx.tx_ch, ENABLE);
+#elif
+    __uart_setflag(uartx, UART_FLAG_TC, true);
+    // 按字节发送
+    for (i = 0; i < size; i++)
+      USART_SendData(pstream->uart_device->uartx, pbuf[0]);
+#endif
   }
-
   return ret;
-}
-
-int16_t uart_Setread_Size(USART_TypeDef *uartx, uint8_t size)
-{
-  struct uart_data *pstream;
-#ifdef USING_UART1
-  if (USART1 == uartx)
-    pstream = &duart1;
-#endif
-#ifdef USING_UART2
-  else if (USART2 == uartx)
-    pstream = &duart2;
-#endif
-#ifdef USING_UART3
-  else if (USART3 == uartx)
-    pstream = &duart3;
-#endif
-
-  pstream->recv_len = size;
-
-  return pstream->recv_len;
 }
 
 void hw_uart_init(void)

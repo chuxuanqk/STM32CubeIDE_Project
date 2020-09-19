@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2020-09-18 14:03:54
- * @LastEditTime: 2020-09-18 18:00:31
+ * @LastEditTime: 2020-09-19 11:05:10
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \Demo_Std_Project\Ocm_demo\Driver\inc\BL0940.h
@@ -120,5 +120,6 @@ struct BL0940_DataTypeDef // 全电参数数据包
 
 int8_t Read_BL0940_Reg(void *buf, uint8_t addr);
 int8_t Write_BL0940_Reg(void *buf, uint8_t addr);
+void hw_BL0940_init(void);
 
 #endif /* BL0940_H_ */

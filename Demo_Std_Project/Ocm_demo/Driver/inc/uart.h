@@ -112,14 +112,16 @@ enum UART_FLAG
   UART_FLAG_DEFAULT,
   UART_FLAG_DMA_TC,
   UART_FLAG_DMA_RC,
+  UART_FLAG_TC,
   UART_FLAG_RC,
+  UART_FLAG_IDLE,
 };
 
 struct uart_data
 {
   struct uart_device *uart_device;
-  bool rx_flag;
-  bool tx_flag;
+  bool rx_flag;                         // 接收flag
+  bool tx_flag;                         // 传输flag
   uint8_t rx_index;                     // 当前接收的数据下标
   uint8_t recv_len;                     // 需要接收数据的长度
   uint8_t stream_rx[UART_DMA_RB_BUFSZ]; // 单缓冲区
@@ -127,12 +129,13 @@ struct uart_data
 };
 
 void hw_uart_init(void);
-bool uart_getflag(USART_TypeDef *uartx, enum UART_FLAG uflag);
-bool uart_clearflag(USART_TypeDef *uartx, enum UART_FLAG uflag);
 int16_t uart_getc(USART_TypeDef *uartx);
 int16_t uart_read(USART_TypeDef *uartx, uint8_t *pbuf, uint8_t size);
 int16_t uart_write(USART_TypeDef *uartx, uint8_t *pbuf, uint8_t size);
-int16_t uart_Setread_Size(USART_TypeDef *uartx, uint8_t size);
+
+bool uart_getFlagStatus(USART_TypeDef *uartx, enum UART_FLAG uflag);
+int16_t uart_SetRead_Size(USART_TypeDef *uartx, uint8_t size);
+
 void __attribute__((weak)) uart_dmaisr_hook(void);
 void __attribute__((weak)) uart_tc_isr_hook(void);
 

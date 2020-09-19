@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2020-09-11 15:32:48
- * @LastEditTime: 2020-09-18 18:06:17
+ * @LastEditTime: 2020-09-19 14:42:00
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \Demo_Std_Project\Ocm_demo\src\main.c
@@ -64,12 +64,10 @@ int main(void)
 
   /* TODO - Add your application code here */
   uart_Setread_Size(USART1, 2);
-  uart_Setread_Size(USART3, 35);
-
   /* Infinite loop */
   while (1)
   {
-    if (uart_getflag(USART1, UART_FLAG_RC))
+    if (uart_getFlagStatus(USART1, UART_FLAG_RC))
     {
       size = uart_read(USART1, buf_rc, 2);
       uart_write(USART3, buf_rc, size);
