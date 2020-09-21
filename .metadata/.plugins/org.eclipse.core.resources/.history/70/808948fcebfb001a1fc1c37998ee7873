@@ -156,7 +156,7 @@ struct BL0940_CmdTypeDef
   uint8_t *recv_buf;
 };
 
-void hw_BL0940_init(struct BL0940_CmdTypeDef *cmd);
+void hw_BL0940_init(void);
 int8_t Send_BL0940(struct BL0940_CmdTypeDef *cmd);
 int8_t Recv_BL0940(struct BL0940_CmdTypeDef *cmd);
 void BL0940_Thread(struct BL0940_CmdTypeDef *cmd);

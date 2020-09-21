@@ -263,112 +263,6 @@ static void UART_DMA_Tx_Config(struct uart_data *pdata)
 }
 #endif
 
-/**
- * @description: 
- * @param {type} 
- * @return {type} 
- */
-struct uart_data *__get_duartx(USART_TypeDef *uartx)
-{
-  struct uart_data *pstream;
-
-#ifdef USING_UART1
-  if (USART1 == uartx)
-    pstream = &duart1;
-#endif
-#ifdef USING_UART2
-  else if (USART2 == uartx)
-    pstream = &duart2;
-#endif
-#ifdef USING_UART3
-  else if (USART3 == uartx)
-    pstream = &duart3;
-#endif
-
-  return pstream;
-}
-
-/**
- * @description: 内部函数，提供修改相关FLAG状态
- * @param {type} 
- * @return {type} 
- */
-void __uart_setflag(USART_TypeDef *uartx, enum UART_FLAG uflag, bool status)
-{
-  struct uart_data *pstream = __get_duartx(uartx);
-
-  switch (uflag)
-  {
-  case UART_FLAG_DMA_TC:
-    pstream->tx_flag = status;
-    break;
-
-  case UART_FLAG_DMA_RC:
-    pstream->rx_flag = status;
-    break;
-
-  case UART_FLAG_TC:
-    pstream->tx_flag = status;
-    break;
-
-  case UART_FLAG_RC:
-    pstream->rx_flag = status;
-    break;
-
-  case UART_FLAG_IDLE:
-    break;
-
-  default:
-    break;
-  }
-}
-
-bool uart_getFlagStatus(USART_TypeDef *uartx, enum UART_FLAG uflag)
-{
-  bool ret = false;
-  struct uart_data *pstream = __get_duartx(uartx);
-
-  switch (uflag)
-  {
-  case UART_FLAG_DMA_TC:
-    ret = (pstream->tx_flag == false) ? true : false;
-    break;
-
-  case UART_FLAG_DMA_RC:
-    ret = (pstream->rx_flag == false) ? true : false;
-    break;
-
-  case UART_FLAG_TC:
-    ret = (pstream->tx_flag == false) ? true : false;
-    break;
-
-  case UART_FLAG_RC:
-    ret = (pstream->rx_flag == false) ? true : false;
-    break;
-
-  case UART_FLAG_IDLE:
-    if ((pstream->tx_flag == false) && (pstream->rx_flag == false))
-      ret = true;
-    break;
-
-  default:
-    break;
-  }
-
-  return ret;
-}
-
-int16_t uart_getc(USART_TypeDef *uartx)
-{
-  int16_t ch = -1;
-
-  if (uartx->SR & USART_FLAG_RXNE)
-  {
-    ch = uartx->DR & 0x01FF;
-  }
-  return ch;
-}
-
 static void uart_isr(struct uart_data *puart)
 {
   USART_TypeDef *uart = puart->uart_device->uartx;
@@ -573,6 +467,112 @@ void DMA1_Channel2_IRQHandler(void)
   dma_isr(&duart3);
 }
 #endif
+
+/**
+ * @description: 
+ * @param {type} 
+ * @return {type} 
+ */
+struct uart_data *__get_duartx(USART_TypeDef *uartx)
+{
+  struct uart_data *pstream;
+
+#ifdef USING_UART1
+  if (USART1 == uartx)
+    pstream = &duart1;
+#endif
+#ifdef USING_UART2
+  else if (USART2 == uartx)
+    pstream = &duart2;
+#endif
+#ifdef USING_UART3
+  else if (USART3 == uartx)
+    pstream = &duart3;
+#endif
+
+  return pstream;
+}
+
+/**
+ * @description: 内部函数，提供修改相关FLAG状态
+ * @param {type} 
+ * @return {type} 
+ */
+void __uart_setflag(USART_TypeDef *uartx, enum UART_FLAG uflag, bool status)
+{
+  struct uart_data *pstream = __get_duartx(uartx);
+
+  switch (uflag)
+  {
+  case UART_FLAG_DMA_TC:
+    pstream->tx_flag = status;
+    break;
+
+  case UART_FLAG_DMA_RC:
+    pstream->rx_flag = status;
+    break;
+
+  case UART_FLAG_TC:
+    pstream->tx_flag = status;
+    break;
+
+  case UART_FLAG_RC:
+    pstream->rx_flag = status;
+    break;
+
+  case UART_FLAG_IDLE:
+    break;
+
+  default:
+    break;
+  }
+}
+
+bool uart_getFlagStatus(USART_TypeDef *uartx, enum UART_FLAG uflag)
+{
+  bool ret = false;
+  struct uart_data *pstream = __get_duartx(uartx);
+
+  switch (uflag)
+  {
+  case UART_FLAG_DMA_TC:
+    ret = (pstream->tx_flag == false) ? true : false;
+    break;
+
+  case UART_FLAG_DMA_RC:
+    ret = (pstream->rx_flag == false) ? true : false;
+    break;
+
+  case UART_FLAG_TC:
+    ret = (pstream->tx_flag == false) ? true : false;
+    break;
+
+  case UART_FLAG_RC:
+    ret = (pstream->rx_flag == false) ? true : false;
+    break;
+
+  case UART_FLAG_IDLE:
+    if ((pstream->tx_flag == false) && (pstream->rx_flag == false))
+      ret = true;
+    break;
+
+  default:
+    break;
+  }
+
+  return ret;
+}
+
+int16_t uart_getc(USART_TypeDef *uartx)
+{
+  int16_t ch = -1;
+
+  if (uartx->SR & USART_FLAG_RXNE)
+  {
+    ch = uartx->DR & 0x01FF;
+  }
+  return ch;
+}
 
 /**
  * @description: 设置需要接收的字节长度，建议在使用uart_write给设备发送信息之前，设置设备返回的数据字节长度

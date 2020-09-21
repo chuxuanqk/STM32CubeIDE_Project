@@ -15,6 +15,10 @@
 		<item key="incremental" value="false"/>
 		<item key="isRegEx" value="false"/>
 		<list key="findhistory">
+			<item value="uart_clearflag"/>
+			<item value="uart_Setread_Size"/>
+			<item value="static void uart_isr(struct uart_data *puart)"/>
+			<item value="dma_isr"/>
 			<item value="uart_tc_isr_hook"/>
 			<item value="NET"/>
 			<item value="duart2"/>
@@ -26,10 +30,6 @@
 			<item value="tx_ch"/>
 			<item value="NET_LED_TRIGGLE"/>
 			<item value="stream_tx"/>
-			<item value="DMA1_Channel4_IRQHandler"/>
-			<item value="USART1_IRQHandler"/>
-			<item value="DMA1_FLAG_GL4"/>
-			<item value="uart-&gt;uart_device-&gt;uartx"/>
 		</list>
 		<list key="replacehistory">
 			<item value="uart"/>

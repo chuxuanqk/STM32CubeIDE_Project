@@ -41,6 +41,53 @@ static void RCC_Configuration(void)
   RCC_APB1PeriphClockCmd(RCC_APB1Periph_USART3, ENABLE);
 }
 
+static void NVIC_Configuration(void)
+{
+  NVIC_InitTypeDef NVIC_InitStructure;
+
+  /* Enable the USART1 Interrupt */
+  NVIC_InitStructure.NVIC_IRQChannel = USART1_IRQn;         //通道设置为串口1中断（故后面应选择在“void USART1_IRQHandler(void)”开中断）
+  NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 0; //中断占先等级0
+  NVIC_InitStructure.NVIC_IRQChannelSubPriority = 1;        //中断响应优先级0
+  NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;           //打开中断
+  NVIC_Init(&NVIC_InitStructure);
+
+  //DMA发送中断设置
+  NVIC_InitStructure.NVIC_IRQChannel = DMA1_Channel4_IRQn;
+  NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 0;
+  NVIC_InitStructure.NVIC_IRQChannelSubPriority = 2;
+  NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
+  NVIC_Init(&NVIC_InitStructure);
+
+  /* Enable the USART2 Interrupt */
+  NVIC_InitStructure.NVIC_IRQChannel = USART2_IRQn;         //通道设置为串口1中断（故后面应选择在“void USART1_IRQHandler(void)”开中断）
+  NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 0; //中断占先等级0
+  NVIC_InitStructure.NVIC_IRQChannelSubPriority = 4;        //中断响应优先级0
+  NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;           //打开中断
+  NVIC_Init(&NVIC_InitStructure);
+
+  //DMA发送中断设置
+  NVIC_InitStructure.NVIC_IRQChannel = DMA1_Channel7_IRQn;
+  NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 0;
+  NVIC_InitStructure.NVIC_IRQChannelSubPriority = 5;
+  NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
+  NVIC_Init(&NVIC_InitStructure);
+
+  /* Enable the USART3 Interrupt */
+  NVIC_InitStructure.NVIC_IRQChannel = USART3_IRQn;         //通道设置为串口1中断（故后面应选择在“void USART1_IRQHandler(void)”开中断）
+  NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 0; //中断占先等级0
+  NVIC_InitStructure.NVIC_IRQChannelSubPriority = 6;        //中断响应优先级0
+  NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;           //打开中断
+  NVIC_Init(&NVIC_InitStructure);
+
+  //DMA发送中断设置
+  NVIC_InitStructure.NVIC_IRQChannel = DMA1_Channel2_IRQn;
+  NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 0;
+  NVIC_InitStructure.NVIC_IRQChannelSubPriority = 7;
+  NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
+  NVIC_Init(&NVIC_InitStructure);
+}
+
 static void GPIO_Configuration(void)
 {
   GPIO_InitTypeDef GPIO_InitStructure;
@@ -129,8 +176,8 @@ static void UART_Configuration(struct uart_device *uart, struct uart_configure *
 
   //串口采用DMA发送
   USART_DMACmd(uart->uartx, USART_DMAReq_Tx, ENABLE);
-  USART_ITConfig(uart->uartx, USART_IT_RXNE, ENABLE); //接收中断使能
-  USART_ClearITPendingBit(uart->uartx, USART_IT_RXNE);
+  USART_ITConfig(uart->uartx, USART_IT_RXNE, ENABLE);  // 接收中断使能
+  USART_ClearITPendingBit(uart->uartx, USART_IT_RXNE); // 清除接收完成中断
   /* Enable USART */
   USART_Cmd(uart->uartx, ENABLE);
 }
@@ -210,57 +257,105 @@ static void UART_DMA_Tx_Config(struct uart_data *pdata)
 
   DMA_Init(uart->dma_tx.tx_ch, &DMA_InitStructure);
   // 清除DMA标志
-//  DMA_ClearFlag(uart->dma_tx.tx_gl_flag);
-  DMA_ITConfig(uart->dma_tx.tx_ch, DMA_IT_TC, ENABLE);	// dma传输中断
+  //  DMA_ClearFlag(uart->dma_tx.tx_gl_flag);
+  DMA_ITConfig(uart->dma_tx.tx_ch, DMA_IT_TC, ENABLE); // dma传输中断
   DMA_Cmd(uart->dma_tx.tx_ch, DISABLE);
 }
 #endif
 
-static void NVIC_Configuration()
+/**
+ * @description: 
+ * @param {type} 
+ * @return {type} 
+ */
+struct uart_data *__get_duartx(USART_TypeDef *uartx)
 {
-  NVIC_InitTypeDef NVIC_InitStructure;
+  struct uart_data *pstream;
 
-  /* Enable the USART1 Interrupt */
-  NVIC_InitStructure.NVIC_IRQChannel = USART1_IRQn;         //通道设置为串口1中断（故后面应选择在“void USART1_IRQHandler(void)”开中断）
-  NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 0; //中断占先等级0
-  NVIC_InitStructure.NVIC_IRQChannelSubPriority = 1;        //中断响应优先级0
-  NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;           //打开中断
-  NVIC_Init(&NVIC_InitStructure);
+#ifdef USING_UART1
+  if (USART1 == uartx)
+    pstream = &duart1;
+#endif
+#ifdef USING_UART2
+  else if (USART2 == uartx)
+    pstream = &duart2;
+#endif
+#ifdef USING_UART3
+  else if (USART3 == uartx)
+    pstream = &duart3;
+#endif
 
-  //DMA发送中断设置
-  NVIC_InitStructure.NVIC_IRQChannel = DMA1_Channel4_IRQn;
-  NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 0;
-  NVIC_InitStructure.NVIC_IRQChannelSubPriority = 2;
-  NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
-  NVIC_Init(&NVIC_InitStructure);
+  return pstream;
+}
 
-  /* Enable the USART2 Interrupt */
-  NVIC_InitStructure.NVIC_IRQChannel = USART2_IRQn;         //通道设置为串口1中断（故后面应选择在“void USART1_IRQHandler(void)”开中断）
-  NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 0; //中断占先等级0
-  NVIC_InitStructure.NVIC_IRQChannelSubPriority = 4;        //中断响应优先级0
-  NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;           //打开中断
-  NVIC_Init(&NVIC_InitStructure);
+/**
+ * @description: 内部函数，提供修改相关FLAG状态
+ * @param {type} 
+ * @return {type} 
+ */
+void __uart_setflag(USART_TypeDef *uartx, enum UART_FLAG uflag, bool status)
+{
+  struct uart_data *pstream = __get_duartx(uartx);
 
-  //DMA发送中断设置
-  NVIC_InitStructure.NVIC_IRQChannel = DMA1_Channel7_IRQn;
-  NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 0;
-  NVIC_InitStructure.NVIC_IRQChannelSubPriority = 5;
-  NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
-  NVIC_Init(&NVIC_InitStructure);
+  switch (uflag)
+  {
+  case UART_FLAG_DMA_TC:
+    pstream->tx_flag = status;
+    break;
 
-  /* Enable the USART3 Interrupt */
-  NVIC_InitStructure.NVIC_IRQChannel = USART3_IRQn;         //通道设置为串口1中断（故后面应选择在“void USART1_IRQHandler(void)”开中断）
-  NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 0; //中断占先等级0
-  NVIC_InitStructure.NVIC_IRQChannelSubPriority = 6;        //中断响应优先级0
-  NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;           //打开中断
-  NVIC_Init(&NVIC_InitStructure);
+  case UART_FLAG_DMA_RC:
+    pstream->rx_flag = status;
+    break;
 
-  //DMA发送中断设置
-  NVIC_InitStructure.NVIC_IRQChannel = DMA1_Channel2_IRQn;
-  NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 0;
-  NVIC_InitStructure.NVIC_IRQChannelSubPriority = 7;
-  NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
-  NVIC_Init(&NVIC_InitStructure);
+  case UART_FLAG_TC:
+    pstream->tx_flag = status;
+    break;
+
+  case UART_FLAG_RC:
+    pstream->rx_flag = status;
+    break;
+
+  case UART_FLAG_IDLE:
+    break;
+
+  default:
+    break;
+  }
+}
+
+bool uart_getFlagStatus(USART_TypeDef *uartx, enum UART_FLAG uflag)
+{
+  bool ret = false;
+  struct uart_data *pstream = __get_duartx(uartx);
+
+  switch (uflag)
+  {
+  case UART_FLAG_DMA_TC:
+    ret = (pstream->tx_flag == false) ? true : false;
+    break;
+
+  case UART_FLAG_DMA_RC:
+    ret = (pstream->rx_flag == false) ? true : false;
+    break;
+
+  case UART_FLAG_TC:
+    ret = (pstream->tx_flag == false) ? true : false;
+    break;
+
+  case UART_FLAG_RC:
+    ret = (pstream->rx_flag == false) ? true : false;
+    break;
+
+  case UART_FLAG_IDLE:
+    if ((pstream->tx_flag == false) && (pstream->rx_flag == false))
+      ret = true;
+    break;
+
+  default:
+    break;
+  }
+
+  return ret;
 }
 
 int16_t uart_getc(USART_TypeDef *uartx)
@@ -277,42 +372,51 @@ int16_t uart_getc(USART_TypeDef *uartx)
 static void uart_isr(struct uart_data *puart)
 {
   USART_TypeDef *uart = puart->uart_device->uartx;
+
   if (USART_GetITStatus(uart, USART_IT_RXNE) != RESET)
   {
-//    /* 奇偶校验错误检测，无校验错误 */
-//    if (USART_GetFlagStatus(uart, USART_FLAG_PE) == RESET)
-//    {
+    if (uart_getFlagStatus(uart, UART_FLAG_RC) == false)
+    {
       puart->stream_rx[puart->rx_index] = (uint8_t)USART_ReceiveData(uart);
       ++puart->rx_index;
       puart->rx_index = puart->rx_index % UART_DMA_RB_BUFSZ;
+
       if (puart->rx_index == puart->recv_len)
-      {
-	  NET_LED_TRIGGLE;
-        puart->rx_flag = true;
-      }
-//    }
+        __uart_setflag(uart, UART_FLAG_RC, true);
+    }
     /* clear interrupt */
     USART_ClearITPendingBit(uart, USART_IT_RXNE);
   }
 
 #ifdef USE_USART_DMA_RX
   /* 检测到总线空闲，USART_CR1的IDLEIE为1 */
-  if (USART_GetFlagStatus(uart, USART_IT_IDLE) != RESET)
+  if (USART_GetITStatus(uart, USART_IT_IDLE) != RESET)
   {
   }
 #endif
 
   /* 一帧数据发送完成后，并且TXE=1时即数据已经被转移到移位寄存器中， USART_CR1中的TCIE为1产生中断*/
-  if (USART_GetFlagStatus(uart, USART_IT_TC) != RESET)
+  if (USART_GetITStatus(uart, USART_IT_TC) != RESET)
   {
-    /* clear interrupt */
+    // 传输完成，将其UART_FLAG_xx_TC复位
+#ifdef USE_USART_DMA_TX
+    __uart_setflag(uart, UART_FLAG_DMA_TC, false);
+#elif
+    __uart_setflag(uart, UART_FLAG_TC, false);
+#endif
 
-    USART_ITConfig(uart, USART_IT_TC, DISABLE);
+    /* clear interrupt */
+    uart_tc_isr_hook();
     USART_ClearITPendingBit(uart, USART_IT_TC);
+    USART_ITConfig(uart, USART_IT_TC, DISABLE);
+  }
+
+  if (USART_GetITStatus(uart, USART_IT_TXE) != RESET)
+  {
   }
 
   /* 检测到过载错误，当RXNE仍是1时，当前被接收在移位寄存器中的数据，需要传送至RDR寄存器是，硬件将该位 置位 */
-  if (USART_GetFlagStatus(uart, USART_FLAG_ORE) == SET)
+  if (USART_GetITStatus(uart, USART_FLAG_ORE) == SET)
   {
     USART_ReceiveData(uart);
   }
@@ -322,231 +426,58 @@ static void dma_isr(struct uart_data *puart)
 {
   struct uart_dma_tx *dma_tx = &puart->uart_device->dma_tx;
 
-//  NET_LED_TRIGGLE;
-  uart_dmaisr_hook();
-  puart->tx_flag = false;	// 使能再次发送
-  DMA_Cmd(dma_tx->tx_ch, DISABLE);
-  DMA_ClearFlag(dma_tx->tx_gl_flag);
-}
-
-#ifdef USING_UART1
-struct uart_configure config1 = UART_CONFIG_DEFAULT;
-struct uart_device uart1 = {
-    USART1,
-    USART1_IRQn,
-
-#ifdef USE_USART_DMA_RX
-    .dma_rx = {
-        DMA1_Channel5,
-        DMA1_FLAG_GL5,
-        DMA1_Channel5_IRQn,
-        0,
-    },
-#endif
-
-#ifdef USE_USART_DMA_TX
-    .dma_tx = {
-        DMA1_Channel4,
-        DMA1_FLAG_GL4,
-        DMA1_Channel4_IRQn,
-        DMA1_IT_TC4,
+  if (DMA_GetITStatus(dma_tx->tx_tc_IT) != RESET)
+  {
+    if (puart->uart_device->uartx == USART3)
+    {
+      USART_ClearITPendingBit(puart->uart_device->uartx, USART_IT_TC);
+      USART_ITConfig(puart->uart_device->uartx, USART_IT_TC, ENABLE); // 传输中断使能
     }
-#endif
 
-};
-struct uart_data duart1 = {
-    .uart_device = &uart1,
-    .rx_flag = false,
-    .tx_flag = false,
-    .rx_index = 0,
-    .recv_len = 2,
-};
-
-void USART1_IRQHandler(void)
-{
-  uart_isr(&duart1);
+    NET_LED_TRIGGLE;
+    uart_dmaisr_hook();
+    puart->tx_flag = false; // 使能再次发送
+    DMA_Cmd(dma_tx->tx_ch, DISABLE);
+    DMA_ClearFlag(dma_tx->tx_gl_flag);
+  }
 }
 
-void DMA1_Channel4_IRQHandler(void)
+
+/**
+ * @description: 设置需要接收的字节长度，建议在使用uart_write给设备发送信息之前，设置设备返回的数据字节长度
+ * @param {type} 
+ * @return {type} 
+ */
+int16_t uart_SetRead_Size(USART_TypeDef *uartx, uint8_t size)
 {
-  dma_isr(&duart1);
-}
+  struct uart_data *pstream = __get_duartx(uartx);
 
-#endif
+  pstream->recv_len = size;
 
-#ifdef USING_UART2
-struct uart_configure config2 = UART_CONFIG_DEFAULT;
-struct uart_device uart2 = {
-    USART2,
-    USART2_IRQn,
-
-#ifdef USE_USART_DMA_RX
-    .dma_rx = {
-        DMA1_Channel6,
-        DMA1_FLAG_GL6,
-        DMA1_Channel6_IRQn,
-        0,
-    },
-#endif
-
-#ifdef USE_USART_DMA_TX
-    .dma_tx = {
-        DMA1_Channel7,
-        DMA1_FLAG_GL7,
-        DMA1_Channel7_IRQn,
-        DMA1_IT_TC7,
-    }
-#endif
-
-};
-struct uart_data duart2 = {
-    .uart_device = &uart2,
-    .rx_flag = false,
-    .tx_flag = false,
-    .rx_index = 0,
-    .recv_len = 2,
-};
-
-void USART2_IRQHandler(void)
-{
-  uart_isr(&duart2);
-}
-
-void DMA1_Channel7_IRQHandler(void)
-{
-  dma_isr(&duart2);
-}
-#endif
-
-#ifdef USING_UART3
-struct uart_configure config3 = UART_CONFIG_DEFAULT;
-struct uart_device uart3 = {
-    USART3,
-    USART3_IRQn,
-
-#ifdef USE_USART_DMA_RX
-    .dma_rx = {
-        DMA1_Channel3,
-        DMA1_FLAG_GL3,
-        DMA1_Channel3_IRQn,
-        0,
-    },
-#endif
-
-#ifdef USE_USART_DMA_TX
-    .dma_tx = {
-        DMA1_Channel2,
-        DMA1_FLAG_GL2,
-        DMA1_Channel2_IRQn,
-        DMA1_IT_TC2,
-    }
-#endif
-};
-struct uart_data duart3 = {
-    .uart_device = &uart3,
-    .rx_flag = false,
-    .tx_flag = false,
-    .rx_index = 0,
-    .recv_len = 2,
-};
-
-void USART3_IRQHandler(void)
-{
-  uart_isr(&duart3);
-}
-
-void DMA1_Channel2_IRQHandler(void)
-{
-  dma_isr(&duart3);
-}
-#endif
-
-bool uart_getflag(USART_TypeDef *uartx, enum UART_FLAG uflag)
-{
-  struct uart_data *pstream;
-  bool ret = false;
-
-#ifdef USING_UART1
-  if (USART1 == uartx)
-    pstream = &duart1;
-#endif
-#ifdef USING_UART2
-  else if (USART2 == uartx)
-    pstream = &duart2;
-#endif
-#ifdef USING_UART3
-  else if (USART3 == uartx)
-    pstream = &duart3;
-#endif
-
-  if (uflag == UART_FLAG_DMA_TC)
-    ret = (pstream->tx_flag == false) ? true : false;
-
-  if (uflag == UART_FLAG_RC)
-    ret = (pstream->rx_flag == true) ? true : false;
-
-  return ret;
-}
-
-bool uart_clearflag(USART_TypeDef *uartx, enum UART_FLAG uflag)
-{
-  struct uart_data *pstream;
-#ifdef USING_UART1
-  if (USART1 == uartx)
-    pstream = &duart1;
-#endif
-#ifdef USING_UART2
-  else if (USART2 == uartx)
-    pstream = &duart2;
-#endif
-#ifdef USING_UART3
-  else if (USART3 == uartx)
-    pstream = &duart3;
-#endif
-
-  if (uflag == UART_FLAG_DMA_TC)
-    pstream->tx_flag = false;
-
-  if (uflag == UART_FLAG_RC)
-    pstream->rx_flag = false;
-
-  return true;
+  return pstream->recv_len;
 }
 
 int16_t uart_read(USART_TypeDef *uartx, uint8_t *pbuf, uint8_t size)
 {
-  struct uart_data *pstream;
   uint8_t i;
   int16_t ret = -1;
+  struct uart_data *pstream = __get_duartx(uartx);
 
   if (size == 0)
     return ret;
 
-#ifdef USING_UART1
-  if (USART1 == uartx)
-    pstream = &duart1;
-#endif
-#ifdef USING_UART2
-  else if (USART2 == uartx)
-    pstream = &duart2;
-#endif
-#ifdef USING_UART3
-  else if (USART3 == uartx)
-    pstream = &duart3;
-#endif
-
   if (pstream->recv_len != size)
     pstream->recv_len = size;
 
-  if (pstream->rx_flag == true)
+  if (uart_getFlagStatus(uartx, UART_FLAG_RC) == true)
   {
     for (i = 0; i < size; i++)
       pbuf[i] = pstream->stream_rx[i];
 
     ret = size;
-    pstream->rx_flag = false;
     pstream->rx_index = 0;
-    memset(pstream->stream_rx, 0, sizeof(pstream->stream_rx));	// refflush
+    __uart_setflag(uartx, UART_FLAG_RC, false);
+    memset(pstream->stream_rx, 0, sizeof(pstream->stream_rx)); // refflush
   }
 
   return ret;
@@ -554,63 +485,30 @@ int16_t uart_read(USART_TypeDef *uartx, uint8_t *pbuf, uint8_t size)
 
 int16_t uart_write(USART_TypeDef *uartx, uint8_t *pbuf, uint8_t size)
 {
-  struct uart_data *pstream;
   int16_t ret = -1;
   uint8_t i = 0;
+  struct uart_data *pstream = __get_duartx(uartx);
 
-#ifdef USING_UART1
-  if (USART1 == uartx)
-    pstream = &duart1;
-#endif
-#ifdef USING_UART2
-  else if (USART2 == uartx)
-    pstream = &duart2;
-#endif
-#ifdef USING_UART3
-  else if (USART3 == uartx)
-    pstream = &duart3;
-#endif
-
-  if (pstream->tx_flag != true)
+  if (uart_getFlagStatus(uartx, UART_FLAG_DMA_TC) == false)
   {
-      pstream->tx_flag = true;	// 设置发送标志
-      ret = size;
+    ret = size;
+    for (i = 0; i < size; i++)
+      pstream->stream_tx[i] = pbuf[i];
 
-      for(i=0; i<size; i++)
-    	pstream->stream_tx[i] = pbuf[i];
-
+#ifdef USE_USART_DMA_TX
+    __uart_setflag(uartx, UART_FLAG_DMA_TC, true);
+    //DMA方式发送,设置数据长度
+    DMA_SetCurrDataCounter(pstream->uart_device->dma_tx.tx_ch, size);
+    //启动DMA发送
+    DMA_Cmd(pstream->uart_device->dma_tx.tx_ch, ENABLE);
+#elif
+    __uart_setflag(uartx, UART_FLAG_TC, true);
     // 按字节发送
-//    for (i = 0; i < size; i++)
-//      USART_SendData(pstream->uart_device->uartx, pbuf[0]);
-          //DMA方式发送,设置数据长度
-	DMA_SetCurrDataCounter(pstream->uart_device->dma_tx.tx_ch, size);
-	//启动DMA发送
-	DMA_Cmd(pstream->uart_device->dma_tx.tx_ch, ENABLE);
+    for (i = 0; i < size; i++)
+      USART_SendData(pstream->uart_device->uartx, pbuf[0]);
+#endif
   }
-
   return ret;
-}
-
-
-int16_t uart_Setread_Size(USART_TypeDef* uartx, uint8_t size)
-{
-  struct uart_data *pstream;
-#ifdef USING_UART1
-  if (USART1 == uartx)
-    pstream = &duart1;
-#endif
-#ifdef USING_UART2
-  else if (USART2 == uartx)
-    pstream = &duart2;
-#endif
-#ifdef USING_UART3
-  else if (USART3 == uartx)
-    pstream = &duart3;
-#endif
-
-  pstream->recv_len = size;
-
-  return pstream->recv_len;
 }
 
 void hw_uart_init(void)

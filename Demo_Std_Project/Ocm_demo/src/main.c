@@ -63,7 +63,7 @@ int main(void)
   hw_uart_485_init();
 
   /* TODO - Add your application code here */
-  uart_Setread_Size(USART1, 2);
+  uart_SetRead_Size(USART1, 2);
   /* Infinite loop */
   while (1)
   {
@@ -72,7 +72,6 @@ int main(void)
       size = uart_read(USART1, buf_rc, 2);
       uart_write(USART3, buf_rc, size);
       memset(buf_rc, 0, sizeof(buf_rc));
-      uart_clearflag(USART1, UART_FLAG_RC);
     }
   }
 }
