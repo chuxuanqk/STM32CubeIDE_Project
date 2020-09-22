@@ -58,6 +58,7 @@
 									<listOptionValue builtIn="false" value="../Libraries/CMSIS/Include"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/Ocm_deom/Driver/inc}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/Ocm_deom/Application}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/Ocm_deom/common}&quot;"/>
 								</option>
 								<option id="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.compiler.option.ffunction.961790983" name="Place functions in their own sections (-ffunction-sections)" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.compiler.option.ffunction" useByScannerDiscovery="false" value="true" valueType="boolean"/>
 								<option id="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.compiler.option.fdata.934922683" name="Place data in their own sections (-fdata-sections)" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.compiler.option.fdata" useByScannerDiscovery="false" value="true" valueType="boolean"/>
@@ -257,7 +258,14 @@
 		<project id="Ocm_deom.com.atollic.truestudio.exe.1942282355" name="Executable"/>
 	</storageModule>
 	<storageModule moduleId="org.eclipse.cdt.core.LanguageSettingsProviders"/>
-	<storageModule moduleId="refreshScope"/>
+	<storageModule moduleId="refreshScope" versionNumber="2">
+		<configuration configurationName="Debug">
+			<resource resourceType="PROJECT" workspacePath="/Ocm_deom"/>
+		</configuration>
+		<configuration configurationName="Release">
+			<resource resourceType="PROJECT" workspacePath="/Ocm_deom"/>
+		</configuration>
+	</storageModule>
 	<storageModule moduleId="org.eclipse.cdt.make.core.buildtargets"/>
 	<storageModule moduleId="org.eclipse.cdt.internal.ui.text.commentOwnerProjectMappings"/>
 	<storageModule moduleId="scannerConfiguration">

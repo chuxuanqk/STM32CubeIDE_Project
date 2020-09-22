@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2020-09-18 14:03:54
- * @LastEditTime: 2020-09-21 17:15:43
+ * @LastEditTime: 2020-09-22 18:04:52
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \Demo_Std_Project\Ocm_demo\Driver\inc\BL0940.h
@@ -149,7 +149,6 @@ struct BL0940_CmdTypeDef
   uint8_t cmd_type : 2;
   bool send_flag : 1;
   bool recv_flag : 1;
-  uint16_t counter_01ms; // 超时计时器
   uint8_t cmd_size;
   uint8_t recv_size;
   uint8_t *cmd_buf;
@@ -157,8 +156,8 @@ struct BL0940_CmdTypeDef
 };
 
 void hw_BL0940_init(struct BL0940_CmdTypeDef *cmd);
-int8_t Send_BL0940(struct BL0940_CmdTypeDef *cmd);
-int8_t Recv_BL0940(struct BL0940_CmdTypeDef *cmd);
+int16_t Send_BL0940(struct BL0940_CmdTypeDef *cmd);
+int16_t Recv_BL0940(struct BL0940_CmdTypeDef *cmd);
 void BL0940_Thread(struct BL0940_CmdTypeDef *cmd);
 
 #endif /* BL0940_H_ */

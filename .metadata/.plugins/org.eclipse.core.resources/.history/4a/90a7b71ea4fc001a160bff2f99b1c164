@@ -8,13 +8,13 @@
 
 struct timer_t timer_list[OS_TIMER_MAX];
 
-typedef int8_t timer_id;
+typedef uint8_t timer_id;
 
 #define SYS_TICK_RATE_HZ 1000
 static volatile uint32_t sys_seconds_cnt;
 static volatile uint16_t sys_millisec_cnt;
 
-void __attribute__((inline)) TickHandler(void)
+attribule(inline) void TickHandler(void)
 {
     uint32_t millisec_increment = 1000 / SYS_TICK_RATE_HZ;
 
@@ -58,28 +58,20 @@ timer_id timer_creat(void (*pFunction)(void *para),
                      bool run,
                      void *para)
 {
-    timer_id index = 0;
+    uint8_t index = 0;
 
     while ((timer_list[index].pfun != NULL) && (index < OS_TIMER_MAX))
     {
         index++;
     }
 
-    if (index < OS_TIMER_MAX)
-    {
-        // printf("time index %d\r\n",index);
-        timer_list[index].pfun = pFunction;
-        timer_list[index].delay = delay;
-        timer_list[index].delay_temp = delay;
-        timer_list[index].period = period;
-        timer_list[index].run = run;
-        timer_list[index].para = para;
-    }
-    else
-    {
-        index = -1;
-    }
-
+    // printf("time index %d\r\n",index);
+    timer_list[index].pfun = pFunction;
+    timer_list[index].delay = delay;
+    timer_list[index].delay_temp = delay;
+    timer_list[index].period = period;
+    timer_list[index].run = run;
+    timer_list[index].para = para;
     return index;
 }
 
@@ -121,7 +113,7 @@ void timer_stop(const timer_id index)
  * @param {type} 
  * @return {type} 
  */
-void __attribute__((inline)) timer_sched(void)
+void timer_sched(void)
 {
     uint8_t index;
 
@@ -150,6 +142,7 @@ void __attribute__((inline)) timer_sched(void)
         }
         else
         {
+            // timer_list[index].delay -= 1;
             --timer_list[index].delay;
         }
     }

@@ -29,7 +29,7 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include "stm32f1xx_it.h"
-
+#include "timer.h"
 /** @addtogroup IO_Toggle
   * @{
   */
@@ -140,6 +140,8 @@ void PendSV_Handler(void)
   */
 void SysTick_Handler(void)
 {
+  TickHandler();
+  timer_sched();
 }
 
 /******************************************************************************/
@@ -160,7 +162,6 @@ void SysTick_Handler(void)
 
 /**
   * @}
-  */ 
-
+  */
 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
