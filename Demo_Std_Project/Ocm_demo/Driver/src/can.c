@@ -132,7 +132,59 @@ void USB_LP_CAN1_RX0_IRQHandler(void)
 	RxMessage.IDE = CAN_ID_EXT;
 	CAN_Receive(CAN1, CAN_FIFO0, &RxMessage);
 
+	can_rx_isr_hook(&RxMessage); // 对接收的数据进行处理
+
 	CAN_ClearITPendingBit(CAN1, CAN_IT_FMP0);
+}
+
+/**
+ * @description: can 数据发送
+ * @param {type} TxMessage  需要由外部设置ExtId
+ * @return {type} 
+ */
+void can_send(CanTxMsg *TxMessage, uint8_t *buf, uint8_t size)
+{
+	uint16_t i = 0;
+	uint16_t index = 0;
+	uint8_t flag = CAN_NO_MB;
+
+	TxMessage->RTR = CAN_RTR_DATA;
+	TxMessage->IDE = CAN_ID_EXT;
+	TxMessage->DLC = 8;
+
+	while (size / 8)
+	{
+		for (i = 0; i < 8; i++)
+			TxMessage->Data[i] = buf[index++];
+
+		while (flag == CAN_NO_MB)
+			flag = CAN_Transmit(CAN1, TxMessage);
+
+		size -= 8;
+	}
+
+	if (size > 0)
+	{
+		TxMessage->DLC = size;
+
+		for (i = 0; i < size; i++)
+			TxMessage->Data[i] = buf[index++];
+
+		while (flag == CAN_NO_MB)
+			flag = CAN_Transmit(CAN1, TxMessage);
+	}
+}
+
+/**
+ * @description: Cancels a transmit request.
+ * @param {type} 
+ * @return {type} 
+ */
+void can_Tx_clear(void)
+{
+	CAN_CancelTransmit(CAN1, 0);
+	CAN_CancelTransmit(CAN1, 1);
+	CAN_CancelTransmit(CAN1, 2);
 }
 
 void hw_can_init(void)

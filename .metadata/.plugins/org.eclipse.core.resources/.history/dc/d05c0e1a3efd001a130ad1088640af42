@@ -4,11 +4,13 @@
 
 struct timer_t timer_list[OS_TIMER_MAX];
 
+
+
 #define SYS_TICK_RATE_HZ 1000
 static volatile uint32_t sys_seconds_cnt;
 static volatile uint16_t sys_millisec_cnt;
 
-inline void TickHandler(void)
+void inline TickHandler(void)
 {
     uint32_t millisec_increment = 1000 / SYS_TICK_RATE_HZ;
 
@@ -115,7 +117,7 @@ void timer_stop(const timer_id index)
  * @param {type} 
  * @return {type} 
  */
-inline void timer_sched(void)
+void __attribute__((inline)) timer_sched(void)
 {
     uint8_t index;
 

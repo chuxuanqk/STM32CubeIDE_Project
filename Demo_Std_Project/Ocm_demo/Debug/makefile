@@ -9,6 +9,7 @@ RM := rm -rf
 # All of the sources participating in the build are defined here
 -include sources.mk
 -include src/subdir.mk
+-include common/subdir.mk
 -include Libraries/STM32F10x_StdPeriph_Driver/src/subdir.mk
 -include Driver/src/subdir.mk
 -include Application/subdir.mk

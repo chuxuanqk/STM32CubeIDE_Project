@@ -73,7 +73,7 @@ int16_t Send_BL0940(struct BL0940_CmdTypeDef *cmd)
 
         uart_SetRead_Size(BL0940_UART, cmd->recv_size); // 设置串口需要读取的数据大小
         ret = uart_write(BL0940_UART, cmd->cmd_buf, cmd->cmd_size);
-    }
+    }                                 
     return ret;
 }
 
@@ -84,9 +84,9 @@ int16_t Send_BL0940(struct BL0940_CmdTypeDef *cmd)
  */
 int16_t Recv_BL0940(struct BL0940_CmdTypeDef *cmd)
 {
-    int16_t ret = -1;
+    int16_t ret = -1;                                                                                                                
     ret = uart_read(BL0940_UART, cmd->recv_buf, cmd->recv_size);
-
+                                                                                                                   
     return ret;
 }
 
