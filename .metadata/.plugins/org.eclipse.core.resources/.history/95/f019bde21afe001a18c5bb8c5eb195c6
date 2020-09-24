@@ -1,0 +1,16 @@
+/*
+ * modbus.h
+ *
+ *  Created on: 2020年9月24日
+ *      Author: Administrator
+ */
+
+#ifndef MODBUS_H_
+#define MODBUS_H_
+
+/*< modbus 功能码*/
+enum Modbus_Case{
+
+};
+
+#endif /* MODBUS_H_ */

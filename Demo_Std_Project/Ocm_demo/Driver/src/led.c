@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2020-09-23 16:05:02
- * @LastEditTime: 2020-09-23 18:06:08
+ * @LastEditTime: 2020-09-24 14:30:31
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \Demo_Std_Project\Ocm_demo\Driver\src\led.c
@@ -19,9 +19,9 @@
 #include "stm32f10x_rcc.h"
 
 #define GPIO_PIN_NET GPIO_Pin_13
-#define GPIO_PIN_STATE GPIO_Pin_14
+#define GPIO_PIN_STATE GPIO_Pin_13
 #define GPIO_NET GPIOC
-#define GPIO_STATE GPIOC
+#define GPIO_STATE GPIOB
 
 #define GPIO_PIN_BL0940_LED_1 GPIO_Pin_3
 #define GPIO_PIN_BL0940_LED_2 GPIO_Pin_2
@@ -32,31 +32,15 @@
 #define SET_TIME_DEFAULT 1000
 #define SHARP_TIMER_DEFAULT 500
 
-/*< 初始化LED设备状态*/
-struct LED_Sharp_Struct led_net_dev = {
-    .led_type = NET_LED,
-    .model = LED_OFF_MODE,
-    .sharp_timer_ms = 0,
-    .set_time_ms = SET_TIME_DEFAULT,
-    .count_timer = SHARP_TIMER_DEFAULT,
-    .LED_ON = GPIO_SetBits(GPIO_NET, GPIO_PIN_NET),
-    .LED_OFF = GPIO_ResetBits(GPIO_NET, GPIO_PIN_NET),
-};
+void led_open(struct LED_Sharp_Struct *led_dev);
 
-struct LED_Sharp_Struct led_state_dev = {
-    .led_type = STATE_LED,
-    .model = LED_OFF_MODE,
-    .sharp_timer_ms = 0,
-    .set_time_ms = SET_TIME_DEFAULT,
-    .count_timer = SHARP_TIMER_DEFAULT,
-    .LED_ON = GPIO_SetBits(GPIO_STATE, GPIO_PIN_STATE),
-    .LED_OFF = GPIO_ResetBits(GPIO_STATE, GPIO_PIN_STATE),
-};
+void led_close(struct LED_Sharp_Struct *led_dev);
 
 /************************************************************************/
 static void RCC_Configuration(void)
 {
     RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOA, ENABLE);
+    RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOB, ENABLE);
     RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOC, ENABLE);
 }
 
@@ -82,7 +66,34 @@ static void GPIO_Configuration(void)
     GPIO_ResetBits(GPIO_BL0940_LED, GPIO_PIN_BL0940_LED_1 | GPIO_PIN_BL0940_LED_2 | GPIO_PIN_BL0940_LED_3 | GPIO_PIN_BL0940_LED_4);
 }
 
-inline struct LED_Sharp_Struct *__LED_GetDevice(enum LED_TYPE type)
+/*< 初始化LED设备状态*/
+struct LED_Sharp_Struct led_net_dev = {
+    .led_type = NET_LED,
+    .model = LED_OFF_MODE,
+    .gpiox = GPIO_NET,
+    .gpio_pin = GPIO_PIN_NET,
+
+    .sharp_timer_ms = 0,
+    .set_time_ms = SET_TIME_DEFAULT,
+    .count_timer = SHARP_TIMER_DEFAULT,
+    .LED_ON = led_open,
+    .LED_OFF = led_close,
+};
+
+struct LED_Sharp_Struct led_state_dev = {
+    .led_type = STATE_LED,
+    .model = LED_OFF_MODE,
+    .gpiox = GPIO_STATE,
+    .gpio_pin = GPIO_PIN_STATE,
+
+    .sharp_timer_ms = 0,
+    .set_time_ms = SET_TIME_DEFAULT,
+    .count_timer = SHARP_TIMER_DEFAULT,
+    .LED_ON = led_open,
+    .LED_OFF = led_close,
+};
+
+struct LED_Sharp_Struct *_LED_GetDevice(enum LED_TYPE type)
 {
     struct LED_Sharp_Struct *led_dev;
 
@@ -119,11 +130,11 @@ void led_reflash_status(struct LED_Sharp_Struct *led)
             switch (led->model)
             {
             case LED_ON_MODE:
-                led->LED_ON;
+                led->LED_ON(led);
                 break;
 
             case LED_OFF_MODE:
-                led->LED_OFF;
+                led->LED_OFF(led);
                 break;
 
             case LED_Sharp_Once_MODE:
@@ -141,28 +152,38 @@ void led_reflash_status(struct LED_Sharp_Struct *led)
         }
         else if (led->count_timer == (led->set_time_ms - 1))
         {
-            led->LED_ON;
+            led->LED_ON(led);
         }
         else if (led->count_timer == led->sharp_timer_ms)
         {
-            led->LED_OFF;
+            led->LED_OFF(led);
         }
     }
 }
 
 inline void led_set_mode(enum LED_TYPE type, enum LED_Sharp_Model mode)
 {
-    struct LED_Sharp_Struct *led_dev = __LED_GetDevice(type);
+    struct LED_Sharp_Struct *led_dev = _LED_GetDevice(type);
 
     led_dev->model = mode;
 }
 
 inline void led_set_time(enum LED_TYPE type, uint16_t set_time, uint16_t sharp_time)
 {
-    struct LED_Sharp_Struct *led_dev = __LED_GetDevice(type);
+    struct LED_Sharp_Struct *led_dev = _LED_GetDevice(type);
 
     led_dev->set_time_ms = set_time;
     led_dev->sharp_timer_ms = sharp_time;
+}
+
+void led_open(struct LED_Sharp_Struct *led_dev)
+{
+    GPIO_SetBits(led_dev->gpiox, led_dev->gpio_pin);
+}
+
+void led_close(struct LED_Sharp_Struct *led_dev)
+{
+    GPIO_ResetBits(led_dev->gpiox, led_dev->gpio_pin);
 }
 
 void hw_led_init(void)
@@ -171,6 +192,20 @@ void hw_led_init(void)
     GPIO_Configuration();
 
     /* 注册LED设备到定时器 */
-    timer_creat(&led_reflash_status, 10, 0, true, &led_net_dev);
-    timer_creat(&led_reflash_status, 10, 0, true, &led_state_dev);
+    timer_creat(led_reflash_status, 10, 0, true, &led_net_dev);
+    timer_creat(led_reflash_status, 10, 0, true, &led_state_dev);
+}
+
+/**
+ * @description: for test 
+ * @param {type} 
+ * @return {type} 
+ */
+void led_test(void)
+{
+    led_set_mode(NET_LED, LED_Sharp_Repeat_MODE);
+    led_set_time(NET_LED, 1000, 500);
+
+    led_set_mode(STATE_LED, LED_Sharp_Repeat_MODE);
+    led_set_time(STATE_LED, 2000, 1000);
 }

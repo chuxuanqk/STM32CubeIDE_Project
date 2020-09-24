@@ -674,3 +674,5 @@ void hw_uart_init(void)
   UART_DMA_Tx_Config(&duart3);
 #endif
 }
+
+

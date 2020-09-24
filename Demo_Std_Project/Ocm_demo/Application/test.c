@@ -10,12 +10,13 @@
 
 void uart_test(void)
 {
-  uint16_t size;
-  uint8_t buf_rc[20];
+  uint16_t size = -1;
+  uint8_t buf_rc[40];
 
-   size = uart_read(USART1, buf_rc, 5);
-  if(size != -1)
+  if (uart_getFlagStatus(USART1, UART_FLAG_RC))
   {
-      uart_write(USART1, buf_rc, size);
+    size = uart_read(USART1, buf_rc, 2);
+    uart_write(USART3, buf_rc, size);
+    memset(buf_rc, 0, sizeof(buf_rc));
   }
 }

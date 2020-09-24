@@ -15,6 +15,9 @@
 		<item key="incremental" value="false"/>
 		<item key="isRegEx" value="false"/>
 		<list key="findhistory">
+			<item value="LED_OFF"/>
+			<item value="、"/>
+			<item value="LED_ON"/>
 			<item value="uart_clearflag"/>
 			<item value="uart_Setread_Size"/>
 			<item value="static void uart_isr(struct uart_data *puart)"/>
@@ -27,9 +30,6 @@
 			<item value="USART_DMACmd"/>
 			<item value="UART_DMA_Tx_Config"/>
 			<item value="LED"/>
-			<item value="tx_ch"/>
-			<item value="NET_LED_TRIGGLE"/>
-			<item value="stream_tx"/>
 		</list>
 		<list key="replacehistory">
 			<item value="uart"/>

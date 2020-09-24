@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2020-09-18 14:03:37
- * @LastEditTime: 2020-09-22 18:03:37
+ * @LastEditTime: 2020-09-24 16:00:08
  * @LastEditors: Please set LastEditors
  * @Description: 提供BL0940芯片的数据读取接口
  * @FilePath: \Demo_Std_Project\Ocm_demo\Driver\src\BL0940.c
@@ -73,7 +73,7 @@ int16_t Send_BL0940(struct BL0940_CmdTypeDef *cmd)
 
         uart_SetRead_Size(BL0940_UART, cmd->recv_size); // 设置串口需要读取的数据大小
         ret = uart_write(BL0940_UART, cmd->cmd_buf, cmd->cmd_size);
-    }                                 
+    }
     return ret;
 }
 
@@ -84,9 +84,9 @@ int16_t Send_BL0940(struct BL0940_CmdTypeDef *cmd)
  */
 int16_t Recv_BL0940(struct BL0940_CmdTypeDef *cmd)
 {
-    int16_t ret = -1;                                                                                                                
+    int16_t ret = -1;
     ret = uart_read(BL0940_UART, cmd->recv_buf, cmd->recv_size);
-                                                                                                                   
+
     return ret;
 }
 

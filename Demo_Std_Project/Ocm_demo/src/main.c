@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2020-09-11 15:32:48
- * @LastEditTime: 2020-09-19 14:42:00
+ * @LastEditTime: 2020-09-24 10:45:48
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \Demo_Std_Project\Ocm_demo\src\main.c
@@ -37,12 +37,16 @@ SOFTWARE.
 
 /* Includes */
 #include <stddef.h>
+#include "string.h"
+
 #include "stm32f10x.h"
 #include "board.h"
 #include "uart.h"
-#include "gpio.h"
 #include "uart_485.h"
-#include "string.h"
+#include "can.h"
+#include "gpio.h"
+#include "led.h"
+
 #include "test.h"
 
 /**
@@ -54,24 +58,17 @@ SOFTWARE.
 */
 int main(void)
 {
-  uint16_t size = -1;
-  uint8_t buf_rc[40];
-
   hw_board_init();
   hw_uart_init();
-  hw_gpio_init();
   hw_uart_485_init();
+  hw_can_init();
+  hw_gpio_init();
+  hw_led_init();
 
   /* TODO - Add your application code here */
-  uart_SetRead_Size(USART1, 2);
+  led_test();
   /* Infinite loop */
   while (1)
   {
-    if (uart_getFlagStatus(USART1, UART_FLAG_RC))
-    {
-      size = uart_read(USART1, buf_rc, 2);
-      uart_write(USART3, buf_rc, size);
-      memset(buf_rc, 0, sizeof(buf_rc));
-    }
   }
 }

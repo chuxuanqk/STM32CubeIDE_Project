@@ -6,6 +6,7 @@
 "Driver/src/flash.o"
 "Driver/src/gpio.o"
 "Driver/src/keyboard.o"
+"Driver/src/led.o"
 "Driver/src/uart.o"
 "Driver/src/uart_485.o"
 "Libraries/STM32F10x_StdPeriph_Driver/src/misc.o"
