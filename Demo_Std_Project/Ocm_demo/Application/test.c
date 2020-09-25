@@ -1,4 +1,12 @@
 /*
+ * @Author: your name
+ * @Date: 2020-09-14 16:35:10
+ * @LastEditTime: 2020-09-25 18:12:17
+ * @LastEditors: Please set LastEditors
+ * @Description: In User Settings Edit
+ * @FilePath: \Demo_Std_Project\Ocm_demo\Application\test.c
+ */
+/*
  * test.c
  *
  *  Created on: 2020年9月14日
@@ -16,7 +24,7 @@ void uart_test(void)
   if (uart_getFlagStatus(USART1, UART_FLAG_RC))
   {
     size = uart_read(USART1, buf_rc, 2);
-    uart_write(USART3, buf_rc, size);
+    uart_write(USART1, buf_rc, size);
     memset(buf_rc, 0, sizeof(buf_rc));
   }
 }

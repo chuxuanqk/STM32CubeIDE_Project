@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2020-09-11 15:32:48
- * @LastEditTime: 2020-09-24 10:45:48
+ * @LastEditTime: 2020-09-25 18:15:00
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \Demo_Std_Project\Ocm_demo\src\main.c
@@ -58,6 +58,9 @@ SOFTWARE.
 */
 int main(void)
 {
+  uint16_t size = -1;
+  uint8_t buf_rc[40];
+
   hw_board_init();
   hw_uart_init();
   hw_uart_485_init();
@@ -70,5 +73,11 @@ int main(void)
   /* Infinite loop */
   while (1)
   {
+    if (uart_getFlagStatus(USART1, UART_FLAG_RC))
+    {
+      size = uart_read(USART1, buf_rc, 2);
+      uart_write(USART1, buf_rc, size);
+      memset(buf_rc, 0, sizeof(buf_rc));
+    }
   }
 }

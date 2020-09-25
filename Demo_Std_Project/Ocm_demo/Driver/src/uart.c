@@ -536,19 +536,19 @@ bool uart_getFlagStatus(USART_TypeDef *uartx, enum UART_FLAG uflag)
   switch (uflag)
   {
   case UART_FLAG_DMA_TC:
-    ret = (pstream->tx_flag == false) ? true : false;
+    ret = (pstream->tx_flag == true) ? true : false;
     break;
 
   case UART_FLAG_DMA_RC:
-    ret = (pstream->rx_flag == false) ? true : false;
+    ret = (pstream->rx_flag == true) ? true : false;
     break;
 
   case UART_FLAG_TC:
-    ret = (pstream->tx_flag == false) ? true : false;
+    ret = (pstream->tx_flag == true) ? true : false;
     break;
 
   case UART_FLAG_RC:
-    ret = (pstream->rx_flag == false) ? true : false;
+    ret = (pstream->rx_flag == true) ? true : false;
     break;
 
   case UART_FLAG_IDLE:
@@ -674,5 +674,3 @@ void hw_uart_init(void)
   UART_DMA_Tx_Config(&duart3);
 #endif
 }
-
-
