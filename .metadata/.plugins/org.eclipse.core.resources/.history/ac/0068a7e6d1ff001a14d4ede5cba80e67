@@ -1,0 +1,49 @@
+/*
+ * @Author: your name
+ * @Date: 2020-09-26 15:12:45
+ * @LastEditTime: 2020-09-26 16:25:09
+ * @LastEditors: Please set LastEditors
+ * @Description: In User Settings Edit
+ * @FilePath: \Test_Code\Ocm_demo\Driver\src\bsp_timer.c
+ */
+/*
+ * bsp_timer.c
+ *
+ *  Created on: 2020年9月26日
+ *      Author: Administrator
+ */
+
+#include "bsp_timer.h"
+#include "stm32f10x_rcc.h"
+
+static void RCC_Configuration(struct TIM_Device_Cfg *cfg)
+{
+    RCC_APB1PeriphClockCmd(cfg->timer_rcc, ENABLE);
+}
+
+static void NVIC_Configuration(void)
+{
+}
+
+static void TIM_Configuration(void)
+{
+    TIM_TimeBaseInitTypeDef TIM_TimeBaseStructure;
+}
+
+struct TIM_Device_Cfg tim3 = {
+    .timer_rcc =
+	.
+};
+
+static void
+tim_isr(void)
+{
+}
+
+void hw_bsptimer_init(void)
+{
+    RCC_Configuration();
+    NVIC_Configuration();
+
+    TIM_Configuration();
+}
