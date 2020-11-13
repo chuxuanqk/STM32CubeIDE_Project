@@ -1,0 +1,9 @@
+09:50:16 **** Incremental Build of configuration Debug for project dali_master_lpc13xx ****
+make all 
+Cannot run program "make": Launching failed
+
+Error: Program "make" not found in PATH
+PATH=[D:/Program Files/STM32CubeIDE_1.4.0/STM32CubeIDE/jre/bin/server;D:/Program Files/STM32CubeIDE_1.4.0/STM32CubeIDE/jre/bin;D:/Program Files/STM32CubeIDE_1.4.0/STM32CubeIDE/jre/lib/amd64;D:\Program Files\Anaconda_pack;D:\Program Files\Anaconda_pack\Library\mingw-w64\bin;D:\Program Files\Anaconda_pack\Library\usr\bin;D:\Program Files\Anaconda_pack\Library\bin;D:\Program Files\Anaconda_pack\Scripts;C:\Program Files (x86)\Common Files\Oracle\Java\javapath;C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0\;C:\Windows\System32\OpenSSH\;C:\Program Files (x86)\ATI Technologies\ATI.ACE\Core-Static;C:\Program Files\Git\cmd;D:\Program Files\ATI.ACE\Core-Static;C:\Program Files (x86)\AMD\ATI.ACE\Core-Static;D:\Program Files\MinGW\bin;D:\Program Files\nmp\;C:\ProgramData\chocolatey\bin;D:\Program Files\9 2020-q2-update\bin;D:\Saber_Workshop\Personal\¹¤¾ß\OpenOCD-20200729-0.10.0\bin;C:\Users\Administrator\AppData\Local\Microsoft\WindowsApps;C:\Users\Administrator\AppData\Local\Programs\Microsoft VS Code\bin;D:\Program Files\Keil\UV4;C:\Users\Administrator\AppData\Roaming\npm;;D:\Program Files\CLion 2020.2.1\bin;;D:\Program Files\STM32CubeIDE_1.4.0\STM32CubeIDE;]
+
+09:50:16 Build Finished. 0 errors, 0 warnings. (took 98ms)
+

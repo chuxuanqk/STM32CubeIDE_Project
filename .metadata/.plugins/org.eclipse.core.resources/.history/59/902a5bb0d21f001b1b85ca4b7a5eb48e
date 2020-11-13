@@ -1,0 +1,53 @@
+/*
+ * dalimaster_control_slave.h
+ *
+ *  Created on: 2020年10月29日
+ *      Author: Saber
+ */
+
+#ifndef VIRTUAL_DEVICE_DALIMASTER_CONTROL_SLAVE_H_
+#define VIRTUAL_DEVICE_DALIMASTER_CONTROL_SLAVE_H_
+
+#include "stdbool.h"
+#include "stdint.h"
+#include "stm32f10x.h"
+
+#define DALI_KEY7SEG_TRANSFORM (65535 / 99)
+#define DALI_DIMLEVEL_TRANSFORM 258
+
+enum Sw_State
+{
+    SW_CLOSE = 0, //关闭调色，不修改设置参数
+    SW_OPEN,      //打开并修改颜色
+    SW_OPEN_EX,   //根据记录颜色值打开
+};
+
+struct DALI_Output_Buffer_Struct
+{
+    /* public */
+    uint8_t port_id;       // 通道id
+    uint8_t set_fade_rate; // 渐变率目标值
+    uint8_t set_fade_time; // 渐变时间
+    uint16_t set_value;    // 亮度等级目标值
+    uint8_t set_sw;        // 开关,0:关闭调色，不修改设置参数、1: 打开并修改颜色、2: 根据记录颜色值打开
+
+    /* private */
+    uint8_t now_sw;
+    uint8_t now_fade_rate; // 当前渐变率
+    uint8_t now_fade_time; /* ※ 渐变时间，改变一次亮度值需要的时间 0-15level ※*/
+    uint16_t now_value;    // 亮度等级当前值
+    uint8_t ex_value;      // 亮度等级过去状态值
+    uint8_t delta_value;   // 亮度等级单次增量
+    bool lock_change;      // 参数修改锁
+};
+
+void Dali_Init_Control(void);
+void Dali_Reflash_Output(void);
+void Dali_Set_RecvFlag(void);
+void Dali_Update_Slave_Status(void)
+
+    void Dali_Clear_All_Channle_Data(void);
+struct DALI_Output_Buffer_Struct *Dali_Get_Port_Buf(uint8_t temp_port);
+void Dali_Update_Set_Value(struct DALI_Output_Buffer_Struct *output_buffer);
+
+#endif /* VIRTUAL_DEVICE_DALIMASTER_CONTROL_SLAVE_H_ */

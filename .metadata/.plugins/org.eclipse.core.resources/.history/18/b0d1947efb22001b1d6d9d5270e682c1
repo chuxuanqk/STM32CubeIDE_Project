@@ -1,0 +1,4 @@
+src/common/timer_callback.o: ../src/common/timer_callback.c \
+ ../src/common/timer_callback.h
+
+../src/common/timer_callback.h:

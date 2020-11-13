@@ -57,8 +57,13 @@ arm-none-eabi-gcc
 
     
     
-- [ ] Modbus协议模块
+- [x] Modbus协议模块
+
+    * 模块信息查询
+    * 模块网络ID设置
 
 - [ ] 定时器模块(bsp_timer)
 
     * 定时器计数功能
+    
+- [ ] 日志子系统

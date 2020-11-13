@@ -1,0 +1,6 @@
+core_cm3.h:1014:22:NVIC_SetPriority	16	static
+core_cm3.h:1139:26:SysTick_Config	16	static
+sys_init.c:13:6:SystemClock_Config	16	static
+sys_init.c:37:6:Sys_NVIC_Init	8	static
+sys_init.c:49:6:sys_init_base	8	static
+sys_init.c:59:6:SysTick_Handler	8	static

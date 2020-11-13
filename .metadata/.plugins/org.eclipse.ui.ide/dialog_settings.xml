@@ -9,6 +9,9 @@
 		<item key="SmartImportRootWizardPage.STORE_NESTED_PROJECTS" value="true"/>
 		<item key="SmartImportRootWizardPage.STORE_CONFIGURE_NATURES" value="true"/>
 		<list key="org.eclipse.ui.internal.wizards.datatransfer.SmartImportRootWizardPage.knownSources">
+			<item value="D:\Program Files\TrueSTUDIO\workspace\STM32RCT6"/>
+			<item value="D:\Saber_Workshop\Projects\TrueSTUDIO\onecm-base-stm32-true-stdio\code"/>
+			<item value="D:\Saber_Workshop\Projects\DALI\code\DALI_DEMO\code\Ocm_demo"/>
 			<item value="D:\Saber_Workshop\Projects\DALI\code\Test_Code\Ocm_demo"/>
 			<item value="D:\Program Files\STM32CubeIDE_1.4.0\workspace_1.4.0\STM32CubeIDE_Project\Demo_Std_Project\Ocm_demo"/>
 			<item value="D:\Program Files\TrueSTUDIO\workspace\Deom_Project\Ocm_demo"/>

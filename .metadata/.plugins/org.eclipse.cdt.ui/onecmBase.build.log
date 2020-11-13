@@ -1,0 +1,10 @@
+10:49:41 **** Incremental Build of configuration Debug for project onecmBase ****
+make all 
+arm-none-eabi-size   onecmBase.elf 
+   text	   data	    bss	    dec	    hex	filename
+  34380	   1112	  17088	  52580	   cd64	onecmBase.elf
+Finished building: default.size.stdout
+ 
+
+10:49:42 Build Finished. 0 errors, 0 warnings. (took 850ms)
+

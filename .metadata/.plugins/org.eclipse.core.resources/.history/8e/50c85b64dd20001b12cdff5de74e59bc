@@ -1,0 +1,258 @@
+/*
+ * dalimaster_control_slave.c
+ *
+ *  Created on: 2020年10月29日
+ *      Author: Saber
+ */
+#include <dali_cmd.h>
+#include <DALImaster.h>
+#include "config_par.h"
+#include "dalimaster_control_slave.h"
+
+#include "bsp_led.h"
+#include "bsp_uart.h"
+
+#define DALI_Port_Number (DALI_LENTH + 1) // 通道0作为整个模块控制，1-64对应DALI短地址 0-63
+#define DALI_FADE_TIME 5                  // 渐变等级5 ---  2.8s
+
+struct DALI_Output_Buffer_Struct DALI_Output_Buffer_Str[DALI_Port_Number]; // DALI各通道状态缓存区
+
+uint8_t recv_cycle_index;
+bool recv_cycle_flag;
+
+/**
+ * @description: 
+ * @param {*}
+ * @return {*}
+ */
+void Dali_Init_Control(void)
+{
+    uint8_t i = 0;
+    struct DALI_Output_Buffer_Struct Init_Output_Buf =
+        {
+            .port_id = 0,
+            .set_fade_rate = DALI_FADE_TIME,
+            .set_fade_time = DALI_FADE_TIME,
+            .set_value = 0,
+            .set_sw = 0,
+            .now_sw = 0,
+            .now_fade_rate = 0,
+            .now_fade_time = 0,
+            .now_value = 0,
+            .ex_value = 0,
+            .delta_value = 0,
+            .lock_change = false};
+
+    recv_cycle_index = 1;
+    recv_cycle_flag = false;
+
+    DALI_Output_Buffer_Str[0] = Init_Output_Buf; // 整个模块控制
+
+    for (i = 1; i < DALI_Port_Number; i++)
+    {
+        DALI_Output_Buffer_Str[i] = Init_Output_Buf;
+        DALI_Output_Buffer_Str[i].port_id = i - 1;
+    }
+}
+
+/**
+ * @description: 获取对应端口号的缓存通道
+ * @param {*}
+ * @return {*} 
+ */
+struct DALI_Output_Buffer_Struct *Dali_Get_Port_Buf(uint8_t temp_port)
+{
+    return &(DALI_Output_Buffer_Str[temp_port]);
+}
+
+/**
+ * @description:  更新各DALI镇流器通道数据，根据设置参数+相应转换算法对数据进行更新处理
+ * @param {*} temp_buf: x通道的结构体指针
+ * @return {*}
+ */
+void Dali_Update_Set_Value(struct DALI_Output_Buffer_Struct *temp_buf)
+{
+
+    temp_buf->lock_change = true; // 上锁
+
+    Config_Data_Str *cfg = Get_Config_data();
+    uint16_t net_id = cfg->Net_IDs[temp_buf]；
+
+    printf("%d,", temp_buf->port_id);
+    printf("%d", (int)cfg->Net_IDs[temp_buf]);
+
+    if (temp_buf->set_value != 0)
+        temp_buf->set_sw = SW_OPEN;
+    else
+        temp_buf->set_sw = SW_CLOSE;
+
+    if (temp_buf->set_fade_rate > 0x0F) // 错误处理，
+        temp_buf->set_fade_rate = temp_buf->now_fade_rate;
+
+    // 转换set_value: 0~65535  ---- 0~254
+    temp_buf->set_value = (temp_buf->set_value / DALI_DIMLEVEL_TRANSFORM);
+
+    temp_buf->lock_change = false; // 解锁
+}
+
+/**
+ * @description: DALI通道状态是否改变 
+ * @param {*}
+ * @return {*} YES:true   NO:false
+ */
+static bool Dali_Status_Change(uint8_t temp_port)
+{
+    bool rflag = false;
+    const struct DALI_Output_Buffer_Struct *output_buf;
+
+    output_buf = Dali_Get_Port_Buf(temp_port);
+
+    if ((output_buf->lock_change == false) &&
+        ((output_buf->set_fade_rate != output_buf->now_fade_rate) ||
+         (output_buf->set_fade_time != output_buf->now_fade_time) ||
+         (output_buf->set_value != output_buf->now_value)))
+        rflag = true;
+
+    return rflag;
+}
+
+/**
+ * @description: DALI通道数据查询，并更新数据到当前值
+ * @param {*}
+ * @return {*}
+ */
+static void Dali_Reflash_Recv(uint8_t temp_port)
+{
+    uint8_t answer = 0;
+    uint8_t short_addr = temp_port - 1;
+    struct DALI_Output_Buffer_Struct *temp_buf = &DALI_Output_Buffer_Str[temp_port];
+
+    Cmd_QueryDimLevel(short_addr);
+    answer = dali_read_backwardframe();
+    temp_buf->now_value = answer;
+
+    Cmd_QueryFateAndTimeRate(short_addr);
+    answer = dali_read_backwardframe();
+    temp_buf->now_fade_time = (answer & 0xF0) >> 4;
+    temp_buf->now_fade_rate = answer & 0x0F;
+}
+
+/**
+ * @description: 将其放入定时任务中, 用于置位查询flag
+ * @param {*}
+ * @return {*}
+ */
+void Dali_Set_RecvFlag(void)
+{
+    recv_cycle_flag = true;
+}
+
+/**
+ * @description: 
+ * @param {*}
+ * @return {*}
+ */
+void Dali_Reset_RecvFlag(void)
+{
+    recv_cycle_flag = false;
+}
+
+/**
+ * @description: 将其放入定时任务中， 定时查询各通道状态, 
+ *              由于DALI传输速率低，导致查询过程过长。
+ * @param {*}
+ * @return {*}
+ */
+void Dali_Update_Slave_Status(void)
+{
+    if (recv_cycle_flag == true)
+    {
+        Dali_Reset_RecvFlag();
+
+        if (Is_Config_portid(recv_cycle_index) == true)
+            Dali_Reflash_Recv(recv_cycle_index);
+
+        recv_cycle_index++;
+        if (recv_cycle_index == DALI_Port_Number)
+            recv_cycle_index = 1; // 重新查询所有通道
+    }
+}
+
+/**
+ * @description: 删除DALI镇流器短地址
+ * @param {*}
+ * @return {*}
+ */
+void Dali_Delete_ShortAddr(uint8_t shortaddr)
+{
+    uint8_t addr = 0;
+
+    if (shortaddr == DALI_CLEAR_ALL_CHANNLE) // 清除所有镇流器短地址
+    {
+        for (addr = 0; addr < DALI_LENTH; addr++)
+            Cmd_DelShortAddr(addr);
+    }
+
+    if (shortaddr < DALI_LENTH)
+        Cmd_DelShortAddr(addr);
+
+    return;
+}
+
+/**
+ * @description: DALI各通道状态刷新
+ * @param {*}
+ * @return {*}
+ */
+void Dali_Reflash_Output(void)
+{
+    uint8_t answer = 0;
+    uint8_t short_addr = 0;
+    struct DALI_Output_Buffer_Struct *temp_buf;
+    Config_Data_Str *temp_config = Get_Config_data();
+    static uint8_t send_cycle_index = 1;
+
+    if ((Is_Config_portid(send_cycle_index) == true) && (Dali_Status_Change(send_cycle_index) == true))
+    {
+        state_led_sharp();
+
+        temp_buf = &DALI_Output_Buffer_Str[send_cycle_index];
+        temp_buf->now_value = temp_buf->set_value;
+        temp_buf->now_fade_rate = temp_buf->set_fade_rate;
+        temp_buf->now_fade_time = temp_buf->set_fade_time;
+
+        if (send_cycle_index == 0) // 广播更新所有通道状态, 通道0做为整个模块控制
+            short_addr = DALI_BORADCAST_ADDR;
+        else
+            short_addr = send_cycle_index - 1;
+
+        Cmd_SetDimLevel(short_addr, temp_buf->now_value);
+        // Cmd_SetFateRate(short_addr, temp_buf->now_fade_rate);    // 渐变率用于调节单步+-的亮度调节
+        Cmd_SetTimeRate(short_addr, temp_buf->now_fade_time);
+    }
+
+    send_cycle_index++;
+}
+
+/**
+ * @description: 清除所有通道信息
+ * @param {*}
+ * @return {*}
+ */
+void Dali_Clear_All_Channle_Data(void)
+{
+    uint8_t i = 0;
+    struct DALI_Output_Buffer_Struct *temp_buf;
+
+    for (; i < DALI_Port_Number; i++)
+    {
+        temp_buf = &DALI_Output_Buffer_Str[i];
+        temp_buf->port_id = 0;
+        temp_buf->set_fade_rate = 0;
+        temp_buf->set_fade_time = 0;
+        temp_buf->set_value = 0;
+        temp_buf->set_sw = 0;
+
+        temp_buf->lock_change = false;
+    }
+}

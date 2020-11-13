@@ -1,0 +1,29 @@
+################################################################################
+# Automatically-generated file. Do not edit!
+################################################################################
+
+# Add inputs and outputs from these tool invocations to the build variables 
+C_SRCS += \
+../src/common/callback_functions.c \
+../src/common/crc16.c \
+../src/common/timer_callback.c 
+
+OBJS += \
+./src/common/callback_functions.o \
+./src/common/crc16.o \
+./src/common/timer_callback.o 
+
+C_DEPS += \
+./src/common/callback_functions.d \
+./src/common/crc16.d \
+./src/common/timer_callback.d 
+
+
+# Each subdirectory must supply rules for building sources it contributes
+src/common/callback_functions.o: ../src/common/callback_functions.c
+	arm-none-eabi-gcc "$<" -mcpu=cortex-m3 -std=gnu11 -DSTM32F10X_MD -DUSE_STDPERIPH_DRIVER -c -I../src -I../Libraries/STM32F10x_StdPeriph_Driver/inc -I../Libraries/CMSIS/Device/ST/STM32F10x/Include -I../Libraries/CMSIS/Include -I"D:/Saber_Workshop/Projects/485_BigGateway/digital-output-dali-netgate/code/src/channel" -I"D:/Saber_Workshop/Projects/485_BigGateway/digital-output-dali-netgate/code/src/common" -I"D:/Saber_Workshop/Projects/485_BigGateway/digital-output-dali-netgate/code/src/config_device" -I"D:/Saber_Workshop/Projects/485_BigGateway/digital-output-dali-netgate/code/src/exchange" -I"D:/Saber_Workshop/Projects/485_BigGateway/digital-output-dali-netgate/code/src/protocol" -I"D:/Saber_Workshop/Projects/485_BigGateway/digital-output-dali-netgate/code/src/sys_device" -I"D:/Saber_Workshop/Projects/485_BigGateway/digital-output-dali-netgate/code/src/third_protocol_dev" -I"D:/Saber_Workshop/Projects/485_BigGateway/digital-output-dali-netgate/code/src/virtual_device" -I"D:/Saber_Workshop/Projects/485_BigGateway/digital-output-dali-netgate/code/src/virtual_device/driver" -I"D:/Saber_Workshop/Projects/485_BigGateway/digital-output-dali-netgate/code/src/virtual_device/dalistack" -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -MMD -MP -MF"src/common/callback_functions.d" -MT"$@"  -mfloat-abi=soft -mthumb -o "$@"
+src/common/crc16.o: ../src/common/crc16.c
+	arm-none-eabi-gcc "$<" -mcpu=cortex-m3 -std=gnu11 -DSTM32F10X_MD -DUSE_STDPERIPH_DRIVER -c -I../src -I../Libraries/STM32F10x_StdPeriph_Driver/inc -I../Libraries/CMSIS/Device/ST/STM32F10x/Include -I../Libraries/CMSIS/Include -I"D:/Saber_Workshop/Projects/485_BigGateway/digital-output-dali-netgate/code/src/channel" -I"D:/Saber_Workshop/Projects/485_BigGateway/digital-output-dali-netgate/code/src/common" -I"D:/Saber_Workshop/Projects/485_BigGateway/digital-output-dali-netgate/code/src/config_device" -I"D:/Saber_Workshop/Projects/485_BigGateway/digital-output-dali-netgate/code/src/exchange" -I"D:/Saber_Workshop/Projects/485_BigGateway/digital-output-dali-netgate/code/src/protocol" -I"D:/Saber_Workshop/Projects/485_BigGateway/digital-output-dali-netgate/code/src/sys_device" -I"D:/Saber_Workshop/Projects/485_BigGateway/digital-output-dali-netgate/code/src/third_protocol_dev" -I"D:/Saber_Workshop/Projects/485_BigGateway/digital-output-dali-netgate/code/src/virtual_device" -I"D:/Saber_Workshop/Projects/485_BigGateway/digital-output-dali-netgate/code/src/virtual_device/driver" -I"D:/Saber_Workshop/Projects/485_BigGateway/digital-output-dali-netgate/code/src/virtual_device/dalistack" -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -MMD -MP -MF"src/common/crc16.d" -MT"$@"  -mfloat-abi=soft -mthumb -o "$@"
+src/common/timer_callback.o: ../src/common/timer_callback.c
+	arm-none-eabi-gcc "$<" -mcpu=cortex-m3 -std=gnu11 -DSTM32F10X_MD -DUSE_STDPERIPH_DRIVER -c -I../src -I../Libraries/STM32F10x_StdPeriph_Driver/inc -I../Libraries/CMSIS/Device/ST/STM32F10x/Include -I../Libraries/CMSIS/Include -I"D:/Saber_Workshop/Projects/485_BigGateway/digital-output-dali-netgate/code/src/channel" -I"D:/Saber_Workshop/Projects/485_BigGateway/digital-output-dali-netgate/code/src/common" -I"D:/Saber_Workshop/Projects/485_BigGateway/digital-output-dali-netgate/code/src/config_device" -I"D:/Saber_Workshop/Projects/485_BigGateway/digital-output-dali-netgate/code/src/exchange" -I"D:/Saber_Workshop/Projects/485_BigGateway/digital-output-dali-netgate/code/src/protocol" -I"D:/Saber_Workshop/Projects/485_BigGateway/digital-output-dali-netgate/code/src/sys_device" -I"D:/Saber_Workshop/Projects/485_BigGateway/digital-output-dali-netgate/code/src/third_protocol_dev" -I"D:/Saber_Workshop/Projects/485_BigGateway/digital-output-dali-netgate/code/src/virtual_device" -I"D:/Saber_Workshop/Projects/485_BigGateway/digital-output-dali-netgate/code/src/virtual_device/driver" -I"D:/Saber_Workshop/Projects/485_BigGateway/digital-output-dali-netgate/code/src/virtual_device/dalistack" -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -MMD -MP -MF"src/common/timer_callback.d" -MT"$@"  -mfloat-abi=soft -mthumb -o "$@"
+

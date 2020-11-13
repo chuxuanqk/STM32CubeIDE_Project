@@ -1,0 +1,24 @@
+################################################################################
+# Automatically-generated file. Do not edit!
+################################################################################
+
+# Add inputs and outputs from these tool invocations to the build variables 
+C_SRCS += \
+../src/channel/chan_data.c \
+../src/channel/chan_data_can1.c 
+
+OBJS += \
+./src/channel/chan_data.o \
+./src/channel/chan_data_can1.o 
+
+C_DEPS += \
+./src/channel/chan_data.d \
+./src/channel/chan_data_can1.d 
+
+
+# Each subdirectory must supply rules for building sources it contributes
+src/channel/chan_data.o: ../src/channel/chan_data.c
+	arm-none-eabi-gcc "$<" -mcpu=cortex-m3 -std=gnu11 -DSTM32F10X_MD -DUSE_STDPERIPH_DRIVER -c -I../src -I../Libraries/STM32F10x_StdPeriph_Driver/inc -I../Libraries/CMSIS/Device/ST/STM32F10x/Include -I../Libraries/CMSIS/Include -I"D:/Saber_Workshop/Projects/485_BigGateway/digital-output-dali-netgate/code/src/channel" -I"D:/Saber_Workshop/Projects/485_BigGateway/digital-output-dali-netgate/code/src/common" -I"D:/Saber_Workshop/Projects/485_BigGateway/digital-output-dali-netgate/code/src/config_device" -I"D:/Saber_Workshop/Projects/485_BigGateway/digital-output-dali-netgate/code/src/exchange" -I"D:/Saber_Workshop/Projects/485_BigGateway/digital-output-dali-netgate/code/src/protocol" -I"D:/Saber_Workshop/Projects/485_BigGateway/digital-output-dali-netgate/code/src/sys_device" -I"D:/Saber_Workshop/Projects/485_BigGateway/digital-output-dali-netgate/code/src/third_protocol_dev" -I"D:/Saber_Workshop/Projects/485_BigGateway/digital-output-dali-netgate/code/src/virtual_device" -I"D:/Saber_Workshop/Projects/485_BigGateway/digital-output-dali-netgate/code/src/virtual_device/driver" -I"D:/Saber_Workshop/Projects/485_BigGateway/digital-output-dali-netgate/code/src/virtual_device/dalistack" -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -MMD -MP -MF"src/channel/chan_data.d" -MT"$@"  -mfloat-abi=soft -mthumb -o "$@"
+src/channel/chan_data_can1.o: ../src/channel/chan_data_can1.c
+	arm-none-eabi-gcc "$<" -mcpu=cortex-m3 -std=gnu11 -DSTM32F10X_MD -DUSE_STDPERIPH_DRIVER -c -I../src -I../Libraries/STM32F10x_StdPeriph_Driver/inc -I../Libraries/CMSIS/Device/ST/STM32F10x/Include -I../Libraries/CMSIS/Include -I"D:/Saber_Workshop/Projects/485_BigGateway/digital-output-dali-netgate/code/src/channel" -I"D:/Saber_Workshop/Projects/485_BigGateway/digital-output-dali-netgate/code/src/common" -I"D:/Saber_Workshop/Projects/485_BigGateway/digital-output-dali-netgate/code/src/config_device" -I"D:/Saber_Workshop/Projects/485_BigGateway/digital-output-dali-netgate/code/src/exchange" -I"D:/Saber_Workshop/Projects/485_BigGateway/digital-output-dali-netgate/code/src/protocol" -I"D:/Saber_Workshop/Projects/485_BigGateway/digital-output-dali-netgate/code/src/sys_device" -I"D:/Saber_Workshop/Projects/485_BigGateway/digital-output-dali-netgate/code/src/third_protocol_dev" -I"D:/Saber_Workshop/Projects/485_BigGateway/digital-output-dali-netgate/code/src/virtual_device" -I"D:/Saber_Workshop/Projects/485_BigGateway/digital-output-dali-netgate/code/src/virtual_device/driver" -I"D:/Saber_Workshop/Projects/485_BigGateway/digital-output-dali-netgate/code/src/virtual_device/dalistack" -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -MMD -MP -MF"src/channel/chan_data_can1.d" -MT"$@"  -mfloat-abi=soft -mthumb -o "$@"
+

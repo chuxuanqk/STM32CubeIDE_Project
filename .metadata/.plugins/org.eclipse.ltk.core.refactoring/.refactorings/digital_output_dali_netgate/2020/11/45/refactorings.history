@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Rename resource &apos;digital_output_dali_netgate/src/virtual_device/DALIStack&apos; to &apos;dalistack&apos;" description="Rename resource &apos;DALIStack&apos;" flags="7" id="org.eclipse.ltk.core.refactoring.rename.resource" input="src/virtual_device/DALIStack" name="dalistack" stamp="1604715943419" updateReferences="true"/>
+</session>

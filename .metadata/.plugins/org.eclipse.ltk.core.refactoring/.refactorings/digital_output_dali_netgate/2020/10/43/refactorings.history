@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Rename resource &apos;Ocm_deom/Application/keyboard_app&apos; to &apos;keyboard_app.c&apos;" description="Rename resource &apos;keyboard_app&apos;" flags="7" id="org.eclipse.ltk.core.refactoring.rename.resource" input="Application/keyboard_app" name="keyboard_app.c" stamp="1603440136465" updateReferences="true"/>
+</session>

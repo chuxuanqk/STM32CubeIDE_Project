@@ -1,0 +1,3 @@
+modbus_port_adjust.c:18:6:CAN1_Rec_Contorl	32	static
+modbus_port_adjust.c:296:6:CAN1_Send_Meg	72	static
+modbus_port_adjust.c:495:6:CAN1_Ports_Adjust	8	static

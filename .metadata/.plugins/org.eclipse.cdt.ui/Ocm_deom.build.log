@@ -1,32 +1,10 @@
-17:42:41 **** Incremental Build of configuration Debug for project Ocm_deom ****
+17:14:04 **** Incremental Build of configuration Debug for project Ocm_deom ****
 make all 
-arm-none-eabi-gcc "../src/main.c" -mcpu=cortex-m3 -std=gnu11 -g1 -DSTM32F10X_MD -DUSE_STDPERIPH_DRIVER -c -I../src -I../Libraries/STM32F10x_StdPeriph_Driver/inc -I../Libraries/CMSIS/Device/ST/STM32F10x/Include -I../Libraries/CMSIS/Include -I"D:/Saber_Workshop/Projects/DALI/code/Test_Code/Ocm_demo/Driver/inc" -I"D:/Saber_Workshop/Projects/DALI/code/Test_Code/Ocm_demo/Application" -I"D:/Saber_Workshop/Projects/DALI/code/Test_Code/Ocm_demo/common" -I"D:/Saber_Workshop/Projects/DALI/code/Test_Code/Ocm_demo/DALIStack/inc" -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -MMD -MP -MF"src/main.d" -MT"src/main.o"  -mfloat-abi=soft -mthumb -o "src/main.o"
-../src/main.c: In function 'main':
-../src/main.c:74:11: warning: unused variable 'buf_rc' [-Wunused-variable]
-   uint8_t buf_rc[40];
-           ^~~~~~
-../src/main.c:73:12: warning: unused variable 'size' [-Wunused-variable]
-   uint16_t size = -1;
-            ^~~~
-arm-none-eabi-gcc "../Driver/src/uart.c" -mcpu=cortex-m3 -std=gnu11 -g1 -DSTM32F10X_MD -DUSE_STDPERIPH_DRIVER -c -I../src -I../Libraries/STM32F10x_StdPeriph_Driver/inc -I../Libraries/CMSIS/Device/ST/STM32F10x/Include -I../Libraries/CMSIS/Include -I"D:/Saber_Workshop/Projects/DALI/code/Test_Code/Ocm_demo/Driver/inc" -I"D:/Saber_Workshop/Projects/DALI/code/Test_Code/Ocm_demo/Application" -I"D:/Saber_Workshop/Projects/DALI/code/Test_Code/Ocm_demo/common" -I"D:/Saber_Workshop/Projects/DALI/code/Test_Code/Ocm_demo/DALIStack/inc" -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -MMD -MP -MF"Driver/src/uart.d" -MT"Driver/src/uart.o"  -mfloat-abi=soft -mthumb -o "Driver/src/uart.o"
-arm-none-eabi-gcc "../Driver/src/bsp_timer.c" -mcpu=cortex-m3 -std=gnu11 -g1 -DSTM32F10X_MD -DUSE_STDPERIPH_DRIVER -c -I../src -I../Libraries/STM32F10x_StdPeriph_Driver/inc -I../Libraries/CMSIS/Device/ST/STM32F10x/Include -I../Libraries/CMSIS/Include -I"D:/Saber_Workshop/Projects/DALI/code/Test_Code/Ocm_demo/Driver/inc" -I"D:/Saber_Workshop/Projects/DALI/code/Test_Code/Ocm_demo/Application" -I"D:/Saber_Workshop/Projects/DALI/code/Test_Code/Ocm_demo/common" -I"D:/Saber_Workshop/Projects/DALI/code/Test_Code/Ocm_demo/DALIStack/inc" -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -MMD -MP -MF"Driver/src/bsp_timer.d" -MT"Driver/src/bsp_timer.o"  -mfloat-abi=soft -mthumb -o "Driver/src/bsp_timer.o"
-arm-none-eabi-gcc -o "Ocm_deom.elf" @"objects.list"   -mcpu=cortex-m3 -T"../stm32_flash.ld" --specs=nosys.specs -Wl,-Map="Ocm_deom.map" -Wl,--gc-sections -static  -mfloat-abi=soft -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
-Finished building target: Ocm_deom.elf
- 
-arm-none-eabi-objdump -h -S  Ocm_deom.elf  > "Ocm_deom.list"
-Finished building: Ocm_deom.list
- 
-arm-none-eabi-objcopy  -O ihex  Ocm_deom.elf  "Ocm_deom.hex"
-Finished building: Ocm_deom.hex
- 
-arm-none-eabi-objcopy  -O binary  Ocm_deom.elf  "Ocm_deom.bin"
-Finished building: Ocm_deom.bin
- 
 arm-none-eabi-size   Ocm_deom.elf 
    text	   data	    bss	    dec	    hex	filename
-  14752	   1712	   1168	  17632	   44e0	Ocm_deom.elf
+  16440	   1680	   2948	  21068	   524c	Ocm_deom.elf
 Finished building: default.size.stdout
  
 
-17:42:43 Build Finished. 0 errors, 2 warnings. (took 2s.853ms)
+17:14:05 Build Finished. 0 errors, 0 warnings. (took 702ms)
 

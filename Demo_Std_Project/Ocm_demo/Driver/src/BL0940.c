@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2020-09-18 14:03:37
- * @LastEditTime: 2020-09-24 16:00:08
+ * @LastEditTime: 2020-10-13 11:49:25
  * @LastEditors: Please set LastEditors
  * @Description: 提供BL0940芯片的数据读取接口
  * @FilePath: \Demo_Std_Project\Ocm_demo\Driver\src\BL0940.c
@@ -15,6 +15,8 @@
 
 #include "BL0940.h"
 #include "uart.h"
+
+#include "stm32f10x_gpio.h"
 
 #define BL0940_UART USART3
 #define TIMEOUT 10
@@ -30,11 +32,13 @@
 
 #define BL0940_SEL_GPIO GPIOA
 
-uint8_t BL0940_CMD_ARR[] = {IDLE_ADDR,
-                            I_WAVE_ADDR,
-                            V_WAVE_ADDR,
-                            CF_CNT_ADDR,
-                            ALL_REG_ADDR};
+uint8_t BL0940_CMD_ARR[] = {
+    IDLE_ADDR,
+    I_WAVE_ADDR,
+    V_WAVE_ADDR,
+    CF_CNT_ADDR,
+    ALL_REG_ADDR,
+};
 
 uint8_t BL0940_READ_CMD[] = {READ_HEAD_CMD, ALL_REG_ADDR};
 

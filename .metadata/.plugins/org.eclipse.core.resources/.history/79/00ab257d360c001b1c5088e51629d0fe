@@ -1,0 +1,72 @@
+/*
+ * @Author: your name
+ * @Date: 2020-09-24 11:59:18
+ * @LastEditTime: 2020-10-12 10:47:46
+ * @LastEditors: Please set LastEditors
+ * @Description: In User Settings Edit
+ * @FilePath: \Demo_Std_Project\Ocm_demo\common\modbus.h
+ */
+/*
+ * modbus.h
+ *
+ *  Created on: 2020年9月24日
+ *      Author: Administrator
+ */
+#include "stdint.h"
+#include "stdbool.h"
+
+#include "config.h"
+
+#ifndef MODBUS_H_
+#define MODBUS_H_
+
+#define Host_Net_ID 0x0001 // 主机网络地址
+
+// #define MODULE_ALL_NUM 10 // 全部设备通道总数, 用于静态分配通道内存
+
+/*< modbus 功能码*/
+enum Modbus_Function
+{
+  CASE_UPDATE = 0,        // 固件程序更新
+  CASE_MODULE_RESPON,     // 总线占用申请
+  CASE_MODULE_MSG,        // 设备信息查询
+  CASE_MODULE_SET_NET_ID, // 设置设备网络ID,组ID
+  CASE_CHANGE_PORT,       // 设备功能，网关主动发送更新数据
+  CASE_READ_PORT,         // 设备功能，读取输出状态
+};
+
+/*< 主机总线串口、CAN总线口、网关协议串口和自由串口统一逻辑总线, 同一串行协议*/
+struct Modbus_Protocol
+{
+  uint16_t src_net_id;             // 源网络id
+  uint16_t des_net_id;             // 目标网络id
+  uint8_t data_len;                // data_len = 2(function+port_id) + 数据域大小
+  uint8_t function;                // 功能码
+  uint8_t port_id;                 // 端口id
+  uint8_t data[CAN_DATA_BUFF_MAX]; // 数据域
+  uint8_t crc_L;
+  uint8_t crc_H;
+};
+
+typedef struct
+{
+  struct Modbus_Protocol message;
+  bool count_use_time_flag; // 接收超时允许 true 允许 false 不允许
+  bool finish_flag;
+  uint8_t module_port;
+  uint16_t group_net_id;
+  uint16_t data_len;
+  uint16_t temp_ptr;
+  uint16_t mac_id;
+  uint16_t counter_01ms; // 1 ms计数器
+} Send_Rec_Data_Structure;
+
+void Reset_Send_Rec_finish_flag(Send_Rec_Data_Structure *temp);
+
+void modbus_init(void);
+void CAN1_Rec_Contorl_With_Buffer(void);
+
+void __attribute__((weak)) Get_Module_Style_ID(uint8_t module_port);
+void __attribute__((weak)) Modbus_Rec_Set_ID(uint8_t temp_port);
+
+#endif /* MODBUS_H_ */

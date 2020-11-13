@@ -1471,3 +1471,363 @@
 2020-09-26 15:10:29,445 [INFO] RetryExec:113 - Retrying request to {s}->https://download.eclipse.org:443
 2020-09-26 15:12:22,839 [INFO] RetryExec:97 - I/O exception (org.apache.http.NoHttpResponseException) caught when processing request to {}->http://download.eclipse.org:80: The target server failed to respond
 2020-09-26 15:12:22,839 [INFO] RetryExec:113 - Retrying request to {}->http://download.eclipse.org:80
+2020-09-27 09:44:50,056 [INFO] Activator:178 - 
+
+
+2020-09-27 09:44:50,056 [INFO] Activator:179 - !SESSION log4j initialized
+2020-09-27 09:45:01,562 [INFO] RetryExec:97 - I/O exception (java.net.SocketException) caught when processing request to {s}->https://download.eclipse.org:443: Connection reset
+2020-09-27 09:45:01,562 [INFO] RetryExec:113 - Retrying request to {s}->https://download.eclipse.org:443
+2020-09-27 10:26:19,493 [ERROR] LogOutputStream:74 - [STDERR_REDIRECT] Managed Build system manifest file error: Option com.st.stm32cube.ide.mcu.option.internal.toolchain.type.686802096.1165283563 uses a null category that is invalid in its context. The option was ignored.
+2020-09-27 10:26:19,493 [ERROR] LogOutputStream:74 - [STDERR_REDIRECT] Managed Build system manifest file error: Option com.st.stm32cube.ide.mcu.option.internal.toolchain.version.46472378.646152054 uses a null category that is invalid in its context. The option was ignored.
+2020-09-27 10:26:19,508 [ERROR] LogOutputStream:74 - [STDERR_REDIRECT] Managed Build system manifest file error: Option com.st.stm32cube.ide.mcu.gnu.managedbuild.option.target_mcu.1543531222.2061876073 uses a null category that is invalid in its context. The option was ignored.
+2020-09-27 10:26:19,508 [ERROR] LogOutputStream:74 - [STDERR_REDIRECT] Managed Build system manifest file error: Option com.st.stm32cube.ide.mcu.gnu.managedbuild.option.target_board.17983101.918893756 uses a null category that is invalid in its context. The option was ignored.
+2020-09-27 10:26:19,508 [ERROR] LogOutputStream:74 - [STDERR_REDIRECT] Managed Build system manifest file error: Option com.st.stm32cube.ide.mcu.gnu.managedbuild.option.instructionset.850306984.366157471 uses a null category that is invalid in its context. The option was ignored.
+2020-09-27 10:26:19,508 [ERROR] LogOutputStream:74 - [STDERR_REDIRECT] Managed Build system manifest file error: Option com.st.stm32cube.ide.mcu.gnu.managedbuild.option.target_cpuid.1481894314.973786807 uses a null category that is invalid in its context. The option was ignored.
+2020-09-27 10:26:19,524 [ERROR] LogOutputStream:74 - [STDERR_REDIRECT] Managed Build system manifest file error: Option com.st.stm32cube.ide.mcu.gnu.managedbuild.option.target_coreid.1510429471.1464846233 uses a null category that is invalid in its context. The option was ignored.
+2020-09-27 10:26:19,524 [ERROR] LogOutputStream:74 - [STDERR_REDIRECT] Managed Build system manifest file error: Option com.st.stm32cube.ide.mcu.gnu.managedbuild.option.runtimelibrary_c.360986388.2142999656 uses a null category that is invalid in its context. The option was ignored.
+2020-09-27 10:26:19,524 [ERROR] LogOutputStream:74 - [STDERR_REDIRECT] Managed Build system manifest file error: Option com.st.stm32cube.ide.mcu.gnu.managedbuild.option.fpu.979145500.337447523 uses a null category that is invalid in its context. The option was ignored.
+2020-09-27 10:26:19,539 [ERROR] LogOutputStream:74 - [STDERR_REDIRECT] Managed Build system manifest file error: Option com.st.stm32cube.ide.mcu.gnu.managedbuild.option.listfile.1482345326.1869773249 uses a null category that is invalid in its context. The option was ignored.
+2020-09-27 10:26:19,539 [ERROR] LogOutputStream:74 - [STDERR_REDIRECT] Managed Build system manifest file error: Option com.st.stm32cube.ide.mcu.gnu.managedbuild.option.converthex.1005914001.1343063749 uses a null category that is invalid in its context. The option was ignored.
+2020-09-27 10:26:19,539 [ERROR] LogOutputStream:74 - [STDERR_REDIRECT] Managed Build system manifest file error: Option com.st.stm32cube.ide.mcu.option.internal.toolchain.type.686802096.683228567 uses a null category that is invalid in its context. The option was ignored.
+2020-09-27 10:26:19,539 [ERROR] LogOutputStream:74 - [STDERR_REDIRECT] Managed Build system manifest file error: Option com.st.stm32cube.ide.mcu.option.internal.toolchain.version.46472378.914321035 uses a null category that is invalid in its context. The option was ignored.
+2020-09-27 10:26:19,555 [ERROR] LogOutputStream:74 - [STDERR_REDIRECT] Managed Build system manifest file error: Option com.st.stm32cube.ide.mcu.gnu.managedbuild.option.target_mcu.1543531222.983925942 uses a null category that is invalid in its context. The option was ignored.
+2020-09-27 10:26:19,555 [ERROR] LogOutputStream:74 - [STDERR_REDIRECT] Managed Build system manifest file error: Option com.st.stm32cube.ide.mcu.gnu.managedbuild.option.target_board.17983101.1204832319 uses a null category that is invalid in its context. The option was ignored.
+2020-09-27 10:26:19,555 [ERROR] LogOutputStream:74 - [STDERR_REDIRECT] Managed Build system manifest file error: Option com.st.stm32cube.ide.mcu.gnu.managedbuild.option.instructionset.850306984.391143627 uses a null category that is invalid in its context. The option was ignored.
+2020-09-27 10:26:19,555 [ERROR] LogOutputStream:74 - [STDERR_REDIRECT] Managed Build system manifest file error: Option com.st.stm32cube.ide.mcu.gnu.managedbuild.option.target_cpuid.1481894314.67665624 uses a null category that is invalid in its context. The option was ignored.
+2020-09-27 10:26:19,571 [ERROR] LogOutputStream:74 - [STDERR_REDIRECT] Managed Build system manifest file error: Option com.st.stm32cube.ide.mcu.gnu.managedbuild.option.target_coreid.1510429471.1094551580 uses a null category that is invalid in its context. The option was ignored.
+2020-09-27 10:26:19,586 [ERROR] LogOutputStream:74 - [STDERR_REDIRECT] Managed Build system manifest file error: Option com.st.stm32cube.ide.mcu.gnu.managedbuild.option.runtimelibrary_c.360986388.581209054 uses a null category that is invalid in its context. The option was ignored.
+2020-09-27 10:26:19,586 [ERROR] LogOutputStream:74 - [STDERR_REDIRECT] Managed Build system manifest file error: Option com.st.stm32cube.ide.mcu.gnu.managedbuild.option.fpu.979145500.1084522061 uses a null category that is invalid in its context. The option was ignored.
+2020-09-27 10:26:19,602 [ERROR] LogOutputStream:74 - [STDERR_REDIRECT] Managed Build system manifest file error: Option com.st.stm32cube.ide.mcu.gnu.managedbuild.option.listfile.1482345326.1363685885 uses a null category that is invalid in its context. The option was ignored.
+2020-09-27 10:26:19,602 [ERROR] LogOutputStream:74 - [STDERR_REDIRECT] Managed Build system manifest file error: Option com.st.stm32cube.ide.mcu.gnu.managedbuild.option.converthex.1005914001.974431647 uses a null category that is invalid in its context. The option was ignored.
+2020-09-28 09:49:48,491 [INFO] Activator:178 - 
+
+
+2020-09-28 09:49:48,496 [INFO] Activator:179 - !SESSION log4j initialized
+2020-09-28 14:41:43,784 [INFO] Activator:178 - 
+
+
+2020-09-28 14:41:43,784 [INFO] Activator:179 - !SESSION log4j initialized
+2020-09-28 14:42:35,530 [INFO] RetryExec:97 - I/O exception (org.apache.http.NoHttpResponseException) caught when processing request to {s}->https://download.eclipse.org:443: The target server failed to respond
+2020-09-28 14:42:35,545 [INFO] RetryExec:113 - Retrying request to {s}->https://download.eclipse.org:443
+2020-09-29 14:40:19,395 [INFO] Activator:178 - 
+
+
+2020-09-29 14:40:19,395 [INFO] Activator:179 - !SESSION log4j initialized
+2020-09-29 14:40:55,683 [INFO] RetryExec:97 - I/O exception (org.apache.http.NoHttpResponseException) caught when processing request to {s}->https://download.eclipse.org:443: The target server failed to respond
+2020-09-29 14:40:55,683 [INFO] RetryExec:113 - Retrying request to {s}->https://download.eclipse.org:443
+2020-10-09 09:40:31,996 [INFO] Activator:178 - 
+
+
+2020-10-09 09:40:32,012 [INFO] Activator:179 - !SESSION log4j initialized
+2020-10-09 09:40:58,263 [INFO] RetryExec:97 - I/O exception (org.apache.http.NoHttpResponseException) caught when processing request to {s}->https://download.eclipse.org:443: The target server failed to respond
+2020-10-09 09:40:58,263 [INFO] RetryExec:113 - Retrying request to {s}->https://download.eclipse.org:443
+2020-10-09 11:34:52,051 [INFO] Activator:178 - 
+
+
+2020-10-09 11:34:52,061 [INFO] Activator:179 - !SESSION log4j initialized
+2020-10-10 10:23:56,573 [INFO] Activator:178 - 
+
+
+2020-10-10 10:23:56,573 [INFO] Activator:179 - !SESSION log4j initialized
+2020-10-10 10:24:38,410 [INFO] RetryExec:97 - I/O exception (org.apache.http.NoHttpResponseException) caught when processing request to {s}->https://download.eclipse.org:443: The target server failed to respond
+2020-10-10 10:24:38,430 [INFO] RetryExec:113 - Retrying request to {s}->https://download.eclipse.org:443
+2020-10-10 10:24:57,075 [INFO] RetryExec:97 - I/O exception (org.apache.http.NoHttpResponseException) caught when processing request to {s}->https://download.eclipse.org:443: The target server failed to respond
+2020-10-10 10:24:57,075 [INFO] RetryExec:113 - Retrying request to {s}->https://download.eclipse.org:443
+2020-10-11 10:29:48,074 [INFO] Activator:178 - 
+
+
+2020-10-11 10:29:48,074 [INFO] Activator:179 - !SESSION log4j initialized
+2020-10-11 10:29:58,993 [INFO] RetryExec:97 - I/O exception (org.apache.http.NoHttpResponseException) caught when processing request to {s}->https://download.eclipse.org:443: The target server failed to respond
+2020-10-11 10:29:58,993 [INFO] RetryExec:113 - Retrying request to {s}->https://download.eclipse.org:443
+2020-10-11 10:30:04,494 [INFO] RetryExec:97 - I/O exception (java.net.SocketException) caught when processing request to {s}->https://download.eclipse.org:443: Connection reset
+2020-10-11 10:30:04,494 [INFO] RetryExec:113 - Retrying request to {s}->https://download.eclipse.org:443
+2020-10-11 10:43:21,244 [INFO] Activator:178 - 
+
+
+2020-10-11 10:43:21,244 [INFO] Activator:179 - !SESSION log4j initialized
+2020-10-11 10:43:37,751 [INFO] RetryExec:97 - I/O exception (org.apache.http.NoHttpResponseException) caught when processing request to {s}->https://download.eclipse.org:443: The target server failed to respond
+2020-10-11 10:43:37,751 [INFO] RetryExec:113 - Retrying request to {s}->https://download.eclipse.org:443
+2020-10-11 10:44:34,625 [INFO] RetryExec:97 - I/O exception (org.apache.http.NoHttpResponseException) caught when processing request to {s}->https://download.eclipse.org:443: The target server failed to respond
+2020-10-11 10:44:34,625 [INFO] RetryExec:113 - Retrying request to {s}->https://download.eclipse.org:443
+2020-10-12 10:54:02,881 [INFO] Activator:178 - 
+
+
+2020-10-12 10:54:02,886 [INFO] Activator:179 - !SESSION log4j initialized
+2020-10-12 10:54:18,565 [INFO] RetryExec:97 - I/O exception (org.apache.http.NoHttpResponseException) caught when processing request to {s}->https://download.eclipse.org:443: The target server failed to respond
+2020-10-12 10:54:18,567 [INFO] RetryExec:113 - Retrying request to {s}->https://download.eclipse.org:443
+2020-10-12 13:48:33,728 [INFO] Activator:178 - 
+
+
+2020-10-12 13:48:33,738 [INFO] Activator:179 - !SESSION log4j initialized
+2020-10-13 15:33:41,739 [INFO] Activator:178 - 
+
+
+2020-10-13 15:33:41,744 [INFO] Activator:179 - !SESSION log4j initialized
+2020-10-13 15:34:21,579 [INFO] RetryExec:97 - I/O exception (java.net.SocketException) caught when processing request to {s}->https://download.eclipse.org:443: Connection reset
+2020-10-13 15:34:21,582 [INFO] RetryExec:113 - Retrying request to {s}->https://download.eclipse.org:443
+2020-10-13 15:34:25,909 [INFO] RetryExec:97 - I/O exception (org.apache.http.NoHttpResponseException) caught when processing request to {s}->https://download.eclipse.org:443: The target server failed to respond
+2020-10-13 15:34:25,910 [INFO] RetryExec:113 - Retrying request to {s}->https://download.eclipse.org:443
+2020-10-13 15:34:28,557 [INFO] RetryExec:97 - I/O exception (org.apache.http.NoHttpResponseException) caught when processing request to {s}->https://download.eclipse.org:443: The target server failed to respond
+2020-10-13 15:34:28,557 [INFO] RetryExec:113 - Retrying request to {s}->https://download.eclipse.org:443
+2020-10-14 10:59:21,028 [INFO] Activator:178 - 
+
+
+2020-10-14 10:59:21,033 [INFO] Activator:179 - !SESSION log4j initialized
+2020-10-14 16:52:22,434 [INFO] Activator:178 - 
+
+
+2020-10-14 16:52:22,438 [INFO] Activator:179 - !SESSION log4j initialized
+2020-10-15 14:53:21,032 [INFO] Activator:178 - 
+
+
+2020-10-15 14:53:21,042 [INFO] Activator:179 - !SESSION log4j initialized
+2020-10-16 14:24:10,741 [INFO] Activator:178 - 
+
+
+2020-10-16 14:24:10,741 [INFO] Activator:179 - !SESSION log4j initialized
+2020-10-16 14:24:22,373 [INFO] RetryExec:97 - I/O exception (org.apache.http.NoHttpResponseException) caught when processing request to {s}->https://download.eclipse.org:443: The target server failed to respond
+2020-10-16 14:24:22,373 [INFO] RetryExec:113 - Retrying request to {s}->https://download.eclipse.org:443
+2020-10-16 14:24:56,123 [INFO] RetryExec:97 - I/O exception (org.apache.http.NoHttpResponseException) caught when processing request to {s}->https://download.eclipse.org:443: The target server failed to respond
+2020-10-16 14:24:56,123 [INFO] RetryExec:113 - Retrying request to {s}->https://download.eclipse.org:443
+2020-10-16 14:25:05,356 [INFO] RetryExec:97 - I/O exception (org.apache.http.NoHttpResponseException) caught when processing request to {s}->https://download.eclipse.org:443: The target server failed to respond
+2020-10-16 14:25:05,356 [INFO] RetryExec:113 - Retrying request to {s}->https://download.eclipse.org:443
+2020-10-17 10:03:19,190 [INFO] Activator:178 - 
+
+
+2020-10-17 10:03:19,200 [INFO] Activator:179 - !SESSION log4j initialized
+2020-10-17 10:04:20,741 [INFO] RetryExec:97 - I/O exception (org.apache.http.NoHttpResponseException) caught when processing request to {}->http://download.eclipse.org:80: The target server failed to respond
+2020-10-17 10:04:20,751 [INFO] RetryExec:113 - Retrying request to {}->http://download.eclipse.org:80
+2020-10-19 10:40:32,807 [INFO] Activator:178 - 
+
+
+2020-10-19 10:40:32,807 [INFO] Activator:179 - !SESSION log4j initialized
+2020-10-19 10:41:08,548 [INFO] RetryExec:97 - I/O exception (org.apache.http.NoHttpResponseException) caught when processing request to {s}->https://download.eclipse.org:443: The target server failed to respond
+2020-10-19 10:41:08,548 [INFO] RetryExec:113 - Retrying request to {s}->https://download.eclipse.org:443
+2020-10-20 13:57:55,962 [INFO] Activator:178 - 
+
+
+2020-10-20 13:57:55,962 [INFO] Activator:179 - !SESSION log4j initialized
+2020-10-20 13:58:06,307 [INFO] RetryExec:97 - I/O exception (org.apache.http.NoHttpResponseException) caught when processing request to {s}->https://download.eclipse.org:443: The target server failed to respond
+2020-10-20 13:58:06,307 [INFO] RetryExec:113 - Retrying request to {s}->https://download.eclipse.org:443
+2020-10-20 13:58:19,356 [INFO] RetryExec:97 - I/O exception (org.apache.http.NoHttpResponseException) caught when processing request to {s}->https://download.eclipse.org:443: The target server failed to respond
+2020-10-20 13:58:19,356 [INFO] RetryExec:113 - Retrying request to {s}->https://download.eclipse.org:443
+2020-10-20 13:58:43,582 [INFO] RetryExec:97 - I/O exception (org.apache.http.NoHttpResponseException) caught when processing request to {s}->https://download.eclipse.org:443: The target server failed to respond
+2020-10-20 13:58:43,582 [INFO] RetryExec:113 - Retrying request to {s}->https://download.eclipse.org:443
+2020-10-20 13:59:29,138 [INFO] RetryExec:97 - I/O exception (org.apache.http.NoHttpResponseException) caught when processing request to {s}->https://download.eclipse.org:443: The target server failed to respond
+2020-10-20 13:59:29,138 [INFO] RetryExec:113 - Retrying request to {s}->https://download.eclipse.org:443
+2020-10-20 13:59:32,218 [INFO] RetryExec:97 - I/O exception (org.apache.http.NoHttpResponseException) caught when processing request to {s}->https://download.eclipse.org:443: The target server failed to respond
+2020-10-20 13:59:32,218 [INFO] RetryExec:113 - Retrying request to {s}->https://download.eclipse.org:443
+2020-10-20 13:59:37,568 [INFO] RetryExec:97 - I/O exception (org.apache.http.NoHttpResponseException) caught when processing request to {s}->https://download.eclipse.org:443: The target server failed to respond
+2020-10-20 13:59:37,568 [INFO] RetryExec:113 - Retrying request to {s}->https://download.eclipse.org:443
+2020-10-22 11:29:23,030 [INFO] Activator:178 - 
+
+
+2020-10-22 11:29:23,045 [INFO] Activator:179 - !SESSION log4j initialized
+2020-10-22 11:29:36,040 [INFO] RetryExec:97 - I/O exception (org.apache.http.NoHttpResponseException) caught when processing request to {s}->https://download.eclipse.org:443: The target server failed to respond
+2020-10-22 11:29:36,043 [INFO] RetryExec:113 - Retrying request to {s}->https://download.eclipse.org:443
+2020-10-22 11:30:13,156 [INFO] RetryExec:97 - I/O exception (org.apache.http.NoHttpResponseException) caught when processing request to {}->http://download.eclipse.org:80: The target server failed to respond
+2020-10-22 11:30:13,156 [INFO] RetryExec:113 - Retrying request to {}->http://download.eclipse.org:80
+2020-10-23 11:43:31,384 [INFO] Activator:178 - 
+
+
+2020-10-23 11:43:31,384 [INFO] Activator:179 - !SESSION log4j initialized
+2020-10-23 19:02:01,430 [INFO] Activator:178 - 
+
+
+2020-10-23 19:02:01,434 [INFO] Activator:179 - !SESSION log4j initialized
+2020-10-24 09:28:18,372 [INFO] Activator:178 - 
+
+
+2020-10-24 09:28:18,388 [INFO] Activator:179 - !SESSION log4j initialized
+2020-10-26 09:21:55,788 [INFO] Activator:178 - 
+
+
+2020-10-26 09:21:55,794 [INFO] Activator:179 - !SESSION log4j initialized
+2020-10-26 09:22:45,594 [INFO] RetryExec:97 - I/O exception (org.apache.http.NoHttpResponseException) caught when processing request to {s}->https://download.eclipse.org:443: The target server failed to respond
+2020-10-26 09:22:45,596 [INFO] RetryExec:113 - Retrying request to {s}->https://download.eclipse.org:443
+2020-10-26 09:22:49,040 [INFO] RetryExec:97 - I/O exception (org.apache.http.NoHttpResponseException) caught when processing request to {s}->https://download.eclipse.org:443: The target server failed to respond
+2020-10-26 09:22:49,041 [INFO] RetryExec:113 - Retrying request to {s}->https://download.eclipse.org:443
+2020-10-26 09:22:52,840 [INFO] RetryExec:97 - I/O exception (java.net.SocketException) caught when processing request to {s}->https://download.eclipse.org:443: Connection reset
+2020-10-26 09:22:52,840 [INFO] RetryExec:113 - Retrying request to {s}->https://download.eclipse.org:443
+2020-10-26 15:17:06,848 [ERROR] LogOutputStream:74 - [STDERR_REDIRECT] Managed Build system manifest file error: Option com.atollic.truestudio.general.runtimelib.827454513 uses a null category that is invalid in its context. The option was ignored.
+2020-10-26 15:17:06,852 [ERROR] LogOutputStream:74 - [STDERR_REDIRECT] Managed Build system manifest file error: Option com.atollic.truestudio.toolchain_options.mcu.258980737 uses a null category that is invalid in its context. The option was ignored.
+2020-10-26 15:17:06,855 [ERROR] LogOutputStream:74 - [STDERR_REDIRECT] Managed Build system manifest file error: Option com.atollic.truestudio.toolchain_options.vendor.2098628004 uses a null category that is invalid in its context. The option was ignored.
+2020-10-26 15:17:06,872 [ERROR] LogOutputStream:74 - [STDERR_REDIRECT] Managed Build system manifest file error: Option com.atollic.truestudio.general.runtimelib.2043478719 uses a null category that is invalid in its context. The option was ignored.
+2020-10-26 15:17:06,875 [ERROR] LogOutputStream:74 - [STDERR_REDIRECT] Managed Build system manifest file error: Option com.atollic.truestudio.toolchain_options.mcu.720547501 uses a null category that is invalid in its context. The option was ignored.
+2020-10-26 15:17:06,878 [ERROR] LogOutputStream:74 - [STDERR_REDIRECT] Managed Build system manifest file error: Option com.atollic.truestudio.toolchain_options.vendor.1037988970 uses a null category that is invalid in its context. The option was ignored.
+2020-10-26 15:17:06,951 [ERROR] LogOutputStream:74 - [STDERR_REDIRECT] Managed Build system manifest file error: Option com.atollic.truestudio.general.runtimelib.827454513 uses a null category that is invalid in its context. The option was ignored.
+2020-10-26 15:17:06,954 [ERROR] LogOutputStream:74 - [STDERR_REDIRECT] Managed Build system manifest file error: Option com.atollic.truestudio.toolchain_options.mcu.258980737 uses a null category that is invalid in its context. The option was ignored.
+2020-10-26 15:17:06,957 [ERROR] LogOutputStream:74 - [STDERR_REDIRECT] Managed Build system manifest file error: Option com.atollic.truestudio.toolchain_options.vendor.2098628004 uses a null category that is invalid in its context. The option was ignored.
+2020-10-26 15:17:06,964 [ERROR] LogOutputStream:74 - [STDERR_REDIRECT] Managed Build system manifest file error: Option com.atollic.truestudio.general.runtimelib.2043478719 uses a null category that is invalid in its context. The option was ignored.
+2020-10-26 15:17:06,967 [ERROR] LogOutputStream:74 - [STDERR_REDIRECT] Managed Build system manifest file error: Option com.atollic.truestudio.toolchain_options.mcu.720547501 uses a null category that is invalid in its context. The option was ignored.
+2020-10-26 15:17:06,970 [ERROR] LogOutputStream:74 - [STDERR_REDIRECT] Managed Build system manifest file error: Option com.atollic.truestudio.toolchain_options.vendor.1037988970 uses a null category that is invalid in its context. The option was ignored.
+2020-10-27 15:28:57,453 [INFO] Activator:178 - 
+
+
+2020-10-27 15:28:57,463 [INFO] Activator:179 - !SESSION log4j initialized
+2020-10-27 15:30:01,160 [INFO] RetryExec:97 - I/O exception (java.net.SocketException) caught when processing request to {s}->https://download.eclipse.org:443: Connection reset
+2020-10-27 15:30:01,160 [INFO] RetryExec:113 - Retrying request to {s}->https://download.eclipse.org:443
+2020-10-28 10:00:53,034 [INFO] Activator:178 - 
+
+
+2020-10-28 10:00:53,044 [INFO] Activator:179 - !SESSION log4j initialized
+2020-10-29 10:08:10,160 [INFO] Activator:178 - 
+
+
+2020-10-29 10:08:10,170 [INFO] Activator:179 - !SESSION log4j initialized
+2020-10-29 10:08:49,723 [INFO] RetryExec:97 - I/O exception (java.net.SocketException) caught when processing request to {s}->https://download.eclipse.org:443: Connection reset
+2020-10-29 10:08:49,723 [INFO] RetryExec:113 - Retrying request to {s}->https://download.eclipse.org:443
+2020-10-31 16:31:05,795 [INFO] Activator:178 - 
+
+
+2020-10-31 16:31:05,795 [INFO] Activator:179 - !SESSION log4j initialized
+2020-10-31 16:31:53,762 [INFO] RetryExec:97 - I/O exception (org.apache.http.NoHttpResponseException) caught when processing request to {s}->https://download.eclipse.org:443: The target server failed to respond
+2020-10-31 16:31:53,762 [INFO] RetryExec:113 - Retrying request to {s}->https://download.eclipse.org:443
+2020-11-02 09:20:19,986 [INFO] Activator:178 - 
+
+
+2020-11-02 09:20:19,996 [INFO] Activator:179 - !SESSION log4j initialized
+2020-11-03 09:20:19,293 [INFO] Activator:178 - 
+
+
+2020-11-03 09:20:19,298 [INFO] Activator:179 - !SESSION log4j initialized
+2020-11-03 13:52:19,372 [INFO] Activator:178 - 
+
+
+2020-11-03 13:52:19,382 [INFO] Activator:179 - !SESSION log4j initialized
+2020-11-03 13:52:54,062 [INFO] RetryExec:97 - I/O exception (org.apache.http.NoHttpResponseException) caught when processing request to {}->http://download.eclipse.org:80: The target server failed to respond
+2020-11-03 13:52:54,062 [INFO] RetryExec:113 - Retrying request to {}->http://download.eclipse.org:80
+2020-11-04 10:53:18,068 [INFO] Activator:178 - 
+
+
+2020-11-04 10:53:18,078 [INFO] Activator:179 - !SESSION log4j initialized
+2020-11-04 16:11:03,193 [INFO] Activator:178 - 
+
+
+2020-11-04 16:11:03,293 [INFO] Activator:179 - !SESSION log4j initialized
+2020-11-04 16:11:15,972 [INFO] RetryExec:97 - I/O exception (org.apache.http.NoHttpResponseException) caught when processing request to {s}->https://download.eclipse.org:443: The target server failed to respond
+2020-11-04 16:11:15,982 [INFO] RetryExec:113 - Retrying request to {s}->https://download.eclipse.org:443
+2020-11-05 10:52:47,881 [INFO] Activator:178 - 
+
+
+2020-11-05 10:52:47,887 [INFO] Activator:179 - !SESSION log4j initialized
+2020-11-06 09:41:45,696 [INFO] Activator:178 - 
+
+
+2020-11-06 09:41:45,706 [INFO] Activator:179 - !SESSION log4j initialized
+2020-11-06 09:41:59,906 [INFO] RetryExec:97 - I/O exception (org.apache.http.NoHttpResponseException) caught when processing request to {s}->https://download.eclipse.org:443: The target server failed to respond
+2020-11-06 09:41:59,916 [INFO] RetryExec:113 - Retrying request to {s}->https://download.eclipse.org:443
+2020-11-06 09:42:12,069 [INFO] RetryExec:97 - I/O exception (org.apache.http.NoHttpResponseException) caught when processing request to {s}->https://download.eclipse.org:443: The target server failed to respond
+2020-11-06 09:42:12,069 [INFO] RetryExec:113 - Retrying request to {s}->https://download.eclipse.org:443
+2020-11-06 09:42:18,786 [INFO] RetryExec:97 - I/O exception (org.apache.http.NoHttpResponseException) caught when processing request to {s}->https://download.eclipse.org:443: The target server failed to respond
+2020-11-06 09:42:18,786 [INFO] RetryExec:113 - Retrying request to {s}->https://download.eclipse.org:443
+2020-11-06 09:42:33,732 [INFO] RetryExec:97 - I/O exception (java.net.SocketException) caught when processing request to {}->http://download.eclipse.org:80: Connection reset
+2020-11-06 09:42:33,732 [INFO] RetryExec:113 - Retrying request to {}->http://download.eclipse.org:80
+2020-11-06 16:54:49,450 [INFO] Activator:178 - 
+
+
+2020-11-06 16:54:49,450 [INFO] Activator:179 - !SESSION log4j initialized
+2020-11-06 16:55:22,085 [INFO] RetryExec:97 - I/O exception (java.net.SocketException) caught when processing request to {s}->https://download.eclipse.org:443: Connection reset
+2020-11-06 16:55:22,085 [INFO] RetryExec:113 - Retrying request to {s}->https://download.eclipse.org:443
+2020-11-06 16:55:27,795 [INFO] RetryExec:97 - I/O exception (org.apache.http.NoHttpResponseException) caught when processing request to {s}->https://download.eclipse.org:443: The target server failed to respond
+2020-11-06 16:55:27,795 [INFO] RetryExec:113 - Retrying request to {s}->https://download.eclipse.org:443
+2020-11-06 16:55:34,355 [INFO] RetryExec:97 - I/O exception (org.apache.http.NoHttpResponseException) caught when processing request to {s}->https://download.eclipse.org:443: The target server failed to respond
+2020-11-06 16:55:34,355 [INFO] RetryExec:113 - Retrying request to {s}->https://download.eclipse.org:443
+2020-11-06 16:55:44,160 [INFO] RetryExec:97 - I/O exception (org.apache.http.NoHttpResponseException) caught when processing request to {s}->https://download.eclipse.org:443: The target server failed to respond
+2020-11-06 16:55:44,160 [INFO] RetryExec:113 - Retrying request to {s}->https://download.eclipse.org:443
+2020-11-07 10:15:57,811 [INFO] Activator:178 - 
+
+
+2020-11-07 10:15:57,811 [INFO] Activator:179 - !SESSION log4j initialized
+2020-11-07 10:16:22,502 [INFO] RetryExec:97 - I/O exception (org.apache.http.NoHttpResponseException) caught when processing request to {s}->https://download.eclipse.org:443: The target server failed to respond
+2020-11-07 10:16:22,502 [INFO] RetryExec:113 - Retrying request to {s}->https://download.eclipse.org:443
+2020-11-07 10:16:28,122 [INFO] RetryExec:97 - I/O exception (org.apache.http.NoHttpResponseException) caught when processing request to {s}->https://download.eclipse.org:443: The target server failed to respond
+2020-11-07 10:16:28,122 [INFO] RetryExec:113 - Retrying request to {s}->https://download.eclipse.org:443
+2020-11-07 10:16:39,545 [INFO] RetryExec:97 - I/O exception (org.apache.http.NoHttpResponseException) caught when processing request to {}->http://download.eclipse.org:80: The target server failed to respond
+2020-11-07 10:16:39,545 [INFO] RetryExec:113 - Retrying request to {}->http://download.eclipse.org:80
+2020-11-07 10:24:50,188 [INFO] Activator:178 - 
+
+
+2020-11-07 10:24:50,198 [INFO] Activator:179 - !SESSION log4j initialized
+2020-11-07 10:24:58,748 [INFO] RetryExec:97 - I/O exception (org.apache.http.NoHttpResponseException) caught when processing request to {s}->https://download.eclipse.org:443: The target server failed to respond
+2020-11-07 10:24:58,758 [INFO] RetryExec:113 - Retrying request to {s}->https://download.eclipse.org:443
+2020-11-07 10:25:18,208 [INFO] RetryExec:97 - I/O exception (org.apache.http.NoHttpResponseException) caught when processing request to {s}->https://download.eclipse.org:443: The target server failed to respond
+2020-11-07 10:25:18,208 [INFO] RetryExec:113 - Retrying request to {s}->https://download.eclipse.org:443
+2020-11-07 10:25:49,631 [INFO] RetryExec:97 - I/O exception (org.apache.http.NoHttpResponseException) caught when processing request to {s}->https://download.eclipse.org:443: The target server failed to respond
+2020-11-07 10:25:49,631 [INFO] RetryExec:113 - Retrying request to {s}->https://download.eclipse.org:443
+2020-11-07 10:25:57,742 [INFO] RetryExec:97 - I/O exception (org.apache.http.NoHttpResponseException) caught when processing request to {}->http://download.eclipse.org:80: The target server failed to respond
+2020-11-07 10:25:57,742 [INFO] RetryExec:113 - Retrying request to {}->http://download.eclipse.org:80
+2020-11-09 09:44:56,587 [INFO] Activator:178 - 
+
+
+2020-11-09 09:44:56,603 [INFO] Activator:179 - !SESSION log4j initialized
+2020-11-10 09:20:39,019 [INFO] Activator:178 - 
+
+
+2020-11-10 09:20:39,019 [INFO] Activator:179 - !SESSION log4j initialized
+2020-11-10 09:26:14,450 [INFO] Activator:178 - 
+
+
+2020-11-10 09:26:14,465 [INFO] Activator:179 - !SESSION log4j initialized
+2020-11-10 09:47:52,586 [INFO] Activator:178 - 
+
+
+2020-11-10 09:47:52,588 [INFO] Activator:179 - !SESSION log4j initialized
+2020-11-10 09:48:14,742 [ERROR] LogOutputStream:74 - [STDERR_REDIRECT] Managed Build system manifest file error: Option com.atollic.truestudio.general.runtimelib.1566203086 uses a null category that is invalid in its context. The option was ignored.
+2020-11-10 09:48:14,746 [ERROR] LogOutputStream:74 - [STDERR_REDIRECT] Managed Build system manifest file error: Option com.atollic.truestudio.toolchain_options.mcu.1521037725 uses a null category that is invalid in its context. The option was ignored.
+2020-11-10 09:48:14,750 [ERROR] LogOutputStream:74 - [STDERR_REDIRECT] Managed Build system manifest file error: Option com.atollic.truestudio.toolchain_options.vendor.1986448989 uses a null category that is invalid in its context. The option was ignored.
+2020-11-10 09:48:14,794 [ERROR] LogOutputStream:74 - [STDERR_REDIRECT] Managed Build system manifest file error: Option com.atollic.truestudio.general.runtimelib.5062660 uses a null category that is invalid in its context. The option was ignored.
+2020-11-10 09:48:14,797 [ERROR] LogOutputStream:74 - [STDERR_REDIRECT] Managed Build system manifest file error: Option com.atollic.truestudio.toolchain_options.mcu.377094577 uses a null category that is invalid in its context. The option was ignored.
+2020-11-10 09:48:14,801 [ERROR] LogOutputStream:74 - [STDERR_REDIRECT] Managed Build system manifest file error: Option com.atollic.truestudio.toolchain_options.vendor.233999976 uses a null category that is invalid in its context. The option was ignored.
+2020-11-10 09:48:57,673 [INFO] Activator:178 - 
+
+
+2020-11-10 09:48:57,675 [INFO] Activator:179 - !SESSION log4j initialized
+2020-11-10 09:49:29,961 [INFO] RetryExec:97 - I/O exception (org.apache.http.NoHttpResponseException) caught when processing request to {}->http://download.eclipse.org:80: The target server failed to respond
+2020-11-10 09:49:29,962 [INFO] RetryExec:113 - Retrying request to {}->http://download.eclipse.org:80
+2020-11-10 10:17:40,527 [INFO] Activator:178 - 
+
+
+2020-11-10 10:17:40,529 [INFO] Activator:179 - !SESSION log4j initialized
+2020-11-10 10:18:07,103 [INFO] RetryExec:97 - I/O exception (java.net.SocketException) caught when processing request to {s}->https://download.eclipse.org:443: Connection reset
+2020-11-10 10:18:07,111 [INFO] RetryExec:113 - Retrying request to {s}->https://download.eclipse.org:443
+2020-11-10 10:24:21,792 [INFO] Activator:178 - 
+
+
+2020-11-10 10:24:21,794 [INFO] Activator:179 - !SESSION log4j initialized
+2020-11-11 09:16:05,995 [INFO] Activator:178 - 
+
+
+2020-11-11 09:16:06,010 [INFO] Activator:179 - !SESSION log4j initialized
+2020-11-11 09:16:36,715 [INFO] RetryExec:97 - I/O exception (org.apache.http.NoHttpResponseException) caught when processing request to {s}->https://download.eclipse.org:443: The target server failed to respond
+2020-11-11 09:16:36,715 [INFO] RetryExec:113 - Retrying request to {s}->https://download.eclipse.org:443
+2020-11-11 15:20:29,052 [INFO] Activator:178 - 
+
+
+2020-11-11 15:20:29,062 [INFO] Activator:179 - !SESSION log4j initialized
+2020-11-11 17:11:35,940 [INFO] Activator:178 - 
+
+
+2020-11-11 17:11:35,942 [INFO] Activator:179 - !SESSION log4j initialized
+2020-11-11 17:11:48,034 [INFO] RetryExec:97 - I/O exception (org.apache.http.NoHttpResponseException) caught when processing request to {s}->https://download.eclipse.org:443: The target server failed to respond
+2020-11-11 17:11:48,035 [INFO] RetryExec:113 - Retrying request to {s}->https://download.eclipse.org:443
+2020-11-12 09:57:09,318 [INFO] Activator:178 - 
+
+
+2020-11-12 09:57:09,318 [INFO] Activator:179 - !SESSION log4j initialized
+2020-11-12 14:28:09,359 [INFO] Activator:178 - 
+
+
+2020-11-12 14:28:09,365 [INFO] Activator:179 - !SESSION log4j initialized
+2020-11-12 14:28:30,776 [INFO] RetryExec:97 - I/O exception (org.apache.http.NoHttpResponseException) caught when processing request to {s}->https://download.eclipse.org:443: The target server failed to respond
+2020-11-12 14:28:30,777 [INFO] RetryExec:113 - Retrying request to {s}->https://download.eclipse.org:443
+2020-11-12 14:39:26,391 [INFO] Activator:178 - 
+
+
+2020-11-12 14:39:26,394 [INFO] Activator:179 - !SESSION log4j initialized
+2020-11-12 14:39:46,283 [INFO] RetryExec:97 - I/O exception (java.net.SocketException) caught when processing request to {s}->https://download.eclipse.org:443: Socket Closed
+2020-11-12 14:39:46,285 [INFO] RetryExec:113 - Retrying request to {s}->https://download.eclipse.org:443
+2020-11-12 16:39:20,575 [INFO] Activator:178 - 
+
+
+2020-11-12 16:39:20,577 [INFO] Activator:179 - !SESSION log4j initialized

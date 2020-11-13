@@ -1,0 +1,3 @@
+rgb_light.c:10:9:RGB_Modbus_Rec_Set_ID	32	static
+rgb_light.c:42:9:RGB_Modbus_Rec_Change_Port	32	static
+rgb_light.c:110:9:RGB_Modbus_Send_Read_Port	32	static

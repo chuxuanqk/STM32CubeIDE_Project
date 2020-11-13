@@ -1,0 +1,827 @@
+/*
+ * keyboard_app.c
+ *
+ *  Created on: 2020年10月23日
+ *      Author: Administrator
+ */
+
+#include <dali_cmd.h>
+#include "stdint.h"
+#include "string.h"
+#include "stdbool.h"
+
+#include "timer_callback.h"
+#include "config_par.h"
+#include "bsp_led.h"
+#include "bsp_led_7seg.h"
+#include "bsp_button.h"
+#include "config_par.h"
+#include "keyboard_app.h"
+#include "dalimaster_control_slave.h"
+#include "modbus_port_adjust.h"
+
+#include "bsp_uart.h"
+
+#define SEG_MODE_MAX (5) //数码管显示的模式的数量
+//模式信息表
+const static uint8_t seg_mode_map[SEG_MODE_MAX][7] = {
+    //模式名称,模式名称,IDL起始地址，单组最大可配置通道数,最大可配置组数，通道映射偏移, 通道+-偏移值
+    {'P', '0', 0, MODULE_LIGHT_CONTROL_PORT_NUM, 0, 0, 1},
+    {'P', '1', 0, MODULE_LIGHT_CONTROL_PORT_NUM, 1, Net_IDs_Single, 1},
+    {'P', '2', 0, MODULE_COLOR_TEMP_PORT_NUM, Net_IDs_Single, Net_IDs_Couple, 2},
+    {'P', '3', 1, MODULE_RGB_CONTROL_PORT_NUM, Net_IDs_Couple, Net_IDs_Triple, 3},
+    {'P', '4', 1, MODULE_RGBW_CONTROL_PORT_NUM, Net_IDs_Triple, Net_IDs_Quartic, 4},
+};
+
+const char Key7Seg_Show_Band[7][LED_7SEG_DEC_LEN] = {
+    {'*', '*', '*', '*'},
+    {'*', '*', '*', 'D'},
+    {'*', '*', 'A', 'D'},
+    {'*', 'L', 'A', 'D'},
+    {'I', 'L', 'A', 'D'},
+    {'*', 'L', 'A', 'D'},
+    {'I', 'L', 'A', 'D'}};
+
+const char Key7Seg_Show_Reset[6][LED_7SEG_DEC_LEN] = {
+    {'L', 'I', 'I', 'K'},
+    {'*', '*', '*', '*'},
+    {'L', 'I', 'I', 'K'},
+    {'*', '*', '*', '*'},
+    {'L', 'I', 'I', 'K'},
+    {'*', '*', '*', '*'}};
+
+/* 按键信息 */
+struct KeySeg_Structure
+{
+    KEY_ID key_number;        // 按键ID
+    KEY_STATE key_state;      // 按键状态
+    uint8_t keyshortup_count; // 按键短按弹起次数
+};
+
+/* 按键实例 */
+struct KeySeg_Structure KeySeg_Temp = {.key_number = KEY_ZERO, .key_state = KEY_NONE, .keyshortup_count = 0};
+struct KeySeg_Structure KeySeg_Set = {.key_number = KEY_SW6, .key_state = KEY_NONE, .keyshortup_count = 0};
+struct KeySeg_Structure KeySegDev_Up = {.key_number = KEY_SW1, .key_state = KEY_NONE, .keyshortup_count = 0};
+struct KeySeg_Structure KeySegDev_Down = {.key_number = KEY_SW2, .key_state = KEY_NONE, .keyshortup_count = 0};
+struct KeySeg_Structure KeySegChannl_Up = {.key_number = KEY_SW3, .key_state = KEY_NONE, .keyshortup_count = 0};
+struct KeySeg_Structure KeySegChannl_Down = {.key_number = KEY_SW4, .key_state = KEY_NONE, .keyshortup_count = 0};
+
+struct KeySeg_Structure *keyseg_state[] = {
+    &KeySeg_Temp,
+    &KeySegDev_Up,
+    &KeySegDev_Down,
+    &KeySegChannl_Up,
+    &KeySegChannl_Down,
+    &KeySeg_Set,
+};
+
+void __attribute__((weak)) KeySeg_Temp_Func(struct KeySeg_Structure *keyseg);
+static void KeySegDev_Up_Func(struct KeySeg_Structure *keyseg);
+static void KeySegDev_Down_Func(struct KeySeg_Structure *keyseg);
+static void KeySegChannl_Up_Func(struct KeySeg_Structure *keyseg);
+static void KeySegChannl_Down_Func(struct KeySeg_Structure *keyseg);
+static void KeySeg_Set_Func(struct KeySeg_Structure *keyseg);
+
+typedef void (*const KFuncPointer)(struct KeySeg_Structure *); // 函数指针类型
+
+/* 各按键的操作函数 */
+KFuncPointer keyseg_func[] = {
+    (KFuncPointer)KeySeg_Temp_Func,
+    (KFuncPointer)KeySegDev_Up_Func,
+    (KFuncPointer)KeySegDev_Down_Func,
+    (KFuncPointer)KeySegChannl_Up_Func,
+    (KFuncPointer)KeySegChannl_Down_Func,
+    NULL,
+    (KFuncPointer)KeySeg_Set_Func,
+};
+
+/* 数码管信息 */
+struct Led7Seg_Structure
+{
+    union
+    {
+        uint8_t led7seg_cfg_mode;   // 配置页，模式选项
+        uint8_t led7seg_aj_channle; // 调光页, 通道号 0-63
+    } Led7Seg1;                     // 对应外观丝印功能数码管
+    union
+    {
+        uint8_t led7seg_cfg_channle; // 配置页，通道号 0-63
+        uint8_t led7seg_aj_dimlevel; // 调光页，亮度百分比 0-99%
+    } Led7Seg2;                      // 对应外观丝印通道数码管
+};
+
+volatile struct Led7Seg_Structure Led7Seg_Temp; // 数码管信息缓存
+uint8_t exit_time = 5;                          // 默认调光页面退出时间
+timer_id exit_id = 0;                           // 定时器ID
+
+/**
+ *  1. 首级页面数据更新，按数码管下任意键进入通道调节页面，SEG1通道数 0-63，SEG2亮度值0-99
+ *  2. 调光页面数据更新，SEG1通道数, SEG2亮度值/色温值/...
+ *  3. 配置页面数据更新，SEG1设备类型SEG1单色， SEG2双色温
+*/
+static inline void Init_Dev_Channl_Keycount(void)
+{
+    KeySegDev_Up.keyshortup_count = 0;
+    KeySegDev_Down.keyshortup_count = 0;
+    KeySegChannl_Up.keyshortup_count = 0;
+    KeySegChannl_Down.keyshortup_count = 0;
+}
+
+static inline void Init_SetConfig_Keycout(void)
+{
+    KeySegDev_Up.keyshortup_count = 0;
+    KeySegDev_Down.keyshortup_count = 0;
+    KeySegChannl_Up.keyshortup_count = 0;
+    KeySegChannl_Down.keyshortup_count = 0;
+    KeySeg_Set.keyshortup_count = 0;
+}
+
+static inline bool Is_In_Home_Page(void)
+{
+    if ((KeySegDev_Up.keyshortup_count == 0) &&
+        (KeySegDev_Down.keyshortup_count == 0) &&
+        (KeySegChannl_Up.keyshortup_count == 0) &&
+        (KeySegChannl_Down.keyshortup_count == 0) &&
+        (KeySeg_Set.keyshortup_count == 0))
+    {
+        Init_Dev_Channl_Keycount();
+        return true;
+    }
+
+    return false;
+}
+
+static inline bool Is_In_Configure_Page(void)
+{
+    if ((KeySeg_Set.keyshortup_count == 1) &&
+        (KeySegDev_Up.keyshortup_count == 0) &&
+        (KeySegDev_Down.keyshortup_count == 0) &&
+        (KeySegChannl_Up.keyshortup_count == 0) &&
+        (KeySegChannl_Down.keyshortup_count == 0))
+    {
+        Init_Dev_Channl_Keycount();
+        return true;
+    }
+
+    return false;
+}
+
+static inline bool Is_In_Adjust_Lamp_Page(void)
+{
+    if ((KeySegDev_Up.keyshortup_count == 1) ||
+        (KeySegDev_Down.keyshortup_count == 1) ||
+        (KeySegChannl_Up.keyshortup_count == 1) ||
+        (KeySegChannl_Down.keyshortup_count == 1) ||
+        (KeySeg_Set.keyshortup_count == 2))
+    {
+        // Init_Dev_Channl_Keycount();
+        return true;
+    }
+
+    return false;
+}
+
+#define Show_Home_Page() (LED_7SEG_DEC_Set((char *)Key7Seg_Show_Band, sizeof(Key7Seg_Show_Band), \
+                                           250, (char *)Key7Seg_Show_Band, 0, 250))
+
+/**
+ * @description: 设置退出调光页面的时间
+ * @param {*}
+ * @return {*}
+ */
+static void Key7Seg_Set_ExitTime(uint8_t t)
+{
+    exit_time = t;
+}
+
+/**
+ * @description: 退出调光模式
+ * @param {*}
+ * @return {*}
+ */
+static void Key7Seg_Exit_AdjustPage(void)
+{
+    if (exit_time == 0)
+    {
+        /* 1.退出调光，到达首级页面数据更新 */
+        timer_stop(exit_id);
+        Init_SetConfig_Keycout();
+        Show_Home_Page();
+    }
+    else
+    {
+        exit_time--;
+    }
+
+    return;
+}
+
+
+
+
+static inline void Show_Adjust_Lamp_Page(void)
+{
+    uint16_t temp_num = 0;
+    uint8_t aj_channle = 0;
+    uint8_t aj_dimlevel = 0;
+    char tmp_7seg_show_array[4];
+    struct DALI_Output_Buffer_Struct *temp_buf;
+
+    // 更新调光等级到对应通道
+    /* 初始化 */
+    aj_channle = Led7Seg_Temp.Led7Seg1.led7seg_aj_channle = 0;
+    temp_buf = Dali_Get_Port_Buf(aj_channle + 1);
+    temp_num = (temp_buf->now_value) * 100;
+    temp_num = temp_num >> 8;
+    aj_dimlevel = temp_num;
+    Led7Seg_Temp.Led7Seg2.led7seg_aj_dimlevel = temp_num;
+
+    tmp_7seg_show_array[0] = (aj_dimlevel % 10) + '0';
+    tmp_7seg_show_array[1] = (aj_dimlevel / 10) + '0';
+    tmp_7seg_show_array[2] = (aj_channle % 10) + '0';
+    tmp_7seg_show_array[3] = (aj_channle / 10) + '0';
+
+    timer_start(exit_id);
+
+    //更新7段数码管显示
+    LED_7SEG_DEC_Set(tmp_7seg_show_array, sizeof(tmp_7seg_show_array),
+                     1000, tmp_7seg_show_array, 0, 1000);
+}
+
+static void Show_Configure_Page(void)
+{
+    char tmp_7seg_show_array[4]; //需要显示的临时数据
+
+    uint8_t cfg_mode = Led7Seg_Temp.Led7Seg1.led7seg_cfg_mode = 1; // 进入模式1
+    uint8_t cfg_channle = Led7Seg_Temp.Led7Seg2.led7seg_cfg_channle = 0;
+
+    tmp_7seg_show_array[0] = (cfg_channle % 10) + '0';
+    tmp_7seg_show_array[1] = (cfg_channle / 10) + '0';
+    tmp_7seg_show_array[2] = seg_mode_map[cfg_mode][1];
+    tmp_7seg_show_array[3] = seg_mode_map[cfg_mode][0];
+
+    //更新7段数码管显示
+    LED_7SEG_DEC_Set(tmp_7seg_show_array, sizeof(tmp_7seg_show_array),
+                     1000, tmp_7seg_show_array, 0, 1000);
+}
+
+static void Show_Reset_Page(void)
+{
+    char tmp_7seg_show_array[4]; //需要显示的临时数据
+
+    uint8_t cfg_mode = Led7Seg_Temp.Led7Seg1.led7seg_cfg_mode = 1; // 复位模式，通道号;复位后进入模式1
+    uint8_t cfg_channle = Led7Seg_Temp.Led7Seg2.led7seg_cfg_channle = 0;
+
+    tmp_7seg_show_array[0] = (cfg_channle % 10) + '0';
+    tmp_7seg_show_array[1] = (cfg_channle / 10) + '0';
+    tmp_7seg_show_array[2] = seg_mode_map[cfg_mode][1];
+    tmp_7seg_show_array[3] = seg_mode_map[cfg_mode][0];
+
+    LED_7SEG_DEC_Set((char *)Key7Seg_Show_Reset, sizeof(Key7Seg_Show_Reset),
+                     500, (char *)tmp_7seg_show_array, sizeof(tmp_7seg_show_array), 500);
+}
+
+static void Update_Configure_Page(void)
+{
+    char tmp_7seg_show_array[4]; //需要显示的临时数据
+
+    uint8_t cfg_mode = Led7Seg_Temp.Led7Seg1.led7seg_cfg_mode;
+    uint8_t cfg_channle = Led7Seg_Temp.Led7Seg2.led7seg_cfg_channle;
+
+    tmp_7seg_show_array[0] = (cfg_channle % 10) + '0';
+    tmp_7seg_show_array[1] = (cfg_channle / 10) + '0';
+    tmp_7seg_show_array[2] = seg_mode_map[cfg_mode][1];
+    tmp_7seg_show_array[3] = seg_mode_map[cfg_mode][0];
+
+    //更新7段数码管显示
+    LED_7SEG_DEC_Set(tmp_7seg_show_array, sizeof(tmp_7seg_show_array),
+                     1000, tmp_7seg_show_array, 0, 1000);
+}
+
+/**
+ * @description: 用于按键更新对应通道的调光参数
+ *               添加功能:在未配置对应通道时也能通过按键控制对应灯的亮度
+ * @param {*}
+ * @return {*}
+ */
+static void Update_Adjust_Page(void)
+{
+    uint32_t temp_num = 0;
+    char tmp_7seg_show_array[4];
+    struct DALI_Output_Buffer_Struct *temp_buf;
+    uint8_t aj_channle = Led7Seg_Temp.Led7Seg1.led7seg_aj_channle;    // 更新调光等级到对应通道
+    uint32_t aj_dimlevel = Led7Seg_Temp.Led7Seg2.led7seg_aj_dimlevel; // 按键dimlevel 0~99
+
+    temp_num = aj_dimlevel;
+    temp_num = temp_num * DALI_KEY7SEG_TRANSFORM + 96; // 0~99 --> 0~65535, 精度丢失需要+90的修正值
+    if (temp_num > 65535)                              // 修正数值计算，经测试该计算方法仍然无法解决精度丢失问题
+        temp_num = 65535;
+
+    temp_buf = Dali_Get_Port_Buf(aj_channle + 1);
+    temp_buf->set_value = Dali_InputValue_encode(temp_num); // 修改到配置
+    temp_buf->now_value = Dali_InputValue_encode(temp_num);
+
+    // Dali_Update_Set_Value(temp_buf);             // 更新数据
+    Dali_Control_Dimlevel(aj_channle, temp_num); // 调节灯管亮度
+    Key7Seg_Set_ExitTime(5);
+
+    tmp_7seg_show_array[0] = (aj_dimlevel % 10) + '0';
+    tmp_7seg_show_array[1] = (aj_dimlevel / 10) + '0';
+    tmp_7seg_show_array[2] = (aj_channle % 10) + '0';
+    tmp_7seg_show_array[3] = (aj_channle / 10) + '0';
+
+    //更新7段数码管显示
+    LED_7SEG_DEC_Set(tmp_7seg_show_array, sizeof(tmp_7seg_show_array),
+                     500, tmp_7seg_show_array, 0, 500);
+
+    return;
+}
+
+/**
+ * @description: 调整通道号
+ * @param {*}
+ * @return {*} adjust_channle
+ */
+uint8_t key7seg_channle_adjust(uint8_t key7seg_mode, uint8_t key7seg_channle)
+{
+    uint8_t adjust_channle;
+
+    switch (key7seg_mode)
+    {
+    case 0:
+        adjust_channle = key7seg_channle;
+        break;
+    case 1:
+        adjust_channle = key7seg_channle;
+        break;
+
+    case 2:
+        adjust_channle = key7seg_channle / 2;
+        break;
+
+    case 3:
+        adjust_channle = key7seg_channle / 3;
+        break;
+
+    case 4:
+        adjust_channle = key7seg_channle / 4;
+
+    default:
+        break;
+    }
+
+    return adjust_channle;
+}
+
+/**
+ * @description: 按键模块 主动发送设备信息
+ *               模式1 2 3 4申请分配NET_ID
+ * @param {*}key7seg_channle: 通道号
+ *           key7seg_mode：   模式号
+ * @return {*}
+ */
+static void KeySeg_Send_Module_Msg(uint8_t key7seg_mode, uint8_t key7seg_channle)
+{
+    if (key7seg_mode != 0) // 模式0禁止申请ID
+    {
+        Send_Rec_Data_Structure *can_send = Get_Can1_Send();
+        Send_Rec_Data_Structure *can_recv = Get_Can1_Receive();
+        Config_Data_Str *cfg_data = Get_Config_data();
+
+        key7seg_channle = key7seg_channle_adjust(key7seg_mode, key7seg_channle);
+
+        uint8_t tmp_module_port = key7seg_channle + seg_mode_map[key7seg_mode][4]; // 通道号
+
+        can_send->mac_id = cfg_data->Net_IDs[tmp_module_port];
+        can_send->group_net_id = cfg_data->Group_Net_IDs[tmp_module_port];
+        can_send->module_port = tmp_module_port;
+
+        CAN1_Send_Meg(CASE_MODULE_MSG, can_send, can_recv);
+    }
+}
+
+
+/*=============================================按键处理部分==================================================================*/
+/**
+ * @description:   P1+ 按键模块 
+ *                  
+ * @param {*}
+ * @return {*}
+ */
+static void KeySegDev_Up_Func(struct KeySeg_Structure *keyseg)
+{
+    uint16_t temp_num = 0;
+    struct DALI_Output_Buffer_Struct *temp_buf;
+
+    if (KeySegDev_Up.key_number != keyseg->key_number)
+        return;
+
+    KeySegDev_Up.key_state = keyseg->key_state;
+
+    if (Is_In_Configure_Page()) /*1.配置页面数据更新 */
+    {
+        if (KeySegDev_Up.key_state == KEY_LONG_8S_UP)
+        {
+            if (Led7Seg_Temp.Led7Seg1.led7seg_cfg_mode == 0)
+            {
+                /* 删除DALI镇流器短地址 */
+                state_led_sharp();
+                Dali_Delete_ShortAddr(Led7Seg_Temp.Led7Seg2.led7seg_cfg_channle);
+            }
+        }
+        else if (KeySegDev_Up.key_state == KEY_LONG_3S_DOWN)
+        {
+            /* 1. 网关向主机发送添加请求，网关配置从设备通道，NET1灯闪烁一次*/
+            KeySeg_Send_Module_Msg(Led7Seg_Temp.Led7Seg1.led7seg_cfg_mode, Led7Seg_Temp.Led7Seg2.led7seg_cfg_channle);
+        }
+        else if (KeySegDev_Up.key_state == KEY_Short_UP)
+        {
+            /* 2.模式选项加一 */
+            Led7Seg_Temp.Led7Seg1.led7seg_cfg_mode += 1;
+
+            /* 可循环加减 */
+            if (Led7Seg_Temp.Led7Seg1.led7seg_cfg_mode == SEG_MODE_MAX)
+                Led7Seg_Temp.Led7Seg1.led7seg_cfg_mode = 0;
+
+            Led7Seg_Temp.Led7Seg2.led7seg_cfg_channle = 0;
+
+            Update_Configure_Page();
+        }
+    }
+
+    if (Is_In_Adjust_Lamp_Page() && (KeySegDev_Up.key_state == KEY_Short_UP)) /*2. 调光页面数据更新,通道+ */
+    {
+        Led7Seg_Temp.Led7Seg1.led7seg_aj_channle += 1;
+        if (Led7Seg_Temp.Led7Seg1.led7seg_aj_channle == DALI_LENTH)
+            Led7Seg_Temp.Led7Seg1.led7seg_aj_channle = 0;
+
+        temp_buf = Dali_Get_Port_Buf(Led7Seg_Temp.Led7Seg1.led7seg_aj_channle + 1);
+        temp_num = (temp_buf->now_value) * 100;
+        temp_num = temp_num / 256;
+
+        Led7Seg_Temp.Led7Seg2.led7seg_aj_dimlevel = (uint8_t)temp_num; /* 进入新通道，TODO: 需要将之前记录的dimlevel重新显示 */
+
+        Update_Adjust_Page();
+    }
+
+    if (Is_In_Home_Page()) /*3. 首级页面数据更新*/
+    {
+        if (KeySegDev_Up.key_state == KEY_Short_UP)
+        {
+            Show_Adjust_Lamp_Page();
+            KeySegDev_Up.keyshortup_count += keyseg->keyshortup_count;
+        }
+    }
+}
+
+/**
+ * @description: 
+ * @param {*}
+ * @return {*}
+ */
+static void KeySegDev_Down_Func(struct KeySeg_Structure *keyseg)
+{
+    volatile uint16_t temp_num = 0;
+    volatile struct DALI_Output_Buffer_Struct *temp_buf;
+
+    if (KeySegDev_Down.key_number != keyseg->key_number)
+        return;
+
+    KeySegDev_Down.key_state = keyseg->key_state;
+
+    if (Is_In_Configure_Page()) /*1.配置页面数据更新 */
+    {
+        if (KeySegDev_Down.key_state == KEY_LONG_8S_UP)
+        {
+            if (Led7Seg_Temp.Led7Seg1.led7seg_cfg_mode == 0)
+            {
+                /* 删除DALI镇流器短地址 */
+                state_led_sharp();
+                Dali_Delete_ShortAddr(Led7Seg_Temp.Led7Seg2.led7seg_cfg_channle);
+            }
+        }
+        else if (KeySegDev_Down.key_state == KEY_LONG_3S_DOWN)
+        {
+            /* 1. 网关向主机发送添加请求，网关配置从设备通道，NET1灯闪烁一次*/
+            KeySeg_Send_Module_Msg(Led7Seg_Temp.Led7Seg1.led7seg_cfg_mode, Led7Seg_Temp.Led7Seg2.led7seg_cfg_channle);
+        }
+        else if (KeySegDev_Down.key_state == KEY_Short_UP)
+        {
+            /* 可循环加减 */
+            if (Led7Seg_Temp.Led7Seg1.led7seg_cfg_mode == 0)
+                Led7Seg_Temp.Led7Seg1.led7seg_cfg_mode = (SEG_MODE_MAX - 1);
+            else
+                Led7Seg_Temp.Led7Seg1.led7seg_cfg_mode -= 1;
+
+            Led7Seg_Temp.Led7Seg2.led7seg_cfg_channle = 0;
+
+            Update_Configure_Page();
+
+            // KeySeg_Send_Module_Msg(Led7Seg_Temp.Led7Seg1.led7seg_cfg_mode, Led7Seg_Temp.Led7Seg2.led7seg_cfg_channle);
+        }
+    }
+
+    if (Is_In_Adjust_Lamp_Page() && (KeySegDev_Down.key_state == KEY_Short_UP)) /*2. 调光页面数据更新,通道- */
+    {
+        if (Led7Seg_Temp.Led7Seg1.led7seg_aj_channle == 0)
+            Led7Seg_Temp.Led7Seg1.led7seg_aj_channle = DALI_LENTH - 1;
+        else
+            Led7Seg_Temp.Led7Seg1.led7seg_aj_channle -= 1;
+
+        temp_buf = Dali_Get_Port_Buf(Led7Seg_Temp.Led7Seg1.led7seg_aj_channle + 1);
+        temp_num = (temp_buf->now_value) * 100;
+        temp_num = temp_num / 256;
+        Led7Seg_Temp.Led7Seg2.led7seg_aj_dimlevel = temp_num; /* 进入新通道，TODO: 需要将之前记录的dimlevel重新显示 */
+
+        Update_Adjust_Page();
+    }
+
+    if (Is_In_Home_Page()) /*3. 首级页面数据更新*/
+    {
+        if (KeySegDev_Down.key_state == KEY_Short_UP)
+        {
+            Show_Adjust_Lamp_Page();
+            KeySegDev_Down.keyshortup_count += keyseg->keyshortup_count;
+        }
+    }
+}
+
+/**
+ * @description: 通道+
+ * @param {*}
+ * @return {*}
+ */
+static void KeySegChannl_Up_Func(struct KeySeg_Structure *keyseg)
+{
+    uint8_t keyseg_cfg_mode;
+    uint8_t keyseg_cfg_channle;
+
+    if (KeySegChannl_Up.key_number != keyseg->key_number)
+        return;
+
+    KeySegChannl_Up.key_state = keyseg->key_state;
+
+    if (Is_In_Configure_Page()) /*1.配置页面数据更新 */
+    {
+
+        if (KeySegChannl_Up.key_state == KEY_LONG_8S_UP)
+        {
+            if (Led7Seg_Temp.Led7Seg1.led7seg_cfg_mode == 0)
+            {
+                /* 删除DALI镇流器短地址 */
+                state_led_sharp();
+                Dali_Delete_ShortAddr(Led7Seg_Temp.Led7Seg2.led7seg_cfg_channle);
+            }
+        }
+        else if (KeySegChannl_Up.key_state == KEY_LONG_3S_DOWN)
+        {
+            /* 1. 网关向主机发送添加请求，网关配置从设备通道，NET1灯闪烁一次*/
+            KeySeg_Send_Module_Msg(Led7Seg_Temp.Led7Seg1.led7seg_cfg_mode, Led7Seg_Temp.Led7Seg2.led7seg_cfg_channle);
+        }
+        else if (KeySegChannl_Up.key_state == KEY_Short_UP)
+        {
+            /* 2.模式选项加一 */
+            keyseg_cfg_mode = Led7Seg_Temp.Led7Seg1.led7seg_cfg_mode;
+            Led7Seg_Temp.Led7Seg2.led7seg_cfg_channle += seg_mode_map[keyseg_cfg_mode][6];
+            keyseg_cfg_channle = Led7Seg_Temp.Led7Seg2.led7seg_cfg_channle;
+
+            /* 可循环加 */
+            if ((keyseg_cfg_mode == 3) && (keyseg_cfg_channle == (DALI_LENTH - 1))) // 模式3 RGB，不能达到63
+            {
+                Led7Seg_Temp.Led7Seg2.led7seg_cfg_channle = 0;
+            }
+            else if (keyseg_cfg_channle == DALI_LENTH) // 模式0 1 2 4
+            {
+                if (keyseg_cfg_mode == 0)                                               // 模式0
+                    Led7Seg_Temp.Led7Seg2.led7seg_cfg_channle = DALI_CLEAR_ALL_CHANNLE; // 特殊通道
+                else
+                    Led7Seg_Temp.Led7Seg2.led7seg_cfg_channle = 0;
+            }
+            else if ((keyseg_cfg_mode == 0) && (keyseg_cfg_channle == (DALI_CLEAR_ALL_CHANNLE + 1))) // 模式0
+            {
+                Led7Seg_Temp.Led7Seg2.led7seg_cfg_channle = 0;
+            }
+
+            Update_Configure_Page();
+        }
+    }
+
+    if (Is_In_Adjust_Lamp_Page() && (KeySegChannl_Up.key_state == KEY_Short_UP)) /*2. 调光页面数据更新 */
+    {
+        Led7Seg_Temp.Led7Seg2.led7seg_aj_dimlevel += 1;
+
+        if (Led7Seg_Temp.Led7Seg2.led7seg_aj_dimlevel > SEG7_MAX_DIMLEVEL)
+            Led7Seg_Temp.Led7Seg2.led7seg_aj_dimlevel = 0;
+
+        Update_Adjust_Page();
+    }
+
+    if (Is_In_Home_Page()) /*3. 首级页面数据更新*/
+    {
+        if (KeySegChannl_Up.key_state == KEY_Short_UP)
+        {
+            Show_Adjust_Lamp_Page();
+            KeySegChannl_Up.keyshortup_count += keyseg->keyshortup_count;
+        }
+    }
+}
+
+/**
+ * @description:  通道-
+ * @param {*}
+ * @return {*}
+ */
+static void KeySegChannl_Down_Func(struct KeySeg_Structure *keyseg)
+{
+
+    uint8_t keyseg_cfg_mode;
+    uint8_t keyseg_cfg_channle;
+
+
+    if (KeySegChannl_Down.key_number != keyseg->key_number)
+        return;
+
+    KeySegChannl_Down.key_state = keyseg->key_state;
+
+    if (Is_In_Configure_Page()) /*1.配置页面数据更新 */
+    {
+        if (KeySegChannl_Down.key_state == KEY_LONG_8S_UP) // for test
+        {
+            if (Led7Seg_Temp.Led7Seg1.led7seg_cfg_mode == 0)
+            {
+                /* 删除DALI镇流器短地址 */
+                state_led_sharp();
+                Dali_Delete_ShortAddr(Led7Seg_Temp.Led7Seg2.led7seg_cfg_channle);
+            }
+        }
+        else if (KeySegChannl_Down.key_state == KEY_LONG_3S_DOWN)
+        {
+            /* 1. 网关向主机发送添加请求，网关配置从设备通道，NET1灯闪烁一次*/
+            KeySeg_Send_Module_Msg(Led7Seg_Temp.Led7Seg1.led7seg_cfg_mode, Led7Seg_Temp.Led7Seg2.led7seg_cfg_channle);
+        }
+        else if (KeySegChannl_Down.key_state == KEY_Short_UP)
+        {
+            keyseg_cfg_mode = Led7Seg_Temp.Led7Seg1.led7seg_cfg_mode;
+            keyseg_cfg_channle = Led7Seg_Temp.Led7Seg2.led7seg_cfg_channle;
+
+            /* 可循环加减 */
+            if (Led7Seg_Temp.Led7Seg2.led7seg_cfg_channle == 0)
+            {
+                if (keyseg_cfg_mode == 0)
+                    Led7Seg_Temp.Led7Seg2.led7seg_cfg_channle = DALI_CLEAR_ALL_CHANNLE; // 特殊通道
+                else if (keyseg_cfg_mode == 3)
+                {
+                    Led7Seg_Temp.Led7Seg2.led7seg_cfg_channle = DALI_LENTH - 1 - seg_mode_map[keyseg_cfg_mode][6];
+                }
+                else
+                {
+                    Led7Seg_Temp.Led7Seg2.led7seg_cfg_channle = DALI_LENTH - seg_mode_map[keyseg_cfg_mode][6];
+                }
+            }
+            else if (Led7Seg_Temp.Led7Seg2.led7seg_cfg_channle == DALI_CLEAR_ALL_CHANNLE)
+            {
+                Led7Seg_Temp.Led7Seg2.led7seg_cfg_channle = DALI_LENTH - seg_mode_map[keyseg_cfg_mode][6];
+            }
+            else
+                Led7Seg_Temp.Led7Seg2.led7seg_cfg_channle -= seg_mode_map[keyseg_cfg_mode][6];
+
+            Update_Configure_Page();
+        }
+    }
+
+    if (Is_In_Adjust_Lamp_Page() && (KeySegChannl_Down.key_state == KEY_Short_UP)) /*2. 调光页面数据更新 */
+    {
+        if (Led7Seg_Temp.Led7Seg2.led7seg_aj_dimlevel == 0)
+            Led7Seg_Temp.Led7Seg2.led7seg_aj_dimlevel = SEG7_MAX_DIMLEVEL;
+        else
+            Led7Seg_Temp.Led7Seg2.led7seg_aj_dimlevel -= 1;
+
+        Update_Adjust_Page();
+    }
+
+    if (Is_In_Home_Page()) /*3. 首级页面数据更新*/
+    {
+        if (KeySegChannl_Down.key_state == KEY_Short_UP)
+        {
+            Show_Adjust_Lamp_Page();
+            KeySegChannl_Down.keyshortup_count += keyseg->keyshortup_count;
+        }
+    }
+}
+
+/**
+ * @description: 配置键
+ *               修改需求：3s和6s全关全灭后进入调光页面
+ * @param {*}
+ * @return {*}
+ */
+static void KeySeg_Set_Func(struct KeySeg_Structure *keyseg)
+{
+    struct DALI_Output_Buffer_Struct *temp_buf;
+
+    if (KeySeg_Set.key_number != keyseg->key_number)
+        return;
+
+    KeySeg_Set.key_state = keyseg->key_state;
+
+    if (Is_In_Configure_Page()) /* 1.配置页面数据更新 */
+    {
+        if (KeySeg_Set.key_state == KEY_LONG_8S_UP)
+        {
+            /* 1.清除数据，闪烁显示 "KILL" ,清除完后再次进入配置页面数据更新 */
+            Init_Dev_Channl_Keycount();
+            Config_Data_Clear_Even();
+            Dali_Clear_All_Channle_Data();
+            Dali_Control_Dimlevel(DALI_BORADCAST_ADDR, 0);
+
+            Show_Reset_Page();
+        }
+        else if (KeySeg_Set.key_state == KEY_LONG_3S_DOWN)
+        {
+            /* 2. 网关向主机发送添加请求，网关配置从设备通道，NET1灯闪烁一次*/
+            KeySeg_Send_Module_Msg(Led7Seg_Temp.Led7Seg1.led7seg_cfg_mode, Led7Seg_Temp.Led7Seg2.led7seg_cfg_channle);
+        }
+        else if (KeySeg_Set.key_state == KEY_Short_UP)
+        {
+            /* 3.退出配置，到达首级页面数据更新 */
+            Init_SetConfig_Keycout();
+            Show_Home_Page();
+
+            return;
+        }
+    }
+
+    if (Is_In_Adjust_Lamp_Page()) /* 2.调光页面数据更新 */
+    {
+        if (KeySeg_Set.key_state == KEY_Short_UP)
+        {
+            /* 1.退出调光，到达首级页面数据更新 */
+            Init_SetConfig_Keycout();
+
+            Show_Home_Page();
+
+            return;
+        }
+    }
+
+    if (Is_In_Home_Page()) /* 3.首级页面数据更新 */
+    {
+        if ((KeySeg_Set.key_state == KEY_LONG_6S_UP) || (KeySeg_Set.key_state == KEY_LONG_8S_UP))
+        {
+            /* 1.所有通道全灭，通道0做为整个模块控制 */
+            state_led_sharp();
+            Dali_Control_Dimlevel(DALI_BORADCAST_ADDR, 0);
+            Show_Adjust_Lamp_Page();
+            KeySeg_Set.keyshortup_count += (keyseg->keyshortup_count + 1);
+        }
+        else if (KeySeg_Set.key_state == KEY_LONG_3S_UP)
+        {
+            /* 2.所有通道全亮 */
+            state_led_sharp();
+            Dali_Control_Dimlevel(DALI_BORADCAST_ADDR, 65535); // 65535最大亮度值
+            Show_Adjust_Lamp_Page();
+            KeySeg_Set.keyshortup_count += (keyseg->keyshortup_count + 1);
+        }
+        else if (KeySeg_Set.key_state == KEY_Short_UP)
+        {
+            /* 3. 进入配置界面*/
+            Show_Configure_Page();
+            KeySeg_Set.keyshortup_count += keyseg->keyshortup_count;
+        }
+    }
+}
+
+/**
+ * @description: KeySeg 初始化
+ * @param {*}
+ * @return {*}
+ */
+void App_KeySeg_Init(void)
+{
+    bsp_InitButtonVar();
+    LED_7SEG_Init();
+
+    exit_id = timer_creat((void *)Key7Seg_Exit_AdjustPage, 1000, 0, false, NULL);
+}
+
+/**
+ * @description: 按键主控制模块
+ * @param {*}
+ * @return {*}
+ */
+void KeySeg_Press_Control(void)
+{
+    uint16_t seg_keyvalue = bsp_KeyPro();
+    static uint8_t func_number = 0;
+
+    if (seg_keyvalue > 0)
+    {
+        /* Read_KeyValue_Code = key_number + KEY_STATE * 256 */
+        KeySeg_Temp.key_number = seg_keyvalue % 256;
+        KeySeg_Temp.key_state = seg_keyvalue / 256;
+        KeySeg_Temp.keyshortup_count = 1;
+        func_number = KeySeg_Temp.key_number;
+
+        keyseg_func[func_number](&KeySeg_Temp);
+    }
+}

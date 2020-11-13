@@ -1,0 +1,36 @@
+/****************************************Copyright (c)****************************************************
+**                                      
+**                                 http://www.onecm.com
+**
+**------------------------------------File Info----------------------------------------------------------*/
+/*
+ * @Description: 
+ * @version: 
+ * @Author: Saber
+ * @Date: 2020-11-12 17:34:25
+ * @FilePath: \code\src\test\dali_test.c
+ * @LastEditors: Saber
+ * @LastEditTime: 2020-11-12 17:34:25
+ * @**
+ * **********************************************************************************************************
+ */
+
+uint8_t test_buf[10];
+
+void test_delete(void)
+{
+    int16_t size = -1;
+    uint16_t old_addr = 0;
+    uint16_t new_addr = 0;
+
+    if (uart_getFlagStatus(USART1, UART_FLAG_RC))
+    {
+        size = uart_read(DEBUG_USART, test_buf, 1);
+
+        old_addr = test_buf[0];
+        new_addr = test_buf[1];
+        Update_ShortAddr(old_addr, new_addr);
+
+        memset(test_buf, 0, sizeof(test_buf));
+    }
+}

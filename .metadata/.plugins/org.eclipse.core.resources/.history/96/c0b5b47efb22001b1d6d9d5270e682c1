@@ -1,0 +1,10 @@
+bsp_timer.c:20:13:RCC_Configuration	8	static
+bsp_timer.c:25:13:NVIC_Configuration	16	static
+bsp_timer.c:38:13:TIM_Configuration	32	static
+bsp_timer.c:68:6:TIM_SetStatus	24	static
+bsp_timer.c:75:6:TIM_GetStatus	24	static
+bsp_timer.c:82:6:TIM_ClearStatus	24	static
+bsp_timer.c:89:6:TIM_SetFrequency	24	static
+bsp_timer.c:102:13:tim_isr	16	static
+bsp_timer.c:119:6:TIM3_IRQHandler	8	static
+bsp_timer.c:124:6:hw_bsptimer_init	16	static

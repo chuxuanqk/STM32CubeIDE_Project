@@ -1,0 +1,10 @@
+10:38:19 **** Incremental Build of configuration Debug for project STM32RCT6 ****
+make all 
+arm-none-eabi-size   STM32RCT6.elf 
+   text	   data	    bss	    dec	    hex	filename
+   1204	      8	    540	   1752	    6d8	STM32RCT6.elf
+Finished building: default.size.stdout
+ 
+
+10:38:20 Build Finished. 0 errors, 0 warnings. (took 455ms)
+

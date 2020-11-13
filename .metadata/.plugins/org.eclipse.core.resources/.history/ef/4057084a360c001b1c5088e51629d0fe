@@ -1,0 +1,326 @@
+/*
+ * @Author: your name
+ * @Date: 2020-09-25 09:31:57
+ * @LastEditTime: 2020-10-12 10:32:02
+ * @LastEditors: Please set LastEditors
+ * @Description: In User Settings Edit
+ * @FilePath: \code\Ocm_demo\common\modbus.c
+ */
+/*
+ * modbus.c
+ *
+ *  Created on: 2020年9月24日
+ *      Author: Administrator
+ */
+
+#include "can.h"
+#include "modbus.h"
+#include "board.h"
+
+// | src_id 2bit | des_id 2bit | data_len 1bit | function 1bit | port_id 1bit | data | crc |
+//      ExtId    |                        协议默认数据长度5                    |
+//                                             |                     data_len              |
+#define BUS_DATA_DEFAULT_LEN 5 // 协议默认数据长度5
+// #define CAN_Rec_Base_Len 5
+
+Send_Rec_Data_Structure CAN1_Receive = {
+    .temp_ptr = 0,
+    .mac_id = 0,
+    .module_port = 0,
+    .group_net_id = 0,
+    .counter_01ms = 0,
+    .count_use_time_flag = false,
+};
+Send_Rec_Data_Structure CAN1_Send;
+//多通道CAN接收缓冲区
+Send_Rec_Data_Structure CAN1_Receive_Buf[MODULE_ALL_NUM + 1];
+
+void Broadcase_Update(Send_Rec_Data_Structure *Receive);           // 固件程序更新
+void Broadcase_Module_Respon(Send_Rec_Data_Structure *Receive);    // 总线占用申请
+void Broadcase_Query_Module_Msg(Send_Rec_Data_Structure *Receive); // 设备信息查询
+void Broadcase_Set_ID(Send_Rec_Data_Structure *Receive);           // 设置设备网络ID,组ID
+
+void Normal_Update(Send_Rec_Data_Structure *Receive);           // 固件程序更新
+void Normal_Module_Respon(Send_Rec_Data_Structure *Receive);    // 总线占用申请
+void Normal_Query_Module_Msg(Send_Rec_Data_Structure *Receive); // 设备信息查询
+void Normal_Set_ID(Send_Rec_Data_Structure *Receive);           // 设置设备网络ID,组ID
+
+typedef void (*const TFuncPointer)(Send_Rec_Data_Structure *);
+
+TFuncPointer broadcase_func[] = {
+    (TFuncPointer)Broadcase_Update,
+    (TFuncPointer)Broadcase_Module_Respon,
+    (TFuncPointer)Broadcase_Query_Module_Msg,
+    (TFuncPointer)Broadcase_Set_ID,
+};
+
+TFuncPointer normal_func[] = {
+    (TFuncPointer)Broadcase_Update,
+    (TFuncPointer)Normal_Module_Respon,
+    (TFuncPointer)Normal_Query_Module_Msg,
+    (TFuncPointer)Normal_Set_ID,
+};
+
+inline void Reset_Send_Rec_finish_flag(Send_Rec_Data_Structure *temp) { temp->finish_flag = false; }
+
+/**
+ * @description: 解析CAN接收到数据
+ * @param {type} 
+ * @return {type} 
+ */
+void inline can_rx_isr_hook(CanRxMsg *rxmessage)
+{
+    if ((CAN1_Receive.finish_flag == false) &&
+        ((CAN1_Receive.mac_id == rxmessage->ExtId) ||
+         (CAN1_Receive.mac_id == 0)))
+    {
+        // 1.处理接收到的CAN数据
+        if ((CAN1_Receive.temp_ptr == 0) && (rxmessage->DLC >= BUS_DATA_DEFAULT_LEN))
+        {
+            CAN1_Receive.count_use_time_flag = 1;
+            // CAN1_Receive.mac_id=rxmessage->StdId;
+            CAN1_Receive.mac_id = rxmessage->ExtId;                                          // CAN协议数据包中将携带源设备的mac_id信息
+            CAN1_Receive.message.src_net_id = CAN1_Receive.mac_id;                           // mac_id即源网络ID
+            CAN1_Receive.message.des_net_id = rxmessage->Data[0] * 256 + rxmessage->Data[1]; // ARM为小端模式，即高字节保存在内存的高地址
+            CAN1_Receive.message.data_len = rxmessage->Data[2];
+            CAN1_Receive.message.function = rxmessage->Data[3];
+            CAN1_Receive.message.port_id = rxmessage->Data[4];
+
+            for (uint8_t i = 0; i < (rxmessage->DLC - BUS_DATA_DEFAULT_LEN); i++)
+                CAN1_Receive.message.data[i] = rxmessage->Data[BUS_DATA_DEFAULT_LEN + i];
+
+            CAN1_Receive.temp_ptr = rxmessage->DLC - BUS_DATA_DEFAULT_LEN;
+
+            if (CAN1_Receive.message.data_len > CAN_DATA_BUFF_MAX)
+                CAN1_Receive.message.data_len = CAN_DATA_BUFF_MAX;
+        }
+        else
+        {
+            for (uint8_t i = 0; i < rxmessage->DLC; i++)
+                CAN1_Receive.message.data[CAN1_Receive.temp_ptr] = rxmessage->Data[i];
+
+            CAN1_Receive.temp_ptr += rxmessage->DLC;
+        }
+
+        // 2.接收到指定数据长度, 将数据存入各自的缓存通道,多路IO复用的简单实现
+        if ((CAN1_Receive.temp_ptr >= (CAN1_Receive.message.data_len - 2)) ||
+            (CAN1_Receive.temp_ptr > (CAN_DATA_BUFF_MAX - 1)))
+        {
+            if ((CAN1_Receive.message.des_net_id == 0) &&
+                (CAN1_Receive_Buf[0].finish_flag == false))
+            {
+                CAN1_Receive_Buf[0] = CAN1_Receive;
+                CAN1_Receive_Buf[0].finish_flag = true; // 数据接收完成
+                CAN1_Receive_Buf[0].temp_ptr = 0;
+            }
+            else
+            {
+                Config_Data_Str *config_data = Get_Config_Data();
+
+                for (uint8_t i = 1; i < (Net_IDs_All + 1); i++)
+                {
+                    if (((CAN1_Receive.message.des_net_id == config_data->Net_IDs[i - 1]) ||
+                         (CAN1_Receive.message.des_net_id == config_data->Group_Net_IDs[i - 1])) &&
+                        (CAN1_Receive_Buf[i].finish_flag == false))
+                    {
+                        CAN1_Receive_Buf[i] = CAN1_Receive;
+                        CAN1_Receive_Buf[i].finish_flag = true;
+                        CAN1_Receive_Buf[i].temp_ptr = 0;
+
+                        break;
+                    }
+                }
+            }
+            CAN1_Receive.temp_ptr = 0;
+            CAN1_Receive.mac_id = 0;
+            CAN1_Receive.counter_01ms = 0;
+            CAN1_Receive.finish_flag = false;
+            CAN1_Receive.count_use_time_flag = false;
+        }
+    }
+}
+
+/**
+ * @description: CAN接收处理函数, 使用缓冲区
+ * @param {type} 
+ * @return {type} 
+ */
+void CAN1_Rec_Contorl_With_Buffer(void)
+{
+    static u8 can_receive_buf_ptr = 0;
+
+    for (; (can_receive_buf_ptr <= MODULE_ALL_NUM) && (CAN1_Receive_Buf[can_receive_buf_ptr].finish_flag == true); can_receive_buf_ptr++)
+    {
+        if (CAN1_Receive_Buf[can_receive_buf_ptr].message.des_net_id == 0)
+            CAN1_ProcessBroadcaseCommend(&CAN1_Receive_Buf[can_receive_buf_ptr]);
+        else
+            CAN1_ProcessNormalCommend(&CAN1_Receive_Buf[can_receive_buf_ptr]);
+
+        break;
+    }
+
+    if (can_receive_buf_ptr > MODULE_ALL_NUM)
+        can_receive_buf_ptr = 0;
+}
+
+/**
+ * @description: 广播命令
+ * @param {type} 
+ * @return {type} 
+ */
+void CAN1_ProcessBroadcaseCommend(Send_Rec_Data_Structure *Receive)
+{
+    uint8_t cmd = Receive->message.function;
+
+    broadcase_func[cmd](Receive);
+}
+
+/**
+ * @description: 
+ * @param {type} 
+ * @return {type} 
+ */
+void CAN1_ProcessNormalCommend(Send_Rec_Data_Structure *Receive)
+{
+    uint8_t cmd = Receive->message.function;
+
+    normal_func[cmd](Receive);
+}
+
+/**
+ * @description: 
+ * @param {type} 
+ * @return {type} 
+ */
+inline static bool Can_Bus_Is_Idle(void)
+{
+    if ((CAN1_Send.finish_flag == false) && (CAN1_Receive.finish_flag == false))
+        return true;
+
+    return false;
+}
+
+/**
+ * @description: 固件程序更新
+ * @param {type} 
+ * @return {type} 
+ */
+void Broadcase_Update(Send_Rec_Data_Structure *Receive) {}
+
+/**
+ * @description: 总线占用申请
+ * @param {type} 
+ * @return {type} 
+ */
+void Broadcase_Module_Respon(Send_Rec_Data_Structure *Receive) {}
+
+/**
+ * @description: 设备信息查询
+ * @param {type} 
+ * @return {type} 
+ */
+void Broadcase_Query_Module_Msg(Send_Rec_Data_Structure *Receive)
+{
+    if (Can_Bus_Is_Idle() == true)
+    {
+        uint8_t send_size_ptr = 0;
+        uint8_t send_buf[40] = {0}; //串口发送缓冲区
+        CanRxMsg TxMessage;
+        uint16_t _module_style_id;
+        Config_Data_Str *config_data = Get_Config_Data();
+        union STM32_ID_12Byte const *stm32_id = Cpu_GetId();
+
+        CAN1_Send.mac_id = config_data->Net_IDs[0];
+        CAN1_Send.group_net_id = config_data->Group_Net_IDs[0];
+        CAN1_Send.module_port = 0;
+        TxMessage.ExtId = CAN1_Send.mac_id;
+        _module_style_id = Get_Module_Style_ID(CAN1_Send.module_port);
+
+        send_buf[send_size_ptr++] = Host_Net_ID / 256;
+        send_buf[send_size_ptr++] = Host_Net_ID % 256;
+        send_buf[send_size_ptr++] = 23;              //数据长度
+        send_buf[send_size_ptr++] = CASE_MODULE_MSG; //功能码
+        send_buf[send_size_ptr++] = 0x00;            //端口号
+
+        send_buf[send_size_ptr++] = CAN1_Send.mac_id / 256; // Net_ID
+        send_buf[send_size_ptr++] = CAN1_Send.mac_id % 256;
+        send_buf[send_size_ptr++] = CAN1_Send.group_net_id / 256;
+        send_buf[send_size_ptr++] = CAN1_Send.group_net_id % 256;
+
+        send_buf[send_size_ptr++] = _module_style_id / 256;
+        send_buf[send_size_ptr++] = _module_style_id % 256;
+        send_buf[send_size_ptr++] = Version / 256;
+        send_buf[send_size_ptr++] = Version % 256;
+
+        send_buf[send_size_ptr++] = stm32_id.id_u8[0];
+        send_buf[send_size_ptr++] = stm32_id.id_u8[1];
+        send_buf[send_size_ptr++] = stm32_id.id_u8[2];
+        send_buf[send_size_ptr++] = stm32_id.id_u8[3];
+        send_buf[send_size_ptr++] = stm32_id.id_u8[4];
+        send_buf[send_size_ptr++] = stm32_id.id_u8[5];
+        send_buf[send_size_ptr++] = stm32_id.id_u8[6];
+        send_buf[send_size_ptr++] = stm32_id.id_u8[7];
+        send_buf[send_size_ptr++] = stm32_id.id_u8[8];
+        send_buf[send_size_ptr++] = stm32_id.id_u8[9];
+        send_buf[send_size_ptr++] = stm32_id.id_u8[10];
+        send_buf[send_size_ptr++] = stm32_id.id_u8[11];
+        send_buf[send_size_ptr++] = CAN1_Send->module_port;
+
+        // CAN1_Send->mac_id = 0x0000; // 广播指令到模块设置上???
+
+        CAN1_Send.finish_flag = true;
+        CAN1_Send.count_use_time_flag = true;
+        can_send(&TxMessage, send_buf, send_size_ptr);
+        //复位标志位
+        Reset_Send_Rec_finish_flag(Receive);
+    }
+}
+
+/**
+ * @description: 设置设备网络ID,组ID
+ * @param {type} 
+ * @return {type} 
+ */
+void Broadcase_Set_ID(Send_Rec_Data_Structure *Receive)
+{
+    uint8_t temp_port = Receive->message.data[20];
+}
+
+/**
+ * @description: 固件程序更新
+ * @param {type} 
+ * @return {type} 
+ */
+void Normal_Update(Send_Rec_Data_Structure *Receive)
+{
+}
+
+/**
+ * @description: 总线占用申请
+ * @param {type} 
+ * @return {type} 
+ */
+void Normal_Module_Respon(Send_Rec_Data_Structure *Receive) {}
+
+/**
+ * @description: 设备信息查询
+ * @param {type} 
+ * @return {type} 
+ */
+void Normal_Query_Module_Msg(Send_Rec_Data_Structure *Receive) {}
+
+/**
+ * @description: 设置设备网络ID,组ID
+ * @param {type} 
+ * @return {type} 
+ */
+void Normal_Set_ID(Send_Rec_Data_Structure *Receive) {}
+
+/**
+ * @description: 
+ * @param {type} 
+ * @return {type} 
+ */
+void modbus_init(void)
+{
+}
