@@ -1,4 +1,0 @@
-bsp_led_7seg.c:122:13:Led_7seg_Dis_Char	24	static
-bsp_led_7seg.c:149:6:LED_7SEG_Init	24	static
-bsp_led_7seg.c:204:6:LED_7SEG_DEC_Set	32	static
-bsp_led_7seg.c:233:6:LED_7SEG_DEC_SHOW	24	static

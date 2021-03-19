@@ -1,7 +1,0 @@
-bsp_button.c:52:13:KeyBoard_Init	8	static
-bsp_button.c:63:20:KeyBoard_KeyLines_ReInit	16	static
-bsp_button.c:88:20:KeyBoard_Keycolumns_ReInit	16	static
-bsp_button.c:116:6:bsp_Button_Tick	4	static
-bsp_button.c:131:6:bsp_InitButtonVar	8	static
-bsp_button.c:157:15:bsp_DetectButton	32	static
-bsp_button.c:367:10:bsp_KeyPro	8	static

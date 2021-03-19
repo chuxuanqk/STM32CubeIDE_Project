@@ -1,10 +1,10 @@
 /*
  * @Author: your name
  * @Date: 2020-09-11 15:32:48
- * @LastEditTime: 2020-09-25 18:15:00
- * @LastEditors: Please set LastEditors
+ * @LastEditTime: 2020-11-24 14:38:42
+ * @LastEditors: Saber
  * @Description: In User Settings Edit
- * @FilePath: \Demo_Std_Project\Ocm_demo\src\main.c
+ * @FilePath: \Ocm_demo\src\main.c
  */
 /*
 ******************************************************************************
@@ -73,11 +73,13 @@ int main(void)
   /* Infinite loop */
   while (1)
   {
-    if (uart_getFlagStatus(USART1, UART_FLAG_RC))
-    {
-      size = uart_read(USART1, buf_rc, 2);
-      uart_write(USART1, buf_rc, size);
-      memset(buf_rc, 0, sizeof(buf_rc));
-    }
+    // if (uart_getFlagStatus(USART1, UART_FLAG_RC))
+    // {
+    //   size = uart_read(USART1, buf_rc, 2);
+    //   uart_write(USART1, buf_rc, size);
+    //   memset(buf_rc, 0, sizeof(buf_rc));
+    // }
+
+    pwm_led_test();
   }
 }

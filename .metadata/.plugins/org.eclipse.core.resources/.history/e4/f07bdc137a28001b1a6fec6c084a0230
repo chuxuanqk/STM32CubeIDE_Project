@@ -1,0 +1,77 @@
+/*
+ * modbus_func_adjust.c
+ *
+ *  Created on: 2020年1月3日
+ *      Author: Fox
+ */
+
+#include "config_par.h"
+#include "modbus_func_adjust.h"
+
+//清除配置的目标通道的互斥通道
+u8 Modbus_Clean_Mix_Port(u8 temp_port, u8 temp_port_stop)
+{
+    u8 i;
+
+    return 1;
+}
+
+u8 Modbus_Rec_Change_Port(u8 *recbuf, u8 temp_port)
+{
+    u8 return_char = 0;
+
+    return return_char;
+}
+
+u8 Modbus_Rec_Read_Port(u8 *recbuf, u8 temp_port) { return 1; }
+
+u8 Modbus_Rec_Set_ID(u8 *recbuf, u8 temp_port, u16 *net_id, u16 *group_net_id)
+{
+    char return_char = 0;
+    u16 temp_net_id = 0, temp_group_net_id = 0;
+    Config_Data_Str *config_data = Get_Config_data();
+
+    if (return_char)
+    {
+        config_data->Net_IDs[temp_port] = temp_net_id;
+        config_data->Group_Net_IDs[temp_port] = temp_group_net_id;
+        Write_Config_To_Flash(&Config_Data); //修改的配置数据写入文件
+    }
+
+    return return_char;
+}
+
+u8 Modbus_Rec_Set_Config(u8 *recbuf, u8 temp_port) { return 0; }
+u8 Modbus_Rec_Read_Config(u8 *recbuf, u8 temp_port) { return 0; }
+
+u8 Modbus_Send_Change_Port(u8 *sendbuf, u8 temp_port) { return 1; }
+
+u8 Modbus_Send_Read_Port(u8 *sendbuf, u8 temp_port)
+{
+    u8 return_char = 0;
+
+    return return_char;
+}
+
+u8 Modbus_Send_Set_ID(u8 *sendbuf, u8 temp_port)
+{
+    u8 return_char = 0;
+    u16 module_style, module_version;
+
+    if (return_char)
+    {
+        sendbuf[11] = module_style / 256;
+        sendbuf[12] = module_style % 256;
+        sendbuf[13] = module_version / 256;
+        sendbuf[14] = module_version % 256;
+    }
+    return return_char;
+}
+u8 Modbus_Send_Set_Config(u8 *sendbuf, u8 temp_port) { return 0; }
+u8 Modbus_Send_Read_Config(u8 *sendbuf, u8 temp_port) { return 0; }
+
+u8 Modbus_Rec_Set_Key_Light_State(u8 *recbuf, u8 temp_port) { return 0; }
+u8 Modbus_Rec_Set_Key_Command(u8 *recbuf, u8 temp_port) { return 0; }
+u8 Modbus_Send_Read_Key_Command(u8 *sendbuf, u8 temp_port) { return 0; }
+u8 Modbus_Send_Send_Key_Command(u8 *sendbuf, u8 temp_port) { return 0; }
+u8 Modbus_Send_Read_Key_Lights_State(u8 *sendbuf, u8 temp_port) { return 0; }

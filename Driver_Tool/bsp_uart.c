@@ -201,6 +201,11 @@ static void UART_Configuration(struct uart_device *uart, struct uart_configure *
   USART_DMACmd(uart->uartx, USART_DMAReq_Tx, ENABLE);
   USART_ITConfig(uart->uartx, USART_IT_RXNE, ENABLE);  // 接收中断使能
   USART_ClearITPendingBit(uart->uartx, USART_IT_RXNE); // 清除接收完成中断
+
+#ifdef USE_USART_DMA_RX
+  USART_ClearITPendingBit(uart->uartx, USART_IT_RXNE); // 清除接收完成中断
+#endif
+
   /* Enable USART */
   USART_Cmd(uart->uartx, ENABLE);
 }
@@ -312,6 +317,11 @@ static void uart_isr(struct uart_data *puart)
   /* 检测到总线空闲，USART_CR1的IDLEIE为1 */
   if (USART_GetITStatus(uart, USART_IT_IDLE) != RESET)
   {
+    uint8_t temp = uart->SR; //先读SR,再读DR才能完成idle中断的清零，否则一直进入中断
+    temp = uart->DR;
+
+    __uart_setflag(uart, UART_FLAG_DMA_RC, true);
+    // puart->rx_flag = 1; // 检测到空闲状态，置位接收完成
   }
 #endif
 

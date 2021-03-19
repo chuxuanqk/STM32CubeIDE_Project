@@ -1,9 +1,0 @@
-chan_data_can1.c:25:26:Get_Can1_Receive	4	static
-chan_data_can1.c:30:26:Get_Can1_Send	4	static
-chan_data_can1.c:36:6:CAN1_NVIC_Init	16	static
-chan_data_can1.c:55:6:CAN1_Configuration	40	static
-chan_data_can1.c:130:6:CAN1_Send_Str	40	static
-chan_data_can1.c:192:6:USB_HP_CAN1_TX_IRQHandler	32	static
-chan_data_can1.c:236:6:USB_LP_CAN1_RX0_IRQHandler	48	static
-chan_data_can1.c:319:6:CAN1_ONECM_Bus_Init	8	static
-chan_data_can1.c:330:6:CAN1_Err_Timer	4	static

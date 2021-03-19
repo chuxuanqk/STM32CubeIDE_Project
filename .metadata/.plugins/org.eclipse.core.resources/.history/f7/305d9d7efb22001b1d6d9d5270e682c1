@@ -1,3 +1,0 @@
-ct_light.c:10:9:Light_CT_Modbus_Rec_Set_ID	32	static
-ct_light.c:42:9:Light_CT_Modbus_Rec_Change_Port	32	static
-ct_light.c:106:9:Light_CT_Modbus_Send_Read_Port	32	static

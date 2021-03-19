@@ -2,6 +2,7 @@
 "Driver/src/BL0940.o"
 "Driver/src/board.o"
 "Driver/src/bsp_button.o"
+"Driver/src/bsp_timer.o"
 "Driver/src/can.o"
 "Driver/src/flash.o"
 "Driver/src/gpio.o"

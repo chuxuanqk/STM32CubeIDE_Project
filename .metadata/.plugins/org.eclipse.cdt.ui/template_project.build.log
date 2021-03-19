@@ -1,0 +1,23 @@
+18:24:13 **** Incremental Build of configuration Debug for project template_project ****
+make all 
+arm-none-eabi-gcc "../src/sys_device/bsp_pvd.c" -mcpu=cortex-m3 -std=gnu11 -DUSE_STDPERIPH_DRIVER -DSTM32F10X_MD -c -I"D:/Saber_Workshop/Projects/My_Project/Big_Power_Relay/code/src/channel" -I"D:/Saber_Workshop/Projects/My_Project/Big_Power_Relay/code/src/common" -I"D:/Saber_Workshop/Projects/My_Project/Big_Power_Relay/code/src/config_device" -I"D:/Saber_Workshop/Projects/My_Project/Big_Power_Relay/code/src/exchange" -I"D:/Saber_Workshop/Projects/My_Project/Big_Power_Relay/code/src/protocol" -I"D:/Saber_Workshop/Projects/My_Project/Big_Power_Relay/code/src/sys_device" -I"D:/Saber_Workshop/Projects/My_Project/Big_Power_Relay/code/src/third_protocol_dev" -I"D:/Saber_Workshop/Projects/My_Project/Big_Power_Relay/code/src/virtual_device" -I"D:/Saber_Workshop/Projects/My_Project/Big_Power_Relay/code/src/test" -I"D:/Saber_Workshop/Projects/My_Project/Big_Power_Relay/code/src" -I"D:/Saber_Workshop/Projects/My_Project/Big_Power_Relay/code/Libraries/STM32F10x_StdPeriph_Driver/inc" -I"D:/Saber_Workshop/Projects/My_Project/Big_Power_Relay/code/Libraries/CMSIS/Device/ST/STM32F10x/Include" -I"D:/Saber_Workshop/Projects/My_Project/Big_Power_Relay/code/Libraries/CMSIS/Include" -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -MMD -MP -MF"src/sys_device/bsp_pvd.d" -MT"src/sys_device/bsp_pvd.o"  -mfloat-abi=soft -mthumb -o "src/sys_device/bsp_pvd.o"
+arm-none-eabi-gcc -o "template_project.elf" @"objects.list"   -mcpu=cortex-m3 -T"../stm32_flash.ld" --specs=nosys.specs -Wl,-Map="template_project.map" -Wl,--gc-sections -static  -mfloat-abi=soft -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: template_project.elf
+ 
+arm-none-eabi-objdump -h -S  template_project.elf  > "template_project.list"
+Finished building: template_project.list
+ 
+arm-none-eabi-objcopy  -O ihex  template_project.elf  "template_project.hex"
+Finished building: template_project.hex
+ 
+arm-none-eabi-objcopy  -O binary  template_project.elf  "template_project.bin"
+Finished building: template_project.bin
+ 
+arm-none-eabi-size   template_project.elf 
+   text	   data	    bss	    dec	    hex	filename
+   8920	   1576	   1728	  12224	   2fc0	template_project.elf
+Finished building: default.size.stdout
+ 
+
+18:24:15 Build Finished. 0 errors, 0 warnings. (took 1s.845ms)
+

@@ -1,0 +1,90 @@
+/*
+ * config_par.h
+ *
+ *  Created on: 2020年1月3日
+ *      Author: Fox
+ */
+
+#ifndef SRC_CONFIG_DEVICE_CONFIG_PAR_H_
+#define SRC_CONFIG_DEVICE_CONFIG_PAR_H_
+
+#include "stdbool.h"
+#include "stm32f10x.h"
+
+//单组最大可配置通道数
+#define DALI_LENTH 00
+
+#define DALI_CLEAR_ALL_CHANNLE 99 // 清除所有短地址的通道号
+#define SEG7_MAX_DIMLEVEL 99      // 最大调光百分比
+
+#define MODULE_LIGHT_CONTROL_PORT_NUM (DALI_LENTH)  //普通调光
+#define MODULE_COLOR_TEMP_PORT_NUM (DALI_LENTH / 2) //色温控制
+//#define MODULE_RGB_CONTROL_PORT_NUM (0)  //RGB控制
+#define MODULE_RGB_CONTROL_PORT_NUM (DALI_LENTH / 3) //RGB控制
+//#define MODULE_RGBW_CONTROL_PORT_NUM (0)              //RGBW控制
+#define MODULE_RGBW_CONTROL_PORT_NUM (DALI_LENTH / 4) //RGBW控制
+
+//全部设备通道总数
+#define MODULE_ALL_NUM (MODULE_LIGHT_CONTROL_PORT_NUM + \
+                        MODULE_COLOR_TEMP_PORT_NUM +    \
+                        MODULE_RGB_CONTROL_PORT_NUM +   \
+                        MODULE_RGBW_CONTROL_PORT_NUM + 1)
+#define PWM_PORT_NUM (MODULE_LIGHT_CONTROL_PORT_NUM) //需要的PWM通道数
+
+//模块内存储的网络ID号数量
+#define Net_IDs_Single (MODULE_LIGHT_CONTROL_PORT_NUM + 1)              // ~65 独立通道网络地址或组地址数量，第一个为整个模块的地址
+#define Net_IDs_Couple (Net_IDs_Single + MODULE_COLOR_TEMP_PORT_NUM)    // ~97 两通道组合模块网络地址或组地址数量
+#define Net_IDs_Triple (Net_IDs_Couple + MODULE_RGB_CONTROL_PORT_NUM)   // ~118 三通道组合模块网络地址或组地址数量
+#define Net_IDs_Quartic (Net_IDs_Triple + MODULE_RGBW_CONTROL_PORT_NUM) // ~134 四通道组合模块网络地址或组地址数量
+#define Net_IDs_All Net_IDs_Quartic                                     //
+
+//设备信息及保存信息配置
+#define Module_Style_DALI_MIX 0x1013              //设备类型，DALI控制器
+#define Module_Style_Analog_10V_Single 0x0003     //设备类型，组合型独立调光
+#define Module_Style_Analog_10V_Color_Temp 0x0023 //设备类型，两通道组合型色温
+#define Module_Style_Analog_10V_RGB 0x000D        //设备类型，组合型RGB调光
+#define Module_Style_Analog_10V_RGBW 0x003C       //设备类型，组合型RGBW调光
+
+#define Version 0x0100 //固件版本,BCD码，v1.0
+
+#define CONFIG_DATA_FLASH_ADDR_SIZE Net_IDs_All * 2 //配置信息大小，总数*2（字节）
+#define FLASH_Page_SIZE 1024                        //STM32芯片FLASH 分页大小，64K产品分页1K
+//保存到Flash数据地址分配
+#define CONFIG_DATA_FLASH_ADDR (0x0800F000)
+
+//设备配置信息
+typedef struct
+{
+    // u8 dmx512_width; //DMX 512位宽
+} device_config;
+//需要保存到Flash的配置信息结构体，存于RAM中
+typedef struct
+{
+    u16 Net_IDs[Net_IDs_All];
+    u16 Group_Net_IDs[Net_IDs_All];
+    u8 save_data_flag; //保存标志位，初始值为0xff说明为程序下载后第一次使用，强制复位
+    device_config dev_con;
+} Config_Data_Str;
+
+//STM32芯片物理地址12*8字节共同体
+union STM32_ID_12Byte
+{
+    u32 id_u32[3];
+    u8 id_u8[12];
+};
+
+extern Config_Data_Str Config_Data;
+extern union STM32_ID_12Byte STM32_ID;
+
+//配置信息载入和写入操作
+void Write_Config_To_Flash(Config_Data_Str *config);  //把配置保存到flash
+void Read_Config_Form_Flash(Config_Data_Str *config); //从flash读取配置数据到结构体
+void Config_Data_ReInit(Config_Data_Str *config);     //重置所有保存数据,需要调用写入flash函数
+void Config_Data_Clear_Even(void);
+
+void Cpu_GetId(void);
+bool Is_Config_portid(uint8_t temp_port);
+Config_Data_Str *Get_Config_data(void);
+union STM32_ID_12Byte *Get_CpuId(void);
+
+#endif /* SRC_CONFIG_DEVICE_CONFIG_PAR_H_ */

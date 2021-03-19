@@ -1,10 +1,10 @@
 /*
  * @Author: your name
  * @Date: 2020-09-23 16:04:41
- * @LastEditTime: 2020-09-24 10:52:45
- * @LastEditors: Please set LastEditors
+ * @LastEditTime: 2020-11-24 14:29:34
+ * @LastEditors: Saber
  * @Description: In User Settings Edit
- * @FilePath: \Demo_Std_Project\Ocm_demo\Driver\inc\led.h
+ * @FilePath: \Ocm_demo\Driver\inc\led.h
  */
 /*
  * led.h
@@ -60,5 +60,6 @@ void led_set_mode(enum LED_TYPE type, enum LED_Sharp_Model mode);
 void led_set_time(enum LED_TYPE type, uint16_t set_time, uint16_t sharp_time);
 
 void led_test(void);
+void pwm_led_test(void);
 
 #endif /* LED_H_ */

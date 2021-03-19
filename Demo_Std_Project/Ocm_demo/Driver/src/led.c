@@ -1,10 +1,10 @@
 /*
  * @Author: your name
  * @Date: 2020-09-23 16:05:02
- * @LastEditTime: 2020-09-24 14:30:31
- * @LastEditors: Please set LastEditors
+ * @LastEditTime: 2020-11-24 15:06:20
+ * @LastEditors: Saber
  * @Description: In User Settings Edit
- * @FilePath: \Demo_Std_Project\Ocm_demo\Driver\src\led.c
+ * @FilePath: \Ocm_demo\Driver\src\led.c
  */
 /*
  * led.c
@@ -31,6 +31,9 @@
 
 #define SET_TIME_DEFAULT 1000
 #define SHARP_TIMER_DEFAULT 500
+
+#define STATE_LED_ON() (GPIO_ResetBits(GPIO_STATE, GPIO_PIN_STATE))
+#define STATE_LED_OFF() (GPIO_SetBits(GPIO_STATE, GPIO_PIN_STATE))
 
 void led_open(struct LED_Sharp_Struct *led_dev);
 
@@ -61,8 +64,10 @@ static void GPIO_Configuration(void)
     GPIO_InitStructure.GPIO_Pin = GPIO_PIN_BL0940_LED_1 | GPIO_PIN_BL0940_LED_2 | GPIO_PIN_BL0940_LED_3 | GPIO_PIN_BL0940_LED_4;
     GPIO_Init(GPIO_BL0940_LED, &GPIO_InitStructure);
 
-    GPIO_ResetBits(GPIO_NET, GPIO_PIN_NET);
-    GPIO_ResetBits(GPIO_STATE, GPIO_PIN_STATE);
+    STATE_LED_OFF();
+    // GPIO_SetBits(GPIO_STATE, GPIO_PIN_STATE);
+    GPIO_SetBits(GPIO_NET, GPIO_PIN_NET);
+
     GPIO_ResetBits(GPIO_BL0940_LED, GPIO_PIN_BL0940_LED_1 | GPIO_PIN_BL0940_LED_2 | GPIO_PIN_BL0940_LED_3 | GPIO_PIN_BL0940_LED_4);
 }
 
@@ -186,14 +191,66 @@ void led_close(struct LED_Sharp_Struct *led_dev)
     GPIO_ResetBits(led_dev->gpiox, led_dev->gpio_pin);
 }
 
+uint32_t pwm_cnt = 0;
+uint32_t max_cnt = 20;
+uint32_t min_cnt = 2;
+uint32_t mid_cnt = 4;
+uint32_t cnt_cnt = 0;
+
+/**
+ * @description: PWM计数
+ * @param {*}
+ * @return {*}
+ */
+void pwm_led_count(void)
+{
+    pwm_cnt++;
+
+    return;
+}
+
 void hw_led_init(void)
 {
     RCC_Configuration();
     GPIO_Configuration();
 
     /* 注册LED设备到定时器 */
-    timer_creat(led_reflash_status, 10, 0, true, &led_net_dev);
-    timer_creat(led_reflash_status, 10, 0, true, &led_state_dev);
+    // timer_creat(led_reflash_status, 10, 0, true, &led_state_dev);
+    // timer_creat(led_reflash_status, 10, 0, true, &led_net_dev);
+
+    timer_creat((void *)pwm_led_count, 1, 0, true, NULL);
+}
+
+/**
+ * @description: 
+ * @param {*}
+ * @return {*}
+ */
+void pwm_led_test(void)
+{
+    if (pwm_cnt == min_cnt)
+    {
+        STATE_LED_OFF();
+    }
+    else if (pwm_cnt == mid_cnt)
+    {
+        STATE_LED_ON();
+    }
+    else if (pwm_cnt >= max_cnt)
+    {
+        cnt_cnt++;
+        pwm_cnt = 0;
+
+        if (cnt_cnt > 10)
+        {
+            cnt_cnt = 0;
+            mid_cnt += 2;
+            if (mid_cnt > max_cnt)
+                mid_cnt = 4;
+        }
+    }
+
+    return;
 }
 
 /**
@@ -203,9 +260,9 @@ void hw_led_init(void)
  */
 void led_test(void)
 {
+    // led_set_mode(STATE_LED, LED_Sharp_Repeat_MODE);
+    // led_set_time(STATE_LED, 2000, 1000);
+
     led_set_mode(NET_LED, LED_Sharp_Repeat_MODE);
     led_set_time(NET_LED, 1000, 500);
-
-    led_set_mode(STATE_LED, LED_Sharp_Repeat_MODE);
-    led_set_time(STATE_LED, 2000, 1000);
 }

@@ -1,10 +1,10 @@
 /*
  * @Author: your name
  * @Date: 2020-09-26 15:12:45
- * @LastEditTime: 2020-09-26 17:45:43
- * @LastEditors: Please set LastEditors
+ * @LastEditTime: 2020-11-24 15:19:51
+ * @LastEditors: Saber
  * @Description: In User Settings Edit
- * @FilePath: \Test_Code\Ocm_demo\Driver\src\bsp_timer.c
+ * @FilePath: \Ocm_demo\Driver\src\bsp_timer.c
  */
 /*
  * bsp_timer.c
@@ -14,6 +14,7 @@
  */
 
 #include "bsp_timer.h"
+#include "stm32f10x.h"
 #include "stm32f10x_rcc.h"
 #include "misc.h"
 

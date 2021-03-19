@@ -1,3 +1,0 @@
-analog_singal_light.c:19:4:ALOG_Modbus_Rec_Set_ID	32	static
-analog_singal_light.c:52:4:ALOG_Modbus_Rec_Change_Port	24	static
-analog_singal_light.c:66:4:ALOG_Modbus_Send_Read_Port	24	static

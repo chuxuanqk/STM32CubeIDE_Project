@@ -1,9 +1,0 @@
-config_par.c:16:6:Dev_Config_Reinit	16	static
-config_par.c:22:6:Write_Config_To_Flash	32	static
-config_par.c:42:6:Read_Config_Form_Flash	32	static
-config_par.c:66:6:Config_Data_ReInit	24	static
-config_par.c:85:6:Config_Data_Clear_Even	16	static
-config_par.c:101:6:Cpu_GetId	4	static
-config_par.c:113:6:Is_Config_portid	24	static
-config_par.c:134:18:Get_Config_data	4	static
-config_par.c:139:24:Get_CpuId	4	static

@@ -8,13 +8,14 @@
 		<item key="DIALOG_FONT_NAME" value="1|Microsoft YaHei UI|9.0|0|WINDOWS|1|-12|0|0|0|400|0|0|0|1|0|0|0|0|Microsoft YaHei UI"/>
 	</section>
 	<section name="org.eclipse.ui.texteditor.FindReplaceDialog">
-		<item key="selection" value="Key7Seg_Set_ExitTime"/>
+		<item key="selection" value="DALI_MIX_Modbus_Rec_Change_Port"/>
 		<item key="wrap" value="true"/>
 		<item key="casesensitive" value="false"/>
 		<item key="wholeword" value="false"/>
 		<item key="incremental" value="false"/>
 		<item key="isRegEx" value="false"/>
 		<list key="findhistory">
+			<item value="DALI_MIX_Modbus_Rec_Change_Port"/>
 			<item value="Key7Seg_Set_ExitTime"/>
 			<item value="temp_num"/>
 			<item value="tmp_func_loop_str"/>
@@ -29,7 +30,6 @@
 			<item value="KeyBoard_KeyLines_ReInit"/>
 			<item value="DALI_CheckMsgType"/>
 			<item value="tick_count"/>
-			<item value="led_close"/>
 		</list>
 		<list key="replacehistory">
 			<item value=""/>

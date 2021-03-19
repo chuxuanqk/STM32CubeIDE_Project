@@ -1,0 +1,294 @@
+/*
+ * modbus_func_adjust.c
+ *
+ *  Created on: 2020年1月3日
+ *      Author: Fox
+ */
+
+#include "config_par.h"
+#include "modbus_func_adjust.h"
+
+//清除配置的目标通道的互斥通道
+u8 Modbus_Clean_Mix_Port(u8 temp_port, u8 temp_port_stop)
+{
+    u8 i;
+    switch (temp_port_stop)
+    {
+    case 0: //全部通道
+    {
+        //清除所有调光通道
+        for (i = 0; i < Net_IDs_Quartic; i++)
+        {
+            Config_Data.Net_IDs[i] = 0;
+            Config_Data.Group_Net_IDs[i] = 0;
+        }
+        break;
+    }
+    case Net_IDs_Single: //单通道
+    {
+        //清除总调光合成通道
+        Config_Data.Net_IDs[0] = 0;
+        Config_Data.Group_Net_IDs[0] = 0;
+        //清除相关2通道
+        Config_Data.Net_IDs[(temp_port - 1) / 2 + Net_IDs_Single] = 0;
+        Config_Data.Group_Net_IDs[(temp_port - 1) / 2 + Net_IDs_Single] = 0;
+        //清除相关3通道
+        Config_Data.Net_IDs[(temp_port - 1) / 3 + Net_IDs_Couple] = 0;
+        Config_Data.Group_Net_IDs[(temp_port - 1) / 3 + Net_IDs_Couple] = 0;
+        //清除相关4通道
+        Config_Data.Net_IDs[(temp_port - 1) / 4 + Net_IDs_Triple] = 0;
+        Config_Data.Group_Net_IDs[(temp_port - 1) / 4 + Net_IDs_Triple] = 0;
+        break;
+    }
+    case Net_IDs_Couple: //双通道
+    {
+        //清除总调光合成通道
+        Config_Data.Net_IDs[0] = 0;
+        Config_Data.Group_Net_IDs[0] = 0;
+        //清除相关单通道
+        Config_Data.Net_IDs[(temp_port - 1) * 2 + 1] = 0;
+        Config_Data.Net_IDs[(temp_port - 1) * 2 + 2] = 0;
+
+        Config_Data.Group_Net_IDs[(temp_port - 1) * 2 + 1] = 0;
+        Config_Data.Group_Net_IDs[(temp_port - 1) * 2 + 2] = 0;
+        //清除相关3通道,先计算出占用的单通道编号
+        Config_Data.Net_IDs[(((temp_port - 1) * 2 + 1) - 1) / 3 + Net_IDs_Couple] = 0;
+        Config_Data.Net_IDs[(((temp_port - 1) * 2 + 2) - 1) / 3 + Net_IDs_Couple] = 0;
+
+        Config_Data.Group_Net_IDs[(((temp_port - 1) * 2 + 1) - 1) / 3 + Net_IDs_Couple] = 0;
+        Config_Data.Group_Net_IDs[(((temp_port - 1) * 2 + 2) - 1) / 3 + Net_IDs_Couple] = 0;
+        //清除相关4通道,先计算出占用的单通道编号
+        Config_Data.Net_IDs[(((temp_port - 1) * 2 + 1) - 1) / 4 + Net_IDs_Triple] = 0;
+        Config_Data.Net_IDs[(((temp_port - 1) * 2 + 2) - 1) / 4 + Net_IDs_Triple] = 0;
+
+        Config_Data.Group_Net_IDs[(((temp_port - 1) * 2 + 1) - 1) / 4 + Net_IDs_Triple] = 0;
+        Config_Data.Group_Net_IDs[(((temp_port - 1) * 2 + 2) - 1) / 4 + Net_IDs_Triple] = 0;
+        break;
+    }
+    case Net_IDs_Triple: //三通道
+    {
+        //清除总调光合成通道
+        Config_Data.Net_IDs[0] = 0;
+        Config_Data.Group_Net_IDs[0] = 0;
+        //清除相关单通道
+        Config_Data.Net_IDs[(temp_port - 1) * 3 + 1] = 0;
+        Config_Data.Net_IDs[(temp_port - 1) * 3 + 2] = 0;
+        Config_Data.Net_IDs[(temp_port - 1) * 3 + 3] = 0;
+
+        Config_Data.Group_Net_IDs[(temp_port - 1) * 3 + 1] = 0;
+        Config_Data.Group_Net_IDs[(temp_port - 1) * 3 + 2] = 0;
+        Config_Data.Group_Net_IDs[(temp_port - 1) * 3 + 3] = 0;
+        //清除相关2通道,先计算出占用的单通道编号
+        Config_Data.Net_IDs[(((temp_port - 1) * 3 + 1) - 1) / 2 + Net_IDs_Single] = 0;
+        Config_Data.Net_IDs[(((temp_port - 1) * 3 + 2) - 1) / 2 + Net_IDs_Single] = 0;
+        Config_Data.Net_IDs[(((temp_port - 1) * 3 + 3) - 1) / 2 + Net_IDs_Single] = 0;
+
+        Config_Data.Group_Net_IDs[(((temp_port - 1) * 3 + 1) - 1) / 2 + Net_IDs_Single] = 0;
+        Config_Data.Group_Net_IDs[(((temp_port - 1) * 3 + 2) - 1) / 2 + Net_IDs_Single] = 0;
+        Config_Data.Group_Net_IDs[(((temp_port - 1) * 3 + 3) - 1) / 2 + Net_IDs_Single] = 0;
+        //清除相关4通道,先计算出占用的单通道编号
+        Config_Data.Net_IDs[(((temp_port - 1) * 3 + 1) - 1) / 4 + Net_IDs_Triple] = 0;
+        Config_Data.Net_IDs[(((temp_port - 1) * 3 + 2) - 1) / 4 + Net_IDs_Triple] = 0;
+        Config_Data.Net_IDs[(((temp_port - 1) * 3 + 3) - 1) / 4 + Net_IDs_Triple] = 0;
+
+        Config_Data.Group_Net_IDs[(((temp_port - 1) * 3 + 1) - 1) / 4 + Net_IDs_Triple] = 0;
+        Config_Data.Group_Net_IDs[(((temp_port - 1) * 3 + 2) - 1) / 4 + Net_IDs_Triple] = 0;
+        Config_Data.Group_Net_IDs[(((temp_port - 1) * 3 + 3) - 1) / 4 + Net_IDs_Triple] = 0;
+        break;
+    }
+    case Net_IDs_Quartic: //四通道
+    {
+        //清除总调光合成通道
+        Config_Data.Net_IDs[0] = 0;
+        Config_Data.Group_Net_IDs[0] = 0;
+        //清除相关单通道
+        Config_Data.Net_IDs[(temp_port - 1) * 4 + 1] = 0;
+        Config_Data.Net_IDs[(temp_port - 1) * 4 + 2] = 0;
+        Config_Data.Net_IDs[(temp_port - 1) * 4 + 3] = 0;
+        Config_Data.Net_IDs[(temp_port - 1) * 4 + 4] = 0;
+
+        Config_Data.Group_Net_IDs[(temp_port - 1) * 4 + 1] = 0;
+        Config_Data.Group_Net_IDs[(temp_port - 1) * 4 + 2] = 0;
+        Config_Data.Group_Net_IDs[(temp_port - 1) * 4 + 3] = 0;
+        Config_Data.Group_Net_IDs[(temp_port - 1) * 4 + 4] = 0;
+        //清除相关2通道,先计算出占用的单通道编号
+        Config_Data.Net_IDs[(((temp_port - 1) * 4 + 1) - 1) / 2 + Net_IDs_Single] = 0;
+        Config_Data.Net_IDs[(((temp_port - 1) * 4 + 2) - 1) / 2 + Net_IDs_Single] = 0;
+        Config_Data.Net_IDs[(((temp_port - 1) * 4 + 3) - 1) / 2 + Net_IDs_Single] = 0;
+        Config_Data.Net_IDs[(((temp_port - 1) * 4 + 4) - 1) / 2 + Net_IDs_Single] = 0;
+
+        Config_Data.Group_Net_IDs[(((temp_port - 1) * 4 + 1) - 1) / 2 + Net_IDs_Single] = 0;
+        Config_Data.Group_Net_IDs[(((temp_port - 1) * 4 + 2) - 1) / 2 + Net_IDs_Single] = 0;
+        Config_Data.Group_Net_IDs[(((temp_port - 1) * 4 + 3) - 1) / 2 + Net_IDs_Single] = 0;
+        Config_Data.Group_Net_IDs[(((temp_port - 1) * 4 + 4) - 1) / 2 + Net_IDs_Single] = 0;
+        //清除相关3通道,先计算出占用的单通道编号
+        Config_Data.Net_IDs[(((temp_port - 1) * 4 + 1) - 1) / 3 + Net_IDs_Couple] = 0;
+        Config_Data.Net_IDs[(((temp_port - 1) * 4 + 2) - 1) / 3 + Net_IDs_Couple] = 0;
+        Config_Data.Net_IDs[(((temp_port - 1) * 4 + 3) - 1) / 3 + Net_IDs_Couple] = 0;
+        Config_Data.Net_IDs[(((temp_port - 1) * 4 + 4) - 1) / 3 + Net_IDs_Couple] = 0;
+
+        Config_Data.Group_Net_IDs[(((temp_port - 1) * 4 + 1) - 1) / 3 + Net_IDs_Couple] = 0;
+        Config_Data.Group_Net_IDs[(((temp_port - 1) * 4 + 2) - 1) / 3 + Net_IDs_Couple] = 0;
+        Config_Data.Group_Net_IDs[(((temp_port - 1) * 4 + 3) - 1) / 3 + Net_IDs_Couple] = 0;
+        Config_Data.Group_Net_IDs[(((temp_port - 1) * 4 + 4) - 1) / 3 + Net_IDs_Couple] = 0;
+        break;
+    }
+    }
+    return 1;
+}
+
+u8 Modbus_Rec_Change_Port(u8 *recbuf, u8 temp_port)
+{
+    u8 return_char = 0;
+
+    return return_char;
+}
+
+u8 Modbus_Rec_Read_Port(u8 *recbuf, u8 temp_port) { return 1; }
+
+u8 Modbus_Rec_Set_ID(u8 *recbuf, u8 temp_port, u16 *net_id, u16 *group_net_id)
+{
+    char return_char = 0;
+    u16 temp_net_id = 0, temp_group_net_id = 0;
+    Config_Data_Str *config_data = Get_Config_data();
+
+    if (temp_port < 1)
+    {
+        if (DALI_MIX_Modbus_Rec_Set_ID(recbuf, temp_port, &temp_net_id, &temp_group_net_id))
+        {
+            Modbus_Clean_Mix_Port(temp_port, 0);
+            return_char = 1;
+        }
+    }
+    else if (temp_port < Net_IDs_Single)
+    {
+        if (ALOG_Modbus_Rec_Set_ID(recbuf, temp_port, &temp_net_id, &temp_group_net_id)) //设置数据符合要求,去掉通道偏移,采用绝对通道
+        {
+            Modbus_Clean_Mix_Port(temp_port, Net_IDs_Single); //清除复用互斥通道
+            return_char = 1;
+        }
+    }
+    else if (temp_port < Net_IDs_Couple)
+    {
+        if (Light_CT_Modbus_Rec_Set_ID(recbuf, temp_port, &temp_net_id, &temp_group_net_id))
+        {
+            Modbus_Clean_Mix_Port(temp_port - Net_IDs_Single + 1, Net_IDs_Couple);
+            return_char = 1;
+        }
+    }
+    else if (temp_port < Net_IDs_Triple)
+    {
+        if (RGB_Modbus_Rec_Set_ID(recbuf, temp_port, &temp_net_id, &temp_group_net_id))
+        {
+            Modbus_Clean_Mix_Port(temp_port - Net_IDs_Couple + 1, Net_IDs_Triple);
+            return_char = 1;
+        }
+    }
+    else if (temp_port < Net_IDs_Quartic)
+    {
+        if (RGBW_Modbus_Rec_Set_ID(recbuf, temp_port, &temp_net_id, &temp_group_net_id))
+        {
+            Modbus_Clean_Mix_Port(temp_port - Net_IDs_Triple + 1, Net_IDs_Quartic);
+            return_char = 1;
+        }
+    }
+
+    if (return_char)
+    {
+        config_data->Net_IDs[temp_port] = temp_net_id;
+        config_data->Group_Net_IDs[temp_port] = temp_group_net_id;
+        Write_Config_To_Flash(&Config_Data); //修改的配置数据写入文件
+    }
+
+    return return_char;
+}
+
+u8 Modbus_Rec_Set_Config(u8 *recbuf, u8 temp_port) { return 0; }
+u8 Modbus_Rec_Read_Config(u8 *recbuf, u8 temp_port) { return 0; }
+
+u8 Modbus_Send_Change_Port(u8 *sendbuf, u8 temp_port) { return 1; }
+
+u8 Modbus_Send_Read_Port(u8 *sendbuf, u8 temp_port)
+{
+    u8 return_char = 0;
+    if (temp_port < 1)
+    {
+        DALI_MIX_Modbus_Send_Read_Port(sendbuf, temp_port);
+        return_char = 1;
+    }
+    else if (temp_port < Net_IDs_Single)
+    {
+        ALOG_Modbus_Send_Read_Port(sendbuf, temp_port);
+        return_char = 1;
+    }
+    else if (temp_port < Net_IDs_Couple)
+    {
+        Light_CT_Modbus_Send_Read_Port(sendbuf, temp_port - Net_IDs_Single + 1);
+        return_char = 1;
+    }
+    else if (temp_port < Net_IDs_Triple)
+    {
+        RGB_Modbus_Send_Read_Port(sendbuf, temp_port - Net_IDs_Couple + 1);
+        return_char = 1;
+    }
+    else if (temp_port < Net_IDs_Quartic)
+    {
+        RGBW_Modbus_Send_Read_Port(sendbuf, temp_port - Net_IDs_Triple + 1);
+        return_char = 1;
+    }
+    return return_char;
+}
+
+u8 Modbus_Send_Set_ID(u8 *sendbuf, u8 temp_port)
+{
+    u8 return_char = 0;
+    u16 module_style, module_version;
+
+    if (temp_port < 1)
+    {
+        module_style = Module_Style_DALI_MIX;
+        module_version = Version;
+        return_char = 1;
+    }
+    else if (temp_port < Net_IDs_Single)
+    {
+        module_style = Module_Style_Analog_10V_Single;
+        module_version = Version;
+        return_char = 1;
+    }
+    else if (temp_port < Net_IDs_Couple)
+    {
+        module_style = Module_Style_Analog_10V_Color_Temp;
+        module_version = Version;
+        return_char = 1;
+    }
+    else if (temp_port < Net_IDs_Triple)
+    {
+        module_style = Module_Style_Analog_10V_RGB;
+        module_version = Version;
+        return_char = 1;
+    }
+    else if (temp_port < Net_IDs_Quartic)
+    {
+        module_style = Module_Style_Analog_10V_RGBW;
+        module_version = Version;
+        return_char = 1;
+    }
+
+    if (return_char)
+    {
+        sendbuf[11] = module_style / 256;
+        sendbuf[12] = module_style % 256;
+        sendbuf[13] = module_version / 256;
+        sendbuf[14] = module_version % 256;
+    }
+    return return_char;
+}
+u8 Modbus_Send_Set_Config(u8 *sendbuf, u8 temp_port) { return 0; }
+u8 Modbus_Send_Read_Config(u8 *sendbuf, u8 temp_port) { return 0; }
+
+u8 Modbus_Rec_Set_Key_Light_State(u8 *recbuf, u8 temp_port) { return 0; }
+u8 Modbus_Rec_Set_Key_Command(u8 *recbuf, u8 temp_port) { return 0; }
+u8 Modbus_Send_Read_Key_Command(u8 *sendbuf, u8 temp_port) { return 0; }
+u8 Modbus_Send_Send_Key_Command(u8 *sendbuf, u8 temp_port) { return 0; }
+u8 Modbus_Send_Read_Key_Lights_State(u8 *sendbuf, u8 temp_port) { return 0; }

@@ -1,6 +1,0 @@
-bsp_exit.c:23:13:RCC_Configuration	8	static
-bsp_exit.c:28:13:EXIT_Configuration	16	static
-bsp_exit.c:41:13:NVIC_Configuration	16	static
-bsp_exit.c:55:6:EXITX_SetStatus	24	static
-bsp_exit.c:70:6:EXTI0_IRQHandler	8	static
-bsp_exit.c:82:6:hw_exit_init	8	static

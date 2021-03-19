@@ -1,12 +1,4 @@
 /*
- * @Author: your name
- * @Date: 2020-09-18 14:03:37
- * @LastEditTime: 2020-10-13 11:49:25
- * @LastEditors: Please set LastEditors
- * @Description: 提供BL0940芯片的数据读取接口
- * @FilePath: \Demo_Std_Project\Ocm_demo\Driver\src\BL0940.c
- */
-/*
  * BL0940.c
  *
  *  Created on: 2020年9月18日
@@ -40,7 +32,7 @@ uint8_t BL0940_CMD_ARR[] = {
     ALL_REG_ADDR,
 };
 
-uint8_t BL0940_READ_CMD[] = {READ_HEAD_CMD, ALL_REG_ADDR};
+uint8_t BL0940_READ_CMD[] = {READ_HEAD_CMD, ALL_REG_ADDR}; // 读取所有寄存器值
 
 static void RCC_Configuration(void)
 {
@@ -92,6 +84,20 @@ int16_t Recv_BL0940(struct BL0940_CmdTypeDef *cmd)
     ret = uart_read(BL0940_UART, cmd->recv_buf, cmd->recv_size);
 
     return ret;
+}
+
+/**
+ * @description: 
+ * @param {type} 
+ * @return {type} 
+ */
+void hw_BL0940_init(struct BL0940_CmdTypeDef *cmd)
+{
+    RCC_Configuration();
+    GPIO_Configuration();
+
+    cmd->cmd_buf = BL0940_READ_CMD; // 读取所有参数
+    cmd->cmd_size = sizeof(BL0940_READ_CMD) / sizeof(BL0940_READ_CMD[0]);
 }
 
 /*
@@ -146,17 +152,3 @@ void BL0940_Thread(struct BL0940_CmdTypeDef *cmd)
     }
 }
 */
-
-/**
- * @description: 
- * @param {type} 
- * @return {type} 
- */
-void hw_BL0940_init(struct BL0940_CmdTypeDef *cmd)
-{
-    RCC_Configuration();
-    GPIO_Configuration();
-
-    cmd->cmd_buf = BL0940_READ_CMD; // 读取所有参数
-    cmd->cmd_size = sizeof(BL0940_READ_CMD) / sizeof(BL0940_READ_CMD[0]);
-}

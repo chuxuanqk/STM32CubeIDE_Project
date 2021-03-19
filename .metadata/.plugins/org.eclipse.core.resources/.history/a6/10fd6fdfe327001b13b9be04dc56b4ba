@@ -1,0 +1,139 @@
+/*
+ * config_par.c
+ *
+ *  Created on: 2020年1月3日
+ *      Author: Fox
+ */
+
+#include "config_par.h"
+
+// 配置信息
+Config_Data_Str Config_Data;
+// STM32芯片物理地址12*8字节共同体
+union STM32_ID_12Byte STM32_ID;
+
+//配置信息初始化
+void Dev_Config_Reinit(device_config *dev_con)
+{
+    //设置默认值
+    //    dev_con->dmx512_width = 8;
+}
+
+void Write_Config_To_Flash(Config_Data_Str *config)
+{
+    u16 i;
+    u8 *data_ptr = (u8 *)config;
+    u32 flash_addr = CONFIG_DATA_FLASH_ADDR;
+    FLASH_Unlock();                                                                            /* 每次擦除Flash中数据时得先解锁 */
+    FLASH_ClearFlag(FLASH_FLAG_BSY | FLASH_FLAG_EOP | FLASH_FLAG_PGERR | FLASH_FLAG_WRPRTERR); //清除标记
+    for (i = 0; i < (sizeof(Config_Data_Str) / FLASH_Page_SIZE + 1); i++)
+        while (FLASH_COMPLETE != FLASH_ErasePage(CONFIG_DATA_FLASH_ADDR + i * FLASH_Page_SIZE))
+            ;
+
+    for (i = 0; i < sizeof(Config_Data_Str); i++)
+    {
+        while (FLASH_COMPLETE != FLASH_ProgramHalfWord(flash_addr, (data_ptr[i] + data_ptr[i + 1] * 256)))
+            ;
+        i++;
+        flash_addr += 2;
+    }
+}
+
+void Read_Config_Form_Flash(Config_Data_Str *config)
+{
+    u16 i;
+    u8 *data_ptr = (u8 *)config;
+    u16 tmp_read;
+    u32 flash_addr = CONFIG_DATA_FLASH_ADDR;
+    for (i = 0; i < sizeof(Config_Data_Str); i++)
+    {
+        tmp_read = *(vu16 *)(flash_addr);
+        data_ptr[i] = tmp_read % 256;
+        i++;
+        if (i < sizeof(Config_Data_Str))
+            data_ptr[i] = tmp_read / 256;
+
+        flash_addr += 2;
+    }
+    //判断是否为第一次启动
+    if (config->save_data_flag != 1)
+    {
+        Config_Data_ReInit(config);    //重置所有参数
+        Write_Config_To_Flash(config); //回写参数到flash
+    }
+}
+
+void Config_Data_ReInit(Config_Data_Str *config)
+{
+    u16 i;
+    u8 *temp_ptr = (u8 *)config;
+    //清零所有参数
+    for (i = 0; i < sizeof(Config_Data_Str); i++)
+    {
+        temp_ptr[i] = 0;
+    }
+
+    Dev_Config_Reinit(&(config->dev_con));
+    config->save_data_flag = 1;
+};
+
+/**
+ * @description: 清除配置数据
+ * @param {*}
+ * @return {*}
+ */
+void Config_Data_Clear_Even(void)
+{
+    uint8_t i = 0;
+
+    for (; i < Net_IDs_All; i++)
+    {
+        Config_Data.Net_IDs[i] = 0;
+        Config_Data.Group_Net_IDs[i] = 0;
+    }
+
+    //清除配置信息
+    Config_Data_ReInit(&Config_Data);
+    Write_Config_To_Flash(&Config_Data);
+}
+
+//读取ChipID
+void Cpu_GetId(void)
+{
+    STM32_ID.id_u32[0] = *(__IO u32 *)(0x1FFFF7E8); //产品唯一身份标识寄存器(96位)
+    STM32_ID.id_u32[1] = *(__IO u32 *)(0x1FFFF7EC);
+    STM32_ID.id_u32[2] = *(__IO u32 *)(0x1FFFF7F0);
+}
+
+/**
+ * @description: 判断是否配置了通道
+ * @param {*}
+ * @return {*}
+ */
+bool Is_Config_portid(uint8_t temp_port)
+{
+    bool rflag = false;
+
+    if (temp_port == 0) // 广播，默认开启
+        rflag = true;
+
+    if ()
+        rflag = true;
+
+    return rflag;
+}
+
+/**
+ * @description: 提供外部模块访问Config_Data
+ * @param {*}
+ * @return {*}
+ */
+Config_Data_Str *Get_Config_data(void)
+{
+    return &Config_Data;
+}
+
+union STM32_ID_12Byte *Get_CpuId(void)
+{
+    return &STM32_ID;
+}

@@ -1,0 +1,15 @@
+15:18:46 **** Build of configuration Debug for project big_power_relay ****
+make all 
+arm-none-eabi-gcc "../src/virtual_device/bsp_button.c" -mcpu=cortex-m3 -std=gnu11 -DSTM32F10X_HD -DUSE_STDPERIPH_DRIVER -c -I../src -I../Libraries/STM32F10x_StdPeriph_Driver/inc -I../Libraries/CMSIS/Device/ST/STM32F10x/Include -I../Libraries/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -MMD -MP -MF"src/virtual_device/bsp_button.d" -MT"src/virtual_device/bsp_button.o"  -mfloat-abi=soft -mthumb -o "src/virtual_device/bsp_button.o"
+arm-none-eabi-gcc "../src/virtual_device/bsp_led_7seg.c" -mcpu=cortex-m3 -std=gnu11 -DSTM32F10X_HD -DUSE_STDPERIPH_DRIVER -c -I../src -I../Libraries/STM32F10x_StdPeriph_Driver/inc -I../Libraries/CMSIS/Device/ST/STM32F10x/Include -I../Libraries/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -MMD -MP -MF"src/virtual_device/bsp_led_7seg.d" -MT"src/virtual_device/bsp_led_7seg.o"  -mfloat-abi=soft -mthumb -o "src/virtual_device/bsp_led_7seg.o"
+arm-none-eabi-gcc "../src/virtual_device/state_led.c" -mcpu=cortex-m3 -std=gnu11 -DSTM32F10X_HD -DUSE_STDPERIPH_DRIVER -c -I../src -I../Libraries/STM32F10x_StdPeriph_Driver/inc -I../Libraries/CMSIS/Device/ST/STM32F10x/Include -I../Libraries/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -MMD -MP -MF"src/virtual_device/state_led.d" -MT"src/virtual_device/state_led.o"  -mfloat-abi=soft -mthumb -o "src/virtual_device/state_led.o"
+arm-none-eabi-gcc "../src/sys_device/sys_init.c" -mcpu=cortex-m3 -std=gnu11 -DSTM32F10X_HD -DUSE_STDPERIPH_DRIVER -c -I../src -I../Libraries/STM32F10x_StdPeriph_Driver/inc -I../Libraries/CMSIS/Device/ST/STM32F10x/Include -I../Libraries/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -MMD -MP -MF"src/sys_device/sys_init.d" -MT"src/sys_device/sys_init.o"  -mfloat-abi=soft -mthumb -o "src/sys_device/sys_init.o"
+../src/sys_device/sys_init.c:10:10: fatal error: timer_callback.h: No such file or directory
+ #include "timer_callback.h"
+          ^~~~~~~~~~~~~~~~~~
+compilation terminated.
+make: *** [src/sys_device/subdir.mk:18: src/sys_device/sys_init.o] Error 1
+"make all" terminated with exit code 2. Build might be incomplete.
+
+15:18:48 Build Failed. 2 errors, 0 warnings. (took 1s.814ms)
+
