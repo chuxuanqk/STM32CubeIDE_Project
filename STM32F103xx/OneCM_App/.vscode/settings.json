@@ -1,0 +1,22 @@
+{
+    "files.associations": {
+        "type_traits": "c",
+        "cstdint": "cpp",
+        "sys_init.h": "c",
+        "config_par.h": "c",
+        "bsp_uart.h": "c",
+        "cstdio": "c",
+        "cstdlib": "c",
+        "virtual_rs485.h": "c",
+        "stm32f10x_crc.h": "c",
+        "jsmn.h": "c",
+        "modbus_port_adjust.h": "c",
+        "modbus_func_adjust.h": "c",
+        "chan_data_can1.h": "c",
+        "keyboard_scan.h": "c",
+        "bsp_button.h": "c",
+        "exchange_dev.h": "c",
+        "callback_functions.h": "c"
+    },
+    "C_Cpp.errorSquiggles": "Disabled"
+}
