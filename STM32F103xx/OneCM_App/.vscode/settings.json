@@ -16,7 +16,8 @@
         "keyboard_scan.h": "c",
         "bsp_button.h": "c",
         "exchange_dev.h": "c",
-        "callback_functions.h": "c"
+        "callback_functions.h": "c",
+        "stdint.h": "c"
     },
     "C_Cpp.errorSquiggles": "Disabled"
 }
